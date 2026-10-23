@@ -1,0 +1,19 @@
+#!/bin/bash
+
+GREEN='\033[0;32m'
+NC='\033[0m'
+
+if [ "$1" = "free" ]; then
+  shift
+  echo -e "${GREEN}🟢 Iniciando Aider con Gemini 3.5 Flash Lite (Plan Gratis Asegurado)...${NC}"
+  aider --env-file .env.ai --model gemini/gemini-3.5-flash-lite --edit-format whole "$@"
+
+elif [ "$1" = "arch" ]; then
+  shift
+  echo -e "${GREEN}🟢 Iniciando Aider con Gemini 3.1 Flash Lite (Plan Gratis Alternativo)...${NC}"
+  aider --env-file .env.ai --model gemini/gemini-3.1-flash-lite --edit-format whole "$@"
+
+else
+  echo "Uso correcto: ./ai [free|arch] [archivos]"
+  echo "Ejemplo: ./ai free js/cronica-historica.js"
+fi
