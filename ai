@@ -3,17 +3,28 @@
 GREEN='\033[0;32m'
 NC='\033[0m'
 
+AIDER_BIN="/home/s0a0m/.local/bin/aider"
+
 if [ "$1" = "free" ]; then
   shift
-  echo -e "${GREEN}🟢 Iniciando Aider con Gemini 3.5 Flash Lite (Plan Gratis Asegurado)...${NC}"
-  aider --env-file .env.ai --model gemini/gemini-3.5-flash-lite --edit-format whole "$@"
+  $AIDER_BIN --env-file .env.ai --model gemini/gemini-3.5-flash-lite "$@"
+
+elif [ "$1" = "pro" ]; then
+  shift
+  $AIDER_BIN --env-file .env.ai --model gemini/gemini-3.8-flash "$@"
+
+elif [ "$1" = "haiku" ]; then
+  shift
+  $AIDER_BIN --env-file .env.ai --model anthropic/claude-haiku-4-5 "$@"
+
+elif [ "$1" = "sonnet" ]; then
+  shift
+  $AIDER_BIN --env-file .env.ai --model anthropic/claude-sonnet-4-5 "$@"
 
 elif [ "$1" = "arch" ]; then
   shift
-  echo -e "${GREEN}🟢 Iniciando Aider con Gemini 3.1 Flash Lite (Plan Gratis Alternativo)...${NC}"
-  aider --env-file .env.ai --model gemini/gemini-3.1-flash-lite --edit-format whole "$@"
+  $AIDER_BIN --env-file .env.ai --architect --model anthropic/claude-sonnet-4-5 --editor-model gemini/gemini-3.5-flash-lite "$@"
 
 else
-  echo "Uso correcto: ./ai [free|arch] [archivos]"
-  echo "Ejemplo: ./ai free js/cronica-historica.js"
+  echo "Uso: ./ai [free|pro|haiku|sonnet|arch] [archivos]"
 fi
