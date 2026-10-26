@@ -1,3 +1,8 @@
+// ============================================================================
+// MAPA INTERACTIVO Y PANEL DE PROVINCIA
+// ============================================================================
+const SVG_MAPA_PATH = './mapa.svg';
+
 function obtenerContextoProvincia(idNormalizado, nombreOriginal) {
   const nombreProvincia = (nombreOriginal || NOMBRES_OFICIALES_DB[idNormalizado] || idNormalizado).trim();
   const dic = window.CONTEXTO_PROVINCIAS || {};
@@ -271,7 +276,10 @@ async function cargarSvgMapa() {
     if (!respuesta.ok) throw new Error(`HTTP error ${respuesta.status}`);
     const svgTexto = await respuesta.text();
 
+    // Inyecta el SVG como nodo real del DOM
     contenedor.innerHTML = svgTexto;
+
+    // Inicializa los listeners y el centrado geométrico una vez inyectado
     inicializarEventosMapa();
   } catch (error) {
     console.error("Error al cargar el archivo SVG del mapa:", error);

@@ -1,15 +1,19 @@
 // ============================================================================
-// GALERÍA DE INTRODUCCIÓN Y CONCLUSIÓN (CON FLECHAS EN EL TIMELAPSE)
+// NARRATIVA Y FLUJO DE PRESENTACIÓN
 // ============================================================================
 let escenaActiva = 'intro';
 let indiceIntro = 0;
 let indiceConclusion = 0;
 let navegandoPorPopstate = false;
+
 let galeriasIntroMontadas = false;
 let timerTimelapse = null;
 let frameTimelapseActual = 0;
 let timelapsePausado = false;
 
+// ============================================================================
+// HISTORIAL DEL NAVEGADOR (BOTONES ATRÁS Y ADELANTE FUNCIONAN SIN SALIR DE LA WEB)
+// ============================================================================
 function guardarEstadoEnHistorial(reemplazar = false) {
   if (navegandoPorPopstate) return;
   const estado = {
@@ -115,6 +119,7 @@ function crearElementoVisual(slide) {
     badge.textContent = slide.frames[0].fecha;
     stage.appendChild(badge);
 
+    // Flechas ‹ › para pasar las fotos satelitales manualmente
     const btnAnt = document.createElement('button');
     btnAnt.type = 'button';
     btnAnt.className = 'tl-flecha-galeria izq';
@@ -140,6 +145,7 @@ function crearElementoVisual(slide) {
     stage.appendChild(btnAnt);
     stage.appendChild(btnSig);
 
+    // Tocar la imagen abre la galería en pantalla completa con flechas
     stage.addEventListener('click', () => {
       timelapsePausado = true;
       abrirZoomGaleria(slide.frames, frameTimelapseActual);

@@ -1,4 +1,8 @@
+// ============================================================================
+// MOTOR DE DATOS Y CÁLCULOS
+// ============================================================================
 const CSV_PATH = './argentina_forest_loss_clean.csv';
+
 const NOMBRES_OFICIALES_DB = {
   "Buenos Aires": "Buenos Aires",
   "Catamarca": "Catamarca",
@@ -46,45 +50,6 @@ let estadoVisualActual = {
 };
 
 let idAnimacionActiva = null;
-
-function obtenerPaletaActiva() {
-  const limites = filtroTiempo.modo === 'unico'
-    ? [0, 300, 2500, 10000, 35000]
-    : [0, 5000, 45000, 160000, 600000];
-
-  const coloresPapel = [
-    [221, 213, 196],
-    [224, 178, 107],
-    [212, 122, 42],
-    [181, 63, 26],
-    [122, 22, 22]
-  ];
-
-  return limites.map((limite, i) => ({ limite, rgb: coloresPapel[i] }));
-}
-
-function calcularColorPorHectareas(ha) {
-  const paleta = obtenerPaletaActiva();
-  if (ha <= 0) {
-    const base = paleta[0].rgb;
-    return `rgb(${base[0]}, ${base[1]}, ${base[2]})`;
-  }
-
-  for (let i = 0; i < paleta.length - 1; i++) {
-    const actual = paleta[i];
-    const siguiente = paleta[i + 1];
-
-    if (ha >= actual.limite && ha <= siguiente.limite) {
-      const factor = (ha - actual.limite) / (siguiente.limite - actual.limite);
-      const r = Math.round(actual.rgb[0] + factor * (siguiente.rgb[0] - actual.rgb[0]));
-      const g = Math.round(actual.rgb[1] + factor * (siguiente.rgb[1] - actual.rgb[1]));
-      const b = Math.round(actual.rgb[2] + factor * (siguiente.rgb[2] - actual.rgb[2]));
-      return `rgb(${r}, ${g}, ${b})`;
-    }
-  }
-  const max = paleta[paleta.length - 1].rgb;
-  return `rgb(${max[0]}, ${max[1]}, ${max[2]})`;
-}
 
 function normalizarNombreProvincia(nombre) {
   if (nombre === "Ciudad de Buenos Aires") return "CABA";
@@ -138,6 +103,45 @@ async function inicializarDataset() {
   } catch (err) {
     console.error("Error al leer el archivo CSV:", err);
   }
+}
+
+function obtenerPaletaActiva() {
+  const limites = filtroTiempo.modo === 'unico'
+    ? [0, 300, 2500, 10000, 35000]
+    : [0, 5000, 45000, 160000, 600000];
+
+  const coloresPapel = [
+    [221, 213, 196],
+    [224, 178, 107],
+    [212, 122, 42],
+    [181, 63, 26],
+    [122, 22, 22]
+  ];
+
+  return limites.map((limite, i) => ({ limite, rgb: coloresPapel[i] }));
+}
+
+function calcularColorPorHectareas(ha) {
+  const paleta = obtenerPaletaActiva();
+  if (ha <= 0) {
+    const base = paleta[0].rgb;
+    return `rgb(${base[0]}, ${base[1]}, ${base[2]})`;
+  }
+
+  for (let i = 0; i < paleta.length - 1; i++) {
+    const actual = paleta[i];
+    const siguiente = paleta[i + 1];
+
+    if (ha >= actual.limite && ha <= siguiente.limite) {
+      const factor = (ha - actual.limite) / (siguiente.limite - actual.limite);
+      const r = Math.round(actual.rgb[0] + factor * (siguiente.rgb[0] - actual.rgb[0]));
+      const g = Math.round(actual.rgb[1] + factor * (siguiente.rgb[1] - actual.rgb[1]));
+      const b = Math.round(actual.rgb[2] + factor * (siguiente.rgb[2] - actual.rgb[2]));
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+  }
+  const max = paleta[paleta.length - 1].rgb;
+  return `rgb(${max[0]}, ${max[1]}, ${max[2]})`;
 }
 
 function actualizarCronicaHistorica(anioReferencia) {
