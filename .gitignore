@@ -1,0 +1,17 @@
+index_backup_svg.html
+*.zip
+.DS_Store
+
+# Entorno cerrado de IA y configuraciones locales
+.venv-ai/
+.env.ai
+.aider*
+!/.aider.conf.yml
+!/.aiderignore
+CONVENTIONS.md
+index_backup_svg.html
+
+# Aider AI files
+.aider*
+.aider.conf.yml
+.aiderignore

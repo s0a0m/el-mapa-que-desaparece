@@ -1,111 +1,123 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-tema="papel">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Mapa que Desaparece | Deforestación en Argentina (2001–2025)</title>
-    <link rel="stylesheet" href="style.css?v=5">
+    <title>El Mapa que Desaparece | Bosques en Argentina (2001–2025)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,700;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/editorial.css?v=9">
 </head>
 <body>
 
-    <!-- PANEL IZQUIERDO -->
-    <aside id="panel-izquierdo">
-        
-        <!-- BLOQUE 1 (ARRIBA EN MÓVIL): TÍTULO, MODOS DE TIEMPO Y KPI NACIONAL -->
-        <div class="bloque-superior-controles">
-            <div class="header-editorial">
-                <h1>EL MAPA QUE DESAPARECE</h1>
-                <p class="bajada">
-                    Monitoreo satelital de la pérdida de cobertura arbórea en Argentina entre <strong>2001 y 2025</strong>. 
-                    Avanza en la línea de tiempo para acumular el desmonte año a año, filtra por un año específico o haz clic en una provincia para inspeccionar sus causas.
-                </p>
+    <!-- ==================================================================
+         ETAPA 1: INTRODUCCIÓN VISUAL (CON LÍNEA DE TIEMPO FIJA ARRIBA)
+         ================================================================== -->
+    <section id="escena-intro" class="escena activa" aria-label="Introducción histórica">
+        <div class="story-topbar">
+            <span class="story-brand">EL MAPA QUE DESAPARECE</span>
+            <button type="button" id="btn-saltar-al-mapa" class="btn-fantasma">Ir directo al mapa →</button>
+        </div>
+
+        <div class="story-stage">
+            <!-- Columna Visual: Línea de tiempo ARRIBA para que nunca se mueva al cambiar de imagen -->
+            <div class="story-visual-wrap">
+                <div id="intro-timeline" class="story-timeline" role="tablist" aria-label="Etapas de la introducción"></div>
+                <div id="intro-ilustracion" class="story-visual"></div>
             </div>
 
-            <!-- CONTROL TEMPORAL CON 2 MODOS: ACUMULADO PROGRESIVO vs AÑO ÚNICO -->
-            <div class="bloque-control">
-                <div class="modo-tabs" role="group" aria-label="Modo de filtro temporal">
-                    <button type="button" id="btn-modo-acumulado" class="modo-tab activo">ACUMULADO PROGRESIVO</button>
-                    <button type="button" id="btn-modo-unico" class="modo-tab">1 AÑO ESPECÍFICO</button>
-                </div>
-
-                <!-- Configuración de Año Base (Solo visible en modo acumulado) -->
-                <div id="fila-anio-base" class="control-header">
-                    <label for="input-anio-base">PARTIR EN CERO DESDE:</label>
-                    <div class="selector-anio-inline">
-                        <input type="number" id="input-anio-base" min="2000" max="2024" value="2000" aria-label="Año base en cero">
-                        <span class="hint-cero">(en este año = 0 ha)</span>
-                    </div>
-                </div>
-
-                <div class="control-header">
-                    <label id="label-slider" for="slider-anio">AVANZAR HASTA EL AÑO:</label>
-                    <div class="selector-anio-inline">
-                        <input type="number" id="input-anio-fin" min="2000" max="2025" value="2025" aria-label="Año seleccionado">
-                    </div>
-                </div>
-
-                <input type="range" id="slider-anio" min="2000" max="2025" value="2025" step="1">
-                <div class="slider-ticks">
-                    <span id="tick-min">2000 (0 ha)</span>
-                    <span id="tick-mid1">2008</span>
-                    <span id="tick-mid2">2016</span>
-                    <span>2025</span>
-                </div>
-            </div>
-
-            <!-- KPI NACIONAL -->
-            <div id="resumen-nacional" class="kpi-box">
-                <div class="kpi-header-row">
-                    <span id="kpi-titulo-periodo" class="kpi-label">PÉRDIDA NACIONAL ACUMULADA</span>
-                    <span id="indicador-anio" class="badge-anio">2001–2025</span>
-                </div>
-                <div id="dato-narrativo" class="kpi-numero">0 ha</div>
-                <span id="dato-equivalencia" class="kpi-sub">Cargando dataset satelital...</span>
-                
-                <div class="escala-integrada">
-                    <div class="barra-gradiente"></div>
-                    <div class="barra-labels">
-                        <span>Sin pérdida / Mínima</span>
-                        <span>Moderada</span>
-                        <span>Crítica</span>
-                    </div>
-                </div>
+            <!-- Columna de Texto -->
+            <div class="story-content">
+                <span id="intro-periodo" class="story-badge">PERÍODO</span>
+                <h1 id="intro-titulo" class="story-title">-</h1>
+                <p id="intro-texto" class="story-lead">-</p>
+                <div id="intro-extra" class="story-extra"></div>
             </div>
         </div>
 
-        <!-- BLOQUE 3 (ABAJO DEL MAPA EN MÓVIL): EXPLICACIÓN DE CO2 Y CRÉDITOS -->
-        <div class="bloque-inferior-info">
-            <div class="info-co2-box">
-                <div class="co2-titulo">¿QUÉ IMPLICA EL CO₂ LIBERADO POR EL DESMONTE?</div>
-                <p>
-                    Los bosques funcionan como <strong>depósitos naturales de carbono</strong>: al crecer, absorben CO₂ del aire y lo fijan en su madera y raíces. Cuando se talan o incendian, ese carbono regresa de golpe a la atmósfera como gas de efecto invernadero, acelerando el calentamiento global.
-                </p>
-                <div id="dato-co2-nacional" class="co2-equivalencia">Calculando impacto climático...</div>
-            </div>
+        <div class="story-footer">
+            <button type="button" id="btn-intro-ant" class="btn-nav">← Anterior</button>
+            <span id="intro-contador" class="story-counter">1 / 5</span>
+            <button type="button" id="btn-intro-sig" class="btn-nav btn-destacado">Siguiente →</button>
+        </div>
+    </section>
 
-            <footer class="creditos-metodologia">
-                <h3>FUENTES CIENTÍFICAS Y METODOLOGÍA</h3>
-                <p>
-                    Datos satelitales procesados de <strong>Global Forest Watch (GFW)</strong>, el laboratorio GLAD de la <strong>Universidad de Maryland</strong> (Hansen et al.) y clasificación de causas de <strong>WRI / Google DeepMind</strong> (Sims et al. 2025, umbral de dosel &gt;30%).
-                </p>
-                <div class="links-fuentes">
-                    <a href="https://www.globalforestwatch.org/dashboards/country/ARG/" target="_blank" rel="noopener">↗ GFW Argentina</a>
-                    <a href="https://www.argentina.gob.ar/ambiente/bosques/umsef" target="_blank" rel="noopener">↗ Monitoreo Bosques (UMSEF)</a>
-                    <a href="https://www.argentina.gob.ar/ambiente/bosques/manejo-sostenible" target="_blank" rel="noopener">↗ Ley de Bosques (Argentina.gob.ar)</a>
+    <!-- ==================================================================
+         ETAPA 2: EL MAPA INTERACTIVO SIMPLIFICADO
+         ================================================================== -->
+    <section id="escena-mapa" class="escena" aria-label="Exploración del mapa">
+        <div class="layout-mapa">
+
+            <aside id="panel-izquierdo">
+                <div class="bloque-controles-mapa">
+                    <div class="cabecera-compacta">
+                        <h2 class="titulo-app">El Mapa que Desaparece</h2>
+                        <div class="acciones-mini">
+                            <button type="button" id="btn-volver-intro" class="btn-mini">← Intro</button>
+                        </div>
+                    </div>
+
+                    <!-- CONTROL TEMPORAL DE 1 SOLO PUNTO (Sin inputs numéricos redundantes) -->
+                    <div class="bloque-control">
+                        <div class="modo-tabs" role="group" aria-label="Modo de línea de tiempo">
+                            <button type="button" id="btn-modo-acumulado" class="modo-tab activo">Acumulado (desde 2001)</button>
+                            <button type="button" id="btn-modo-unico" class="modo-tab">1 año específico</button>
+                        </div>
+
+                        <div class="control-header">
+                            <label id="label-slider" for="slider-anio">Acumulado 2001 hasta:</label>
+                            <strong id="valor-slider-texto" class="badge-anio">2025</strong>
+                        </div>
+
+                        <input type="range" id="slider-anio" min="2001" max="2025" value="2025" step="1">
+                        <div class="slider-ticks">
+                            <span id="tick-min">2001</span>
+                            <span>2007 (Ley)</span>
+                            <span>2016</span>
+                            <span>2025</span>
+                        </div>
+                    </div>
+
+                    <!-- KPI NACIONAL: Intervalo de años ARRIBA de todo para que nunca se bugee -->
+                    <div class="kpi-limpio">
+                        <div class="kpi-periodo-top">
+                            <span id="indicador-anio" class="badge-anio">PERÍODO 2001–2025</span>
+                        </div>
+                        <span id="kpi-titulo-periodo" class="kpi-label">PÉRDIDA ARBÓREA NACIONAL</span>
+                        <div id="dato-narrativo" class="kpi-numero">0 ha</div>
+                        <div class="escala-integrada">
+                            <div class="barra-gradiente"></div>
+                            <div class="barra-labels">
+                                <span>Mínima</span>
+                                <span>Moderada</span>
+                                <span>Crítica (&gt;600k ha)</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </footer>
-        </div>
 
-    </aside>
+                <div class="bloque-cronica-mapa">
+                    <article class="cronica-box" aria-live="polite">
+                        <span id="hito-epigrafe" class="cronica-epigrafe">CONTEXTO DEL PERÍODO</span>
+                        <h3 id="hito-titulo" class="cronica-titulo">-</h3>
+                        <p id="hito-resumen" class="cronica-texto">-</p>
+                        <a id="hito-link" href="#" target="_blank" rel="noopener noreferrer" class="cronica-link">↗ Ver fuente</a>
+                    </article>
 
-    <!-- BLOQUE 2 (CENTRO EN ESCRITORIO / EN EL MEDIO EN MÓVIL): MAPA INTERACTIVO -->
-    <main id="mapa-contenedor" aria-label="Mapa interactivo de deforestación por provincias">
-        <div class="instruccion-flotante">
-            Pasa el mouse por una provincia para ver su pérdida · Haz clic para abrir el informe completo
-        </div>
-        
-        <div class="mapa-lienzo-wrapper">
-                              <svg xmlns="http://www.w2.org/2000/svg" viewBox="0 -800 1600 2600">
+                    <button type="button" id="btn-ir-conclusion" class="btn-ir-cierre">
+                        Ver conclusiones e impacto final →
+                    </button>
+                </div>
+            </aside>
+
+            <main id="mapa-contenedor">
+                <div class="instruccion-flotante">
+                    Toca una provincia para ver sus datos y evolución (2001–2025)
+                </div>
+
+                <div class="mapa-lienzo-wrapper">
+                                                 <svg xmlns="http://www.w2.org/2000/svg" viewBox="0 -800 1600 2600">
         <path id="Cordoba" d="M392.34,-158.37L373.55,-158.19L373.88,-162.76L372.22,-165.4L372.06,-167.69L373.88,-171.2L373.55,-174.19L362.11,-180.17L361.45,-182.46L361.45,-188.09C351.57,-188.92 341.71,-189.78 332.27,-191.08L330.61,-191.96L330.11,-195.3L325.97,-196L323.15,-194.95L318.67,-195.12L313.53,-197.58L309.72,-197.76L307.4,-196.71L304.75,-199.34L297.78,-201.1L280.04,-200.75L266.61,-198.82L262.3,-197.59L263.3,-192.13L266.61,-181.76L265.62,-176.48L255.17,-167.86L244.89,-165.93L226.82,-118.27L228.48,-66.21L238.43,-64.1L246.88,-57.24L252.19,-50.2L254.84,-41.41L263.13,-42.29L264.62,-41.23L264.46,-39.12L264.78,-36.48L266.28,-35.43L266.94,-32.09L265.12,-28.22L264.79,-23.82L265.12,-17.84L263.79,-13.8L263.13,-9.22L261.8,-3.95L261.8,0.27L259.48,3.79L256,5.55L257.82,30C258.99,53.22 260.14,79.12 261.31,104.04C288.99,103 317.05,102.01 340.89,100.52L340.39,66.05L363.27,66.4L394.11,12.76L400.57,3.79L409.03,-4.65L410.85,-9.92L411.51,-14.15L409.52,-21.01L407.54,-30.5L406.04,-36.48L403.22,-42.29L399.08,-49.67L395.6,-55.48L392.61,-59.52L391.95,-63.21L392.61,-65.68L396.26,-70.78L396.76,-74.29L394.44,-79.57L393.77,-82.03L394.77,-86.78L400.74,-104.37L409.52,-131.98L410.52,-134.44L393.34,-158.37Z"/>
         <path id="Santa Fe" d="M361.23,66.84L413.29,66.98L450.65,20.3C453.63,16.64 457.95,18.6 461.69,19.88C464.27,21.53 466.67,22.25 468.2,18.32L475.11,8.73L478.97,3.23L469.66,-4.81L462.62,-13.27L458.63,-23.99L458.23,-31.89C458.23,-31.89 457.17,-34.29 457.3,-34.85C457.43,-35.42 457.43,-45.15 457.43,-45.15C457.43,-45.15 457.43,-49.1 458.23,-50.23C459.03,-51.35 460.62,-58.69 460.89,-59.68C461.16,-60.66 459.69,-67.43 459.69,-67.43L460.49,-74.91L472.33,-86.76L483.1,-92.54L489.75,-101.57L500.38,-123.99L510.62,-143.18L510.36,-150.94L508.76,-162.64L511.02,-174.49L511.28,-180.7L508.49,-185.92L511.02,-195.37L512.61,-209.89C512.61,-209.89 515.54,-216.38 515.94,-217.09C516.33,-217.79 524.45,-221.88 524.45,-221.88L531.09,-229.36C531.09,-229.36 533.49,-235.28 533.49,-237.82C533.49,-240.36 534.28,-246.43 534.42,-247.69C534.55,-248.96 536.68,-252.77 536.68,-252.77L536.94,-266.03L538.82,-274.54L541.73,-280.42L545.06,-283.66L546.65,-285.21L546.65,-286.06L413.95,-286.91L412.22,-269.56L409.7,-250.37L406.91,-232.88L400.79,-191.27L393.9,-157.85L410.36,-135L409.17,-130.9L395.07,-86.76C394.01,-83.18 393.97,-79.61 395.74,-76.04C397.74,-72.6 395.49,-70.51 394.14,-68.14C392.22,-65.61 391.73,-62.86 392.28,-59.96L406.38,-37.67L406.64,-34.29L407.04,-30.62L408.5,-25.96C408.5,-25.96 409.43,-22.86 409.57,-22.01C409.7,-21.17 411.43,-16.09 411.43,-16.09L411.29,-11.58L409.96,-7.35L409.03,-4.52L398.93,5.35L393.87,12.54L389.36,21.15L380.71,34.69L362.23,66.84Z"/>
         <path id="Chaco" d="M412.84,-286.75L546.81,-285.88L548.63,-290.8L548.8,-298.19L548.96,-307.51L547.64,-311.91C547.64,-311.91 549.46,-318.94 549.63,-320C549.79,-321.05 558.58,-325.62 558.58,-325.62C558.8,-326.95 559.02,-328.77 559.24,-330.55C557.94,-334.7 558.37,-336.22 560.9,-339.52C562.84,-340.87 565.45,-341.39 564.88,-345.85L570.19,-349.37L567.03,-353.59L563.72,-357.46C560.68,-357.48 558.24,-361.37 555.6,-363.96C555.6,-363.96 548.3,-371.7 547.97,-372.41C547.64,-373.11 540.51,-379.09 540.51,-379.09L530.06,-382.78L525.59,-383.66C522.29,-384.91 519.91,-388.59 517.46,-392.1C513.13,-396.44 509.4,-392.71 506.35,-396.15C506.7,-398.01 507.19,-399.72 506.69,-402.48L502.54,-406.7L500.88,-412.33L493.75,-417.78L482.81,-424.29L482.31,-430.27L478.83,-433.08L475.35,-436.78L473.03,-439.59L470.71,-439.41L468.72,-445.22L460.26,-451.2L447,-458.06L443.19,-464.21L436.06,-468.43C435.63,-475.67 432.03,-476.19 429.09,-478.1L423.95,-478.1L410.69,-490.59C404.54,-490.79 412.01,-496 405.38,-497.63C405.62,-495.55 397.35,-499.59 396.1,-501.14C393.25,-503.46 387.76,-502.97 383.33,-503.61L383.66,-489.36L332.1,-417.6L413.51,-417.43L413.84,-286.75Z"/>
@@ -131,59 +143,120 @@
         <path id="Santa Cruz" d="M193.47,1086.7L199.35,1086.21L198.28,1088.64L199.2,1088.96L200.72,1086.37L201.03,1082.33L198.43,1080.38L192.79,1073.42L188.82,1067.76L185.61,1062.25L182.26,1055.13L179.36,1050.6L177.07,1047.03L175.69,1047.36L174.32,1049.14L172.49,1052.05L170.05,1048.33L172.34,1048.65L174.01,1045.74L175.39,1045.74L178.9,1045.9L178.9,1044.44L168.67,1017.57L169.29,1014.82L168.22,1013.2L166.54,1012.71L166.23,1011.58L168.22,1009.15L168.98,1005.1L167.15,1000.57L167.76,995.39L168.98,990.05L170.66,985.19L172.64,979.04L175.54,975.32L179.97,971.75L189.89,966.09L191.41,964.47C191.41,964.47 190.19,964.31 190.04,963.5C189.89,962.69 186.99,961.23 186.99,961.23L185.16,959.29L182.87,954.43L181.04,947.63L181.49,947.8L188.36,959.29L191.11,962.53L194.62,962.36L199.65,959.61L203.01,955.89C203.01,955.89 208.66,950.06 208.51,948.93C208.35,947.79 209.73,942.45 209.73,942.45L210.34,935.98L209.73,929.02L211.25,921.89L211.86,913.8L212.63,909.59L210.95,908.13L210.79,902.95L215.22,893.56L219.03,887.89L222.85,886.28L226.21,879.96L226.51,877.05L231.24,873L235.52,870.25L242.38,862.15L246.05,861.67L246.2,860.7L248.34,860.21L248.03,858.59L248.64,856.65L252,856.81L252.15,852.12L256.73,847.91L259.17,843.7L261.92,843.37L263.29,841.92L266.5,841.75L266.04,840.13L264.21,838.68L265.58,837.71L265.12,832.53L269.24,832.36L269.55,834.31L271.08,832.85L270.47,829.77L267.57,828.64L268.18,826.21L267.11,824.27L266.04,821.19L267.72,822L268.33,819.09L269.7,814.72L270.16,810.83L270.77,807.92L270.77,805.65L270.46,803.22L271.53,800.8L270.62,799.66L269.55,796.26L269.4,791.89L270.16,790.76L268.18,789.62L263.75,785.25L260.54,784.44L257.65,783.8L250.17,785.26L245.74,783.64L243.45,784.61L239.18,784.44L238.57,785.74L236.59,783.96L234.6,784.61L232.01,783.15L229.72,780.24L226.51,776.67L221.93,772.14L220.71,771.17L220.25,771.33L219.49,769.71L216.75,766.15L214.61,766.64L214,764.86L211.86,764.37L211.56,763.24L209.42,764.21L208.05,761.13L206.37,760.97L202.25,750.77L199.2,746.08L197.98,739.11L197.82,733.77L199.2,730.7L198.74,729.89L200.11,727.79C150.85,729.92 99.51,735.57 48.27,741.06L48.73,745.75L39.88,753.36L46.28,758.22L48.42,764.05L50.86,775.87L51.47,783.15L48.57,784.77L42.01,789.3L42.47,793.51L43.85,799.02L44.91,802.58L43.69,804.68L45.83,807.59L46.29,808.57L37.74,822.49L32.09,829.29L33.01,831.07L34.08,838.03L31.64,841.27L29.65,846.12L28.28,848.55L28.58,853.73L33.01,859.07L36.06,862.63L36.98,869.11L40.33,873.97L41.56,876.56L41.56,879.31L38.2,881.9L33.32,886.92L32.09,891.78L32.86,893.72L34.38,899.22L33.62,905.7L31.79,908.94L27.21,912.5L23.4,916.22L20.8,922.86L20.65,925.29L31.48,927.39L30.87,928.53L12.56,928.04L10.58,929.82L10.42,935.97L11.19,943.58L12.41,949.25L13.48,954.26L12.56,961.87L11.64,965.6L12.1,974.18L13.93,981.79L19.12,997.65L20.34,1002.18L25.07,1007.52L27.97,1017.72L29.35,1020.32L38.96,1012.87L42.17,1008.98L49.19,1008.17L55.29,1005.26L57.27,1003.48L59.71,1004.45L61.24,1012.22L62.01,1022.1L61.55,1028.73L65.06,1039.74L64.45,1043.47L63.84,1047.19L62.46,1051.56L64.91,1057.23L72.23,1065.32L83.98,1076.17L98.63,1075.04L134.04,1070.83L147.47,1069.69L151.89,1072.28L159.22,1075.36L169.14,1075.84L174.48,1075.84L181.19,1079.24L189.28,1080.54L194.01,1082.64L194.47,1086.7Z"/>
         <path id="Santiago del Estero" d="M393.66,-157.77L373.45,-158.68C373.31,-160.14 372.62,-161.22 372.24,-162.45C371.8,-163.86 372.33,-165.8 371.91,-166.84C377.88,-177.47 369.06,-175.78 364.38,-178.28C360.81,-180.75 362.02,-185.39 361.3,-189.16L351.38,-189.16L339.4,-188.98C334.77,-189.19 332.12,-190.9 330.68,-193.52C330.97,-196.36 329.43,-195.99 328.45,-196.6C319.07,-193.54 318.17,-194.26 314.25,-198.6C309.78,-199.89 310.5,-194.26 305.53,-199.33L298.52,-201.14L289.79,-200.78L279.53,-200.23L267.72,-198.42L268.07,-204.95L265.67,-210.03C272.21,-216.35 266.11,-212.44 266.53,-220.38C267.93,-223.79 265.07,-225.5 262.59,-228L262.59,-234.53C262.28,-235.96 256.12,-240.93 252.84,-244.15L253.7,-253.23C254.04,-258.73 254.38,-264.24 254.72,-269.74L252.5,-276.64L250.11,-278.81L249.42,-287.71L248.91,-290.79C253.02,-292.86 256.45,-292.52 262.25,-300.41L258.49,-305.13L260.88,-322.73C263.15,-322.66 265.46,-322.48 265.5,-328.54C266.14,-332.84 268.58,-340.4 269.78,-347.05C271.22,-349.99 276.44,-351.91 274.73,-356.33C274.43,-357.11 275.19,-358.18 274.74,-359.21C279.36,-360.62 278.34,-366.02 277.65,-371.19L278.84,-383.89L283.98,-396.05C283.98,-396.05 285.86,-398.95 286.37,-399.68C286.88,-400.41 286.71,-406.21 286.71,-406.21L288.25,-411.66L290.82,-412.2L293.73,-410.93L299.54,-409.84L300.23,-412.93L310.66,-414.2L321.27,-412.56L327.43,-411.11L332.56,-417.64L338.89,-417.28L413.13,-417.83L414.16,-286.8C408.69,-243.79 403.28,-200.78 394.66,-157.77Z"/>
       </svg>
+                </div>
 
+                <button type="button" id="btn-ir-conclusion-mobile" class="btn-cierre-flotante-mobile">
+                    Conclusión final →
+                </button>
+            </main>
+
+        </div>
+
+        <!-- PANEL DETALLE DE PROVINCIA -->
+        <aside id="panel-provincia" class="oculto" aria-live="polite">
+            <div class="panel-top-bar">
+                <span id="prov-region" class="tag-region">REGIÓN</span>
+                <button id="btn-cerrar-panel" title="Cerrar">✕ Cerrar</button>
+            </div>
             
-        </div>
-    </main>
+            <h2 id="prov-nombre">Provincia</h2>
 
-    <!-- PANEL INSPECTOR DE PROVINCIA -->
-    <aside id="panel-provincia" class="oculto" aria-live="polite">
-        <div class="panel-top-bar">
-            <span id="prov-region" class="tag-region">REGIÓN FORESTAL</span>
-            <button id="btn-cerrar-panel" title="Cerrar panel">✕ CERRAR</button>
-        </div>
-        
-        <h2 id="prov-nombre">PROVINCIA</h2>
-
-        <div class="ficha-kpis">
-            <div class="ficha-kpi">
-                <span id="prov-label-superficie" class="kpi-label">SUPERFICIE DEFORESTADA EN EL PERÍODO</span>
-                <strong id="prov-hectareas" class="texto-alerta">0 ha</strong>
-                <span id="prov-equivalencia-local" class="kpi-micro"></span>
+            <div class="ficha-kpis">
+                <div class="ficha-kpi">
+                    <span id="prov-label-superficie" class="kpi-label">HECTÁREAS PERDIDAS</span>
+                    <strong id="prov-hectareas" class="texto-alerta">0 ha</strong>
+                </div>
+                <div class="ficha-kpi">
+                    <span class="kpi-label">EQUIV. SOBRE DOSEL 2000</span>
+                    <strong id="prov-bosque-propio">0%</strong>
+                    <span id="prov-base-2000" class="kpi-micro"></span>
+                </div>
+                <div class="ficha-kpi">
+                    <span class="kpi-label">PESO NACIONAL</span>
+                    <strong id="prov-porcentaje">0%</strong>
+                </div>
+                <div class="ficha-kpi">
+                    <span id="prov-label-pico" class="kpi-label">AÑO PICO</span>
+                    <strong id="prov-peor-anio">-</strong>
+                </div>
             </div>
-            <div class="ficha-kpi">
-                <span class="kpi-label">APORTE AL TOTAL NACIONAL</span>
-                <strong id="prov-porcentaje">0%</strong>
+
+            <div class="ficha-seccion">
+                <div class="chart-header">
+                    <h3>SERIE ANUAL (2001–2025)</h3>
+                    <strong id="chart-hover-info" class="chart-hover-lectura">Pasá el mouse por el gráfico</strong>
+                </div>
+                <div id="prov-grafico-barras" class="mini-chart-container"></div>
+                <div class="chart-axis">
+                    <span>2001</span>
+                    <span>2007 (Ley)</span>
+                    <span>2016</span>
+                    <span>2025</span>
+                </div>
             </div>
-            <div class="ficha-kpi">
-                <span id="prov-label-pico" class="kpi-label">PICO HISTÓRICO ANUAL</span>
-                <strong id="prov-peor-anio">-</strong>
+
+            <div class="ficha-seccion">
+                <h3>CAUSA PRINCIPAL Y CONTEXTO</h3>
+                <div id="prov-driver" class="badge-driver">-</div>
+                <p id="prov-explicacion" class="texto-contexto"></p>
             </div>
-            <div class="ficha-kpi span-completo">
-                <span class="kpi-label">IMPACTO CLIMÁTICO ESTIMADO (EMISIONES GEI)</span>
-                <strong id="prov-co2" class="texto-ambar">0 t CO₂e</strong>
-                <span id="prov-co2-autos" class="kpi-micro"></span>
+
+            <div class="ficha-seccion">
+                <h3>INFORMES, GREENPEACE Y FUENTES</h3>
+                <ul id="prov-noticias" class="lista-noticias"></ul>
+            </div>
+        </aside>
+    </section>
+
+    <!-- ==================================================================
+         ETAPA 3: CONCLUSIÓN DINÁMICA (CON LÍNEA DE TIEMPO FIJA ARRIBA)
+         ================================================================== -->
+    <section id="escena-conclusion" class="escena" aria-label="Conclusiones e impacto">
+        <div class="story-topbar">
+            <button type="button" id="btn-volver-mapa" class="btn-fantasma">← Volver al mapa interactivo</button>
+            <span class="story-brand">CONCLUSIONES Y FUENTES</span>
+        </div>
+
+        <div class="story-stage">
+            <div class="story-visual-wrap">
+                <div id="conc-timeline" class="story-timeline cols-3" role="tablist"></div>
+                <div id="conc-ilustracion" class="story-visual"></div>
+            </div>
+
+            <div class="story-content">
+                <span id="conc-etiqueta" class="story-badge">CONCLUSIÓN</span>
+                <h2 id="conc-titulo" class="story-title">-</h2>
+                <p id="conc-texto" class="story-lead">-</p>
+                <div id="conc-extra" class="story-extra"></div>
             </div>
         </div>
 
-        <div class="ficha-seccion">
-            <h3>MOTOR PRINCIPAL DE PÉRDIDA</h3>
-            <div id="prov-driver" class="badge-driver">-</div>
-            <p id="prov-explicacion" class="texto-contexto"></p>
+        <div class="story-footer">
+            <button type="button" id="btn-conc-ant" class="btn-nav">← Anterior</button>
+            <span id="conc-contador" class="story-counter">1 / 3</span>
+            <button type="button" id="btn-conc-sig" class="btn-nav btn-destacado">Siguiente →</button>
         </div>
+    </section>
 
-        <div class="ficha-seccion">
-            <h3>REPORTES Y MONITOREO REGIONAL</h3>
-            <ul id="prov-noticias" class="lista-noticias"></ul>
+    <!-- MODAL DE ZOOM PARA VER IMÁGENES DE CERCA SIN RECORTE -->
+    <!-- VISOR PANTALLA COMPLETA (Se cierra tocando la imagen y permite pasar fotos con flechas) -->
+    <div id="modal-zoom" class="modal-zoom oculto" role="dialog" aria-modal="true" aria-label="Imagen ampliada"></div>
+        <div class="modal-zoom-bar">
+            <span id="modal-zoom-caption">Vista detallada</span>
+            <div class="modal-zoom-actions">
+                <button type="button" id="btn-toggle-zoom" class="btn-mini">🔍 Zoom 2x</button>
+                <button type="button" id="btn-cerrar-zoom" class="btn-mini">✕ Cerrar</button>
+            </div>
         </div>
-    </aside>
+        <div id="modal-zoom-body" class="modal-zoom-body">
+            <img id="modal-zoom-img" src="" alt="Imagen ampliada">
+        </div>
+    </div>
 
-    <!-- TOOLTIP FLOTANTE -->
     <div id="tooltip" class="oculto"></div>
-
-    <!-- ANUNCIADOR ACCESIBLE -->
     <div id="anunciador-accesible" class="sr-only" aria-live="polite"></div>
 
-    <script src="app.js?v=5"></script>
+    <script src="js/cronica-historica.js?v=9"></script>
+    <script src="js/app.js?v=9"></script>
 </body>
 </html>

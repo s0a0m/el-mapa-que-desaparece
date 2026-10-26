@@ -1,0 +1,1979 @@
+:root,
+html[data-tema="papel"] {
+    color-scheme: light;
+    --bg-main: #F4EFE6;
+    --bg-panel: #FAF7F2;
+    --bg-card: #EFE9DC;
+    --bg-map-canvas: #E8E1D3;
+    --border-color: #D0C8B8;
+    --border-strong: #8C8273;
+    --text-main: #1C1917;
+    --text-muted: #57534E;
+    --map-stroke: #6E6659;
+    --accent-primary: #991B1B;
+    --accent-secondary: #B45309;
+
+    --tier-1: #DDD5C4;
+    --tier-2: #E0B26B;
+    --tier-3: #D47A2A;
+    --tier-4: #B53F1A;
+    --tier-5: #7A1616;
+}
+
+html[data-tema="oscuro"] {
+    color-scheme: dark;
+    --bg-main: #111317;
+    --bg-panel: #171A20;
+    --bg-card: #1F232B;
+    --bg-map-canvas: #0D0F13;
+    --border-color: #2B303B;
+    --border-strong: #4B5563;
+    --text-main: #F3F4F6;
+    --text-muted: #9CA3AF;
+    --map-stroke: #181B22;
+    --accent-primary: #EF4444;
+    --accent-secondary: #F59E0B;
+
+    --tier-1: #2D3833;
+    --tier-2: #7C6328;
+    --tier-3: #D97706;
+    --tier-4: #EA580C;
+    --tier-5: #DC2626;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+.escena {
+    display: none;
+    width: 100vw;
+    height: 100vh;
+}
+
+.escena.activa {
+    display: flex;
+    flex-direction: column;
+    animation: fadeEscena 0.28s ease;
+}
+
+@keyframes fadeEscena {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* --- CABECERA Y ESCENARIO DE DIAPOSITIVAS --- */
+.story-topbar {
+    height: 56px;
+    padding: 0 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-panel);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.story-brand {
+    font-family: 'Newsreader', Georgia, serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.3px;
+}
+
+.btn-fantasma {
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    color: var(--text-main);
+    padding: 6px 12px;
+    font-family: inherit;
+    font-size: 0.76rem;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-fantasma:hover {
+    background: var(--text-main);
+    color: var(--bg-panel);
+}
+
+.story-stage {
+    flex: 1;
+    max-width: 1040px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1.5rem 2rem;
+    display: grid;
+    grid-template-columns: 440px 1fr;
+    gap: 2.5rem;
+    align-items: center;
+    overflow-y: auto;
+}
+
+.story-visual-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.story-visual {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 250px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* LÍNEA DE TIEMPO DEBAJO DE LA IMAGEN (4 COLUMNAS IGUALES SIN BUG EN CELULAR) */
+/* Ajuste de la grilla de línea de tiempo para 5 diapositivas */
+.story-timeline {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+    width: 100%;
+}
+
+.visual-stack {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Indicador visual de lo que mide 1 rectángulo en la imagen satelital */
+.lupa-lote {
+    position: absolute;
+    bottom: 34px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(15, 18, 22, 0.88);
+    border: 1px solid #fbbf24;
+    padding: 5px 9px;
+    border-radius: 4px;
+    pointer-events: none;
+    z-index: 4;
+}
+
+.lupa-box {
+    width: 16px;
+    height: 12px;
+    border: 2px solid #fbbf24;
+    background: rgba(251, 191, 36, 0.25);
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.lupa-label {
+    color: #fef3c7;
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+.barra-switch-video {
+    background: var(--bg-card);
+    border-top: 1px solid var(--border-color);
+    padding: 7px 10px;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.link-video-nasa {
+    color: var(--accent-primary);
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.link-video-nasa:hover {
+    text-decoration: underline;
+}
+
+.esquema-cadenero {
+    background: var(--bg-card);
+    border-left: 3px solid var(--accent-secondary);
+    padding: 9px 12px;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: var(--text-main);
+}
+
+.story-timeline.cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.tl-step {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-top: 3px solid var(--border-color);
+    color: var(--text-muted);
+    font-family: inherit;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 7px 4px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 0 0 4px 4px;
+    transition: all 0.18s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tl-step.visitado {
+    border-top-color: var(--accent-secondary);
+}
+
+.tl-step.activo {
+    background: var(--bg-panel);
+    color: var(--text-main);
+    border-color: var(--border-strong);
+    border-top: 3px solid var(--accent-primary);
+}
+
+/* COMPARADOR SATELITAL NASA ANTES / DESPUÉS */
+.nasa-comparador {
+    position: relative;
+    width: 100%;
+    height: 270px;
+    background: #141814;
+    overflow: hidden;
+    user-select: none;
+}
+
+.nasa-img {
+    width: 100%;
+    height: 270px;
+    object-fit: cover;
+    display: block;
+}
+
+.nasa-capa-antes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    overflow: hidden;
+    border-right: 2.5px solid #ffffff;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+}
+
+.nasa-capa-antes .nasa-img {
+    width: 440px;
+    max-width: none;
+}
+
+.nasa-tag {
+    position: absolute;
+    top: 10px;
+    background: rgba(15, 18, 22, 0.82);
+    color: #ffffff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+    pointer-events: none;
+}
+
+.nasa-tag.izq { left: 10px; border-left: 3px solid #22c55e; }
+.nasa-tag.der { right: 10px; border-right: 3px solid #ef4444; }
+
+.nasa-range {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: ew-resize;
+    margin: 0;
+    z-index: 5;
+}
+
+.nasa-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(15, 18, 22, 0.82);
+    color: #e5e7eb;
+    font-size: 0.68rem;
+    text-align: center;
+    padding: 5px 8px;
+    pointer-events: none;
+}
+
+/* FOTOGRAFÍAS DOCUMENTALES */
+.foto-documental {
+    margin: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.foto-documental img {
+    width: 100%;
+    height: 235px;
+    object-fit: cover;
+    display: block;
+}
+
+.foto-documental figcaption {
+    background: var(--bg-card);
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    padding: 6px 10px;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+/* SEMÁFORO LEY DE BOSQUES */
+.semaforo-ley-box {
+    padding: 1rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.semaforo-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 9px 11px;
+    border-radius: 4px;
+}
+
+.sem-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 3px;
+}
+
+.semaforo-item.rojo .sem-dot { background: #dc2626; box-shadow: 0 0 0 3px rgba(220,38,38,0.2); }
+.semaforo-item.amarillo .sem-dot { background: #d97706; box-shadow: 0 0 0 3px rgba(217,119,6,0.2); }
+.semaforo-item.verde .sem-dot { background: #16a34a; box-shadow: 0 0 0 3px rgba(22,163,74,0.2); }
+
+.semaforo-item strong {
+    display: block;
+    font-size: 0.82rem;
+    margin-bottom: 2px;
+}
+
+.semaforo-item p {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.35;
+}
+
+/* TEXTOS DE DIAPOSITIVAS */
+.story-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+    color: var(--accent-primary);
+    margin-bottom: 6px;
+}
+
+.story-title {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 2.15rem;
+    line-height: 1.12;
+    margin: 0 0 0.85rem 0;
+    color: var(--text-main);
+}
+
+.story-lead {
+    font-size: 1rem;
+    line-height: 1.58;
+    color: var(--text-main);
+    margin: 0 0 1rem 0;
+}
+
+.pildora-dato {
+    display: inline-block;
+    background: var(--bg-card);
+    border-left: 3px solid var(--accent-primary);
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.tarjetas-mini-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    font-size: 0.76rem;
+    line-height: 1.38;
+}
+
+.tarjetas-mini-grid > div {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    padding: 8px 10px;
+    border-radius: 4px;
+}
+
+.kpi-conc-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-strong);
+    padding: 0.9rem 1.1rem;
+    border-radius: 4px;
+}
+
+.kpi-conc-card strong {
+    display: block;
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.75rem;
+    color: var(--accent-primary);
+    margin-bottom: 2px;
+}
+
+.kpi-conc-card span {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.lista-fuentes-compacta {
+    list-style: none;
+    padding: 0.8rem;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.lista-fuentes-compacta a {
+    display: block;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 7px 10px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--text-main);
+    text-decoration: none;
+    border-radius: 3px;
+}
+
+.lista-fuentes-compacta a:hover {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+}
+
+.story-footer {
+    height: 62px;
+    padding: 0 1.5rem;
+    border-top: 1px solid var(--border-color);
+    background: var(--bg-panel);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.story-counter {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.btn-nav {
+    background: var(--bg-card);
+    border: 1px solid var(--border-strong);
+    color: var(--text-main);
+    padding: 8px 16px;
+    font-family: inherit;
+    font-size: 0.84rem;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-nav.btn-destacado {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: #ffffff;
+}
+
+/* ==========================================================================
+   ESCENA 2: MAPA INTERACTIVO
+   ========================================================================== */
+.layout-mapa {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+#panel-izquierdo {
+    width: 390px;
+    min-width: 360px;
+    background: var(--bg-panel);
+    border-right: 1px solid var(--border-color);
+    padding: 1.2rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 20;
+    overflow-y: auto;
+}
+
+.cabecera-compacta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.8rem;
+    margin-bottom: 0.85rem;
+    border-bottom: 2px solid var(--text-main);
+}
+
+.titulo-app {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.35rem;
+    margin: 0;
+}
+
+.acciones-mini {
+    display: flex;
+    gap: 6px;
+}
+
+.btn-mini {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 4px 8px;
+    font-family: inherit;
+    font-size: 0.72rem;
+    font-weight: 600;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.bloque-control {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 0.8rem 0.9rem;
+    border-radius: 4px;
+    margin-bottom: 0.9rem;
+}
+
+.modo-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 9px;
+}
+
+.modo-tab {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-family: inherit;
+    font-size: 0.73rem;
+    font-weight: 600;
+    padding: 6px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.modo-tab.activo {
+    background: var(--text-main);
+    border-color: var(--text-main);
+    color: var(--bg-panel);
+}
+
+.control-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.control-header.oculto { display: none; }
+
+.control-header label {
+    font-size: 0.73rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.selector-anio-inline {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.hint-cero { font-size: 0.7rem; color: var(--text-muted); }
+
+input[type="number"] {
+    width: 70px;
+    font-size: 0.9rem;
+    padding: 3px 6px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-strong);
+    color: var(--text-main);
+    font-family: inherit;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+    font-weight: 700;
+    border-radius: 3px;
+}
+
+input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent-primary);
+    cursor: pointer;
+    margin: 4px 0;
+}
+
+.slider-ticks {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.67rem;
+    color: var(--text-muted);
+}
+
+.kpi-limpio {
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.8rem 0;
+    margin-bottom: 0.85rem;
+}
+
+.kpi-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.kpi-label {
+    font-size: 0.66rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.badge-anio {
+    font-size: 0.72rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 2px 8px;
+    font-weight: 700;
+}
+
+.kpi-numero {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 2.15rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    margin: 4px 0 8px 0;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+}
+
+.barra-gradiente {
+    height: 7px;
+    width: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--tier-1) 0%, var(--tier-2) 25%, var(--tier-3) 50%, var(--tier-4) 75%, var(--tier-5) 100%);
+    margin-bottom: 4px;
+}
+
+.barra-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.66rem;
+    color: var(--text-muted);
+}
+
+.cronica-box {
+    background: var(--bg-card);
+    border-left: 3px solid var(--accent-primary);
+    padding: 0.75rem 0.9rem;
+    margin-bottom: 0.85rem;
+}
+
+.cronica-epigrafe {
+    display: block;
+    font-size: 0.64rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    margin-bottom: 2px;
+}
+
+.cronica-titulo {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 0.98rem;
+    margin: 0 0 4px 0;
+}
+
+.cronica-texto {
+    font-size: 0.76rem;
+    line-height: 1.4;
+    color: var(--text-muted);
+    margin: 0 0 6px 0;
+}
+
+.cronica-link {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-main);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-strong);
+}
+
+.btn-ir-cierre {
+    width: 100%;
+    background: var(--text-main);
+    color: var(--bg-panel);
+    border: none;
+    padding: 10px 14px;
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#mapa-contenedor {
+    flex: 1;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 24px;
+    background-color: var(--bg-map-canvas);
+    overflow: hidden;
+    transition: padding-right 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (min-width: 1025px) {
+    body.inspector-abierto #mapa-contenedor {
+        padding-right: 430px;
+    }
+}
+
+.instruccion-flotante {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-strong);
+    padding: 6px 16px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 20px;
+    text-align: center;
+    z-index: 10;
+}
+
+.mapa-lienzo-wrapper {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#mapa-contenedor svg {
+    height: 100%;
+    max-height: 84vh;
+    width: auto;
+    max-width: 100%;
+    display: block;
+    margin: 0 auto;
+    overflow: visible;
+    filter: drop-shadow(0 8px 18px rgba(28, 25, 23, 0.15));
+}
+
+#mapa-contenedor path.provincia-path {
+    fill: var(--tier-1);
+    stroke: var(--map-stroke);
+    stroke-width: 1px;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+    cursor: pointer;
+    transition: filter 0.15s ease;
+}
+
+#mapa-contenedor path.provincia-path:hover {
+    filter: brightness(0.95) contrast(1.08);
+}
+
+#svg-borde-hover,
+#svg-borde-activo {
+    fill: none !important;
+    stroke: var(--text-main) !important;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+    pointer-events: none !important;
+}
+
+#svg-borde-hover { stroke-width: 2.2px !important; }
+#svg-borde-activo { stroke-width: 2.8px !important; }
+
+.btn-cierre-flotante-mobile { display: none; }
+
+/* PANEL INSPECTOR DE PROVINCIA */
+#panel-provincia {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 410px;
+    max-width: 94vw;
+    background: var(--bg-panel);
+    border-left: 2px solid var(--text-main);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.14);
+    padding: 1.3rem 1.5rem;
+    z-index: 30;
+    overflow-y: auto;
+    transform: translateX(0);
+    transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#panel-provincia.oculto {
+    transform: translateX(105%);
+    pointer-events: none;
+}
+
+.panel-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#btn-cerrar-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-strong);
+    color: var(--text-main);
+    padding: 4px 10px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.tag-region {
+    font-size: 0.68rem;
+    color: var(--accent-secondary);
+    font-weight: 700;
+}
+
+#prov-nombre {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.8rem;
+    margin: 2px 0 0.85rem 0;
+}
+
+.ficha-kpis {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 0.95rem;
+}
+
+.ficha-kpi {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 9px 11px;
+}
+
+.ficha-kpi strong {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.22rem;
+    display: block;
+    margin-top: 2px;
+    font-variant-numeric: tabular-nums;
+}
+
+.kpi-micro {
+    display: block;
+    font-size: 0.67rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.texto-alerta { color: var(--accent-primary); }
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 5px;
+}
+
+.chart-leyenda { font-size: 0.64rem; color: var(--text-muted); }
+
+.mini-chart-container {
+    height: 68px;
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 8px 6px 0 6px;
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.chart-bar { flex: 1; background: var(--tier-3); min-height: 2px; }
+.chart-bar.en-rango { background: var(--accent-primary); }
+.chart-bar.fuera-rango { background: var(--border-color); opacity: 0.55; }
+.chart-bar.ley-2007 { border-right: 1.5px dashed var(--text-main); }
+
+.chart-axis {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.64rem;
+    color: var(--text-muted);
+    margin-top: 3px;
+}
+
+.ficha-seccion {
+    border-top: 1px solid var(--border-color);
+    padding-top: 0.8rem;
+    margin-bottom: 0.95rem;
+}
+
+.ficha-seccion h3 {
+    font-size: 0.67rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin: 0 0 6px 0;
+}
+
+.badge-driver {
+    display: inline-block;
+    background: var(--bg-card);
+    border-left: 3px solid var(--accent-primary);
+    padding: 5px 10px;
+    font-size: 0.77rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.texto-contexto { font-size: 0.8rem; line-height: 1.46; margin: 0; }
+
+.lista-noticias {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.lista-noticias li {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 7px 9px;
+}
+
+.lista-noticias a {
+    color: var(--text-main);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.76rem;
+    display: block;
+}
+
+.lista-noticias span { font-size: 0.66rem; color: var(--text-muted); }
+
+#tooltip {
+    position: fixed;
+    pointer-events: none;
+    background: var(--bg-panel);
+    color: var(--text-main);
+    border: 1.5px solid var(--text-main);
+    padding: 7px 11px;
+    z-index: 90;
+    font-size: 0.78rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+}
+
+#tooltip.oculto { display: none; }
+#tooltip strong { font-family: 'Newsreader', Georgia, serif; display: block; font-size: 0.95rem; }
+#tooltip .tt-ha { color: var(--accent-primary); font-weight: 700; }
+#tooltip .tt-hint { display: block; font-size: 0.66rem; color: var(--text-muted); }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
+
+/* ==========================================================================
+   RESPONSIVE PARA CELULARES (<= 1024px)
+   ========================================================================== */
+@media (max-width: 1024px) {
+    .story-topbar {
+        height: 48px;
+        padding: 0 1rem;
+    }
+
+    .story-brand { font-size: 0.9rem; }
+
+    .story-stage {
+        grid-template-columns: 1fr;
+        gap: 0.9rem;
+        padding: 0.9rem 1rem;
+        align-content: start;
+    }
+
+    .story-visual { min-height: 195px; }
+    .nasa-comparador, .nasa-img { height: 205px; }
+    .nasa-capa-antes .nasa-img { width: 92vw; }
+    .foto-documental img { height: 185px; }
+
+    .tl-step {
+        font-size: 0.68rem;
+        padding: 6px 2px;
+    }
+
+    .story-title { font-size: 1.45rem; margin-bottom: 0.5rem; }
+    .story-lead { font-size: 0.88rem; line-height: 1.48; margin-bottom: 0.7rem; }
+    .tarjetas-mini-grid { grid-template-columns: 1fr; gap: 6px; }
+
+    .story-footer {
+        height: 54px;
+        padding: 0 1rem;
+    }
+
+    /* ESCENA MAPA EN CELULAR */
+    .layout-mapa {
+        flex-direction: column;
+        height: 100dvh;
+    }
+
+    #panel-izquierdo {
+        width: 100%;
+        min-width: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 0.6rem 0.9rem;
+        flex-shrink: 0;
+        overflow: visible;
+    }
+
+    .cabecera-compacta {
+        padding-bottom: 0.35rem;
+        margin-bottom: 0.45rem;
+    }
+
+    .titulo-app { font-size: 1.08rem; }
+
+    .bloque-control {
+        padding: 0.45rem 0.65rem;
+        margin-bottom: 0.4rem;
+    }
+
+    #fila-anio-base, .slider-ticks, .escala-integrada, .bloque-cronica-mapa {
+        display: none;
+    }
+
+    .kpi-limpio {
+        border: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+
+    .kpi-numero { font-size: 1.4rem; margin: 0; }
+
+    #mapa-contenedor {
+        flex: 1;
+        width: 100%;
+        min-height: 0;
+        padding: 8px 12px 54px 12px;
+    }
+
+    #mapa-contenedor svg {
+        max-height: 100%;
+        max-width: 95vw;
+    }
+
+    .btn-cierre-flotante-mobile {
+        display: block;
+        position: absolute;
+        bottom: 10px;
+        right: 12px;
+        background: var(--text-main);
+        color: var(--bg-panel);
+        border: none;
+        padding: 8px 14px;
+        font-family: inherit;
+        font-size: 0.75rem;
+        font-weight: 700;
+        border-radius: 20px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+        z-index: 15;
+    }
+
+    #panel-provincia {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-width: 100vw;
+        height: 82dvh;
+        border-left: none;
+        border-top: 2px solid var(--text-main);
+        border-radius: 14px 14px 0 0;
+        transform: translateY(0);
+    }
+
+    #panel-provincia.oculto { transform: translateY(105%); }
+}
+
+@media (hover: none) {
+    #tooltip { display: none !important; }
+}
+
+.slide-media-item {
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+
+.slide-media-item.activa {
+    display: flex;
+    width: 100%;
+}
+
+.foto-documental img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    background-color: var(--bg-card);
+    display: block;
+}
+
+@media (max-width: 1024px) {
+    .foto-documental img {
+        height: 195px;
+    }
+}
+
+/* Escenario más amplio para que el timelapse satelital tenga máximo impacto */
+.story-stage {
+    max-width: 1140px;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2.5rem;
+}
+
+.story-timeline {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.tarjetas-mini-grid.cols-2 {
+    grid-template-columns: 1fr 1fr;
+}
+
+.slide-media-item {
+    display: none;
+    width: 100%;
+}
+
+.slide-media-item.activa {
+    display: flex;
+    width: 100%;
+}
+
+/* REPRODUCTOR TIMELAPSE SATELITAL (CROSS-FADE SUAVE SIN PANTALLA BLANCA) */
+.timelapse-player {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #0d1117;
+}
+
+.timelapse-stage {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    background: #0d1117;
+    overflow: hidden;
+}
+
+.timelapse-frame-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.75s ease-in-out;
+    pointer-events: none;
+}
+
+.timelapse-frame-img.activa {
+    opacity: 1;
+}
+
+.timelapse-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(15, 18, 24, 0.86);
+    color: #ffffff;
+    border-left: 3px solid #ef4444;
+    padding: 5px 11px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    border-radius: 3px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    z-index: 4;
+}
+
+.timelapse-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 10px;
+    background: #161b22;
+    border-top: 1px solid #2b313a;
+}
+
+.tl-play-btn {
+    background: #262c36;
+    border: 1px solid #485262;
+    color: #ffffff;
+    width: 30px;
+    height: 26px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.timelapse-years {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
+}
+
+.tl-year-btn {
+    background: transparent;
+    border: 1px solid #30363d;
+    color: #9ca3af;
+    font-family: inherit;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 4px 2px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.tl-year-btn:hover {
+    color: #ffffff;
+    border-color: #6b7280;
+}
+
+.tl-year-btn.activo {
+    background: #991B1B;
+    border-color: #ef4444;
+    color: #ffffff;
+}
+
+.timelapse-caption {
+    background: var(--bg-card);
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    padding: 6px 10px;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+}
+
+.foto-documental img {
+    width: 100%;
+    height: 310px;
+    object-fit: cover;
+    display: block;
+}
+
+@media (max-width: 1024px) {
+    .story-stage {
+        grid-template-columns: 1fr;
+        gap: 0.9rem;
+    }
+
+    .timelapse-stage,
+    .foto-documental img {
+        height: 215px;
+    }
+
+    .tarjetas-mini-grid.cols-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================================
+   MEJORAS V9: LÍNEA DE TIEMPO FIJA, IMÁGENES SIN RECORTE, ZOOM Y MAPA LIMPIO
+   ========================================================================== */
+
+/* 1. Diapositivas más amplias, alineadas arriba para que la línea de tiempo JAMÁS se mueva */
+.story-stage {
+    max-width: 1220px;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 2.2rem;
+    align-items: start;
+    align-content: center;
+    padding: 1.2rem 2rem;
+}
+
+.story-visual {
+    height: 380px;
+    min-height: 380px;
+    background: #14171A;
+    position: relative;
+}
+
+/* Botones de Anterior / Siguiente más cerca del contenido */
+.story-footer {
+    max-width: 1220px;
+    width: 100%;
+    margin: 0 auto 0.6rem auto;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    height: 54px;
+}
+
+/* 2. No recortar ni deformar imágenes de distintas resoluciones */
+.timelapse-stage {
+    height: 310px;
+    background: #0d1117;
+}
+
+.timelapse-frame-img {
+    object-fit: contain !important;
+    background: #0d1117;
+}
+
+.foto-stage-fijo {
+    position: relative;
+    width: 100%;
+    height: 335px;
+    background: #14171A;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.foto-documental img {
+    width: 100%;
+    height: 100% !important;
+    object-fit: contain !important;
+    background: #14171A;
+    cursor: zoom-in;
+}
+
+/* Comparador de Salta (NASA #146731) adaptado a su proporción sin deformar */
+.nasa-comparador {
+    height: 335px;
+    background: #14171A;
+}
+
+.nasa-img {
+    height: 335px;
+    object-fit: cover;
+}
+
+/* Botón flotante para hacer Zoom en cualquier imagen */
+.btn-lupa-flotante {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 8;
+    background: rgba(15, 18, 24, 0.86);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    padding: 5px 10px;
+    font-family: inherit;
+    font-size: 0.72rem;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-lupa-flotante:hover {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+}
+
+/* 3. Arreglo definitivo del KPI de hectáreas y el período en el mapa */
+.lectura-anio-slider {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.1rem;
+    color: var(--accent-primary);
+}
+
+.kpi-periodo-top {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    margin-bottom: 4px;
+}
+
+.badge-anio {
+    font-size: 0.75rem;
+    background: var(--accent-primary);
+    color: #ffffff;
+    border: none;
+    padding: 3px 9px;
+    border-radius: 3px;
+    font-weight: 700;
+}
+
+.kpi-numero {
+    font-size: clamp(1.55rem, 2.1vw, 2.05rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 4. Gráfico de 25 barras: toda la columna vertical responde al mouse sin tener que tocar el rojo */
+.mini-chart-container {
+    height: 78px;
+    padding: 6px 6px 0 6px;
+    gap: 0;
+}
+
+.chart-col-zone {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    padding: 0 1px;
+    cursor: pointer;
+}
+
+.chart-col-zone:hover {
+    background: rgba(153, 27, 27, 0.14);
+}
+
+.chart-col-zone.ley-2007 {
+    border-right: 1.5px dashed var(--text-main);
+}
+
+.chart-col-zone .chart-bar {
+    width: 100%;
+    pointer-events: none;
+}
+
+.chart-hover-badge {
+    font-size: 0.72rem;
+    color: var(--accent-primary);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* 5. Modal Lightbox para ver imágenes de cerca (Zoom 1x / 2x) */
+.modal-zoom {
+    position: fixed;
+    inset: 0;
+    background: rgba(12, 14, 18, 0.94);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-zoom.oculto {
+    display: none !important;
+}
+
+.modal-zoom-topbar {
+    height: 52px;
+    padding: 0 1.2rem;
+    background: #161b22;
+    border-bottom: 1px solid #30363d;
+    color: #f3f4f6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+}
+
+.modal-zoom-acciones {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-zoom-control {
+    background: #262c36;
+    color: #ffffff;
+    border: 1px solid #4b5563;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 0.76rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-zoom-control:hover {
+    background: var(--accent-primary);
+}
+
+.modal-zoom-stage {
+    flex: 1;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    cursor: zoom-in;
+}
+
+.modal-zoom-stage.zoom-2x {
+    justify-content: flex-start;
+    align-items: flex-start;
+    cursor: zoom-out;
+}
+
+.modal-zoom-stage img {
+    max-width: 94vw;
+    max-height: 85dvh;
+    object-fit: contain;
+}
+
+.modal-zoom-stage.zoom-2x img {
+    max-width: none;
+    max-height: none;
+    width: 180vw;
+}
+
+/* 6. Celular limpio: Subtítulo + Título + Texto + Imagen + Siguiente + Saltar al mapa */
+@media (max-width: 1024px) {
+    .story-stage {
+        grid-template-columns: 1fr;
+        gap: 0.65rem;
+        padding: 0.65rem 0.9rem;
+    }
+
+    .story-visual {
+        height: 225px;
+        min-height: 225px;
+    }
+
+    .timelapse-stage,
+    .foto-stage-fijo,
+    .nasa-comparador,
+    .nasa-img {
+        height: 185px;
+    }
+
+    /* En mobile ocultamos las cajas extra, epígrafes largos y el botón Anterior para dejar una vista limpia */
+    .story-extra,
+    .timelapse-caption,
+    .foto-documental figcaption,
+    #btn-intro-ant,
+    #btn-conc-ant {
+        display: none !important;
+    }
+
+    .story-footer {
+        margin: 0;
+        border-radius: 0;
+        justify-content: space-between;
+    }
+
+    #btn-intro-sig,
+    #btn-conc-sig {
+        flex: 1;
+        margin-left: 12px;
+        text-align: center;
+    }
+
+    .kpi-periodo-top {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+/* Visor limpio al tocar cualquier imagen (sin barras ni botones) */
+.modal-zoom {
+    position: fixed;
+    inset: 0;
+    background: rgba(12, 14, 18, 0.92);
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+    cursor: zoom-out;
+}
+
+.modal-zoom.oculto {
+    display: none !important;
+}
+
+.modal-zoom img {
+    max-width: 95vw;
+    max-height: 92dvh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* ==========================================================================
+   AJUSTE EDITORIAL LIMPIO: TEXTO A LA IZQUIERDA · IMAGEN A LA DERECHA (FONDO CLARO)
+   ========================================================================== */
+
+/* Ocultar subtítulos rojos, líneas de tiempo superiores y epígrafes ruidosos */
+.story-badge,
+#intro-timeline,
+#conc-timeline,
+.foto-documental figcaption,
+.timelapse-caption {
+    display: none !important;
+}
+
+/* Texto a la izquierda (columna 1) e Imagen a la derecha (columna 2) */
+.story-stage {
+    max-width: 1160px;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 3rem;
+    align-items: center;
+    padding: 1.5rem 2.2rem;
+}
+
+.story-content {
+    order: 1;
+}
+
+.story-visual-wrap {
+    order: 2;
+}
+
+/* Quitar el fondo negro detrás de las imágenes: usar el mismo fondo cálido del papel */
+.story-visual,
+.foto-stage-fijo,
+.foto-documental,
+.foto-documental img,
+.timelapse-player,
+.timelapse-stage,
+.timelapse-frame-img,
+.nasa-comparador {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.story-visual {
+    height: auto !important;
+    min-height: 0 !important;
+}
+
+/* Las imágenes respetan su proporción natural con borde editorial suave */
+.foto-documental img,
+.timelapse-stage,
+.nasa-comparador {
+    width: 100%;
+    height: auto !important;
+    max-height: 56vh;
+    border-radius: 6px;
+    border: 1px solid var(--border-strong) !important;
+    box-shadow: 0 10px 28px rgba(28, 25, 23, 0.1) !important;
+}
+
+.timelapse-stage {
+    height: 360px !important;
+}
+
+.timelapse-frame-img {
+    object-fit: cover !important;
+    border-radius: 6px;
+}
+
+.nasa-comparador,
+.nasa-img {
+    height: 350px !important;
+    object-fit: cover !important;
+}
+
+/* Lectura más limpia y directa */
+.story-title {
+    font-size: clamp(1.75rem, 2.5vw, 2.3rem);
+    line-height: 1.15;
+    margin-bottom: 1rem;
+}
+
+.story-lead {
+    font-size: 1.04rem;
+    line-height: 1.62;
+    color: var(--text-muted);
+    margin-bottom: 1.1rem;
+}
+
+@media (max-width: 1024px) {
+    .story-stage {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    /* En celular: primero el título/texto breve y debajo la imagen */
+    .story-content {
+        order: 1;
+    }
+
+    .story-visual-wrap {
+        order: 2;
+    }
+
+    .foto-documental img,
+    .timelapse-stage,
+    .nasa-comparador,
+    .nasa-img {
+        max-height: 36vh;
+        height: 220px !important;
+    }
+}
+
+/* ==========================================================================
+   CORRECCIÓN INTEGRAL IPHONE / SAFARI, LISTAS LIMPIAS Y GALERÍA CON FLECHAS
+   ========================================================================== */
+
+/* 1. Usar 100dvh real para que la barra de Safari/Chrome en iPhone no tape los botones */
+html, body {
+    height: 100dvh !important;
+    min-height: -webkit-fill-available;
+    overflow: hidden;
+}
+
+.escena {
+    height: 100dvh !important;
+    display: none;
+    flex-direction: column;
+}
+
+.escena.activa {
+    display: flex;
+}
+
+.story-stage {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.story-footer {
+    flex-shrink: 0;
+    height: auto !important;
+    min-height: 54px;
+    padding: 10px 1.2rem calc(10px + env(safe-area-inset-bottom, 0px)) 1.2rem !important;
+}
+
+/* 2. Quitar el borde negro raro de las imágenes */
+.foto-documental img,
+.timelapse-stage,
+.nasa-comparador {
+    border: none !important;
+    outline: none !important;
+    box-shadow: 0 6px 20px rgba(28, 25, 23, 0.08) !important;
+}
+
+/* 3. Listas limpias con viñetas editoriales en lugar de cajas cuadradas */
+.lista-editorial-intro {
+    list-style: none;
+    padding: 0;
+    margin: 0.4rem 0 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.lista-editorial-intro li {
+    position: relative;
+    padding-left: 16px;
+    font-size: 0.92rem;
+    line-height: 1.48;
+    color: var(--text-main);
+}
+
+.lista-editorial-intro li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--accent-primary);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* 4. Flechas ‹ › para pasar las imágenes satelitales en la galería y en pantalla completa */
+.tl-flecha-galeria {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 6;
+    background: rgba(28, 25, 23, 0.75);
+    color: #ffffff;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tl-flecha-galeria.izq { left: 10px; }
+.tl-flecha-galeria.der { right: 10px; }
+
+.tl-flecha-galeria:hover {
+    background: var(--accent-primary);
+}
+
+.zoom-galeria-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    width: 100%;
+    height: 100%;
+}
+
+.zoom-galeria-centro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.zoom-galeria-fecha {
+    color: #ffffff;
+    background: var(--accent-primary);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.zoom-flecha {
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 1.8rem;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+/* 5. Evitar que los años y etiquetas del mapa se solapen */
+.kpi-periodo-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.slider-ticks {
+    display: flex;
+    justify-content: space-between;
+    gap: 4px;
+    font-size: 0.68rem;
+    white-space: nowrap;
+}
+
+/* 6. En celulares: permitir volver atrás, quitar espacio vacío arriba y mostrar las listas */
+@media (max-width: 1024px) {
+    .story-stage {
+        align-content: start !important;
+        padding: 0.75rem 1rem !important;
+        gap: 0.75rem !important;
+    }
+
+    .story-title {
+        font-size: 1.35rem !important;
+        margin-top: 0 !important;
+        margin-bottom: 0.45rem !important;
+    }
+
+    .story-lead {
+        font-size: 0.9rem !important;
+        line-height: 1.48 !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .story-extra {
+        display: block !important;
+    }
+
+    .lista-editorial-intro li {
+        font-size: 0.82rem;
+    }
+
+    /* Mostrar el botón Anterior en celulares para poder retroceder entre diapositivas */
+    #btn-intro-ant,
+    #btn-conc-ant {
+        display: inline-flex !important;
+        padding: 7px 12px;
+        font-size: 0.78rem;
+    }
+
+    #btn-intro-sig,
+    #btn-conc-sig {
+        flex: 0 1 auto !important;
+        margin-left: 0 !important;
+        padding: 7px 14px;
+        font-size: 0.78rem;
+    }
+
+    .kpi-limpio {
+        display: flex;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 2px;
+    }
+}
