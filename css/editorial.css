@@ -1977,3 +1977,10 @@ html, body {
         gap: 2px;
     }
 }
+
+.mapa-svg-embed {                                                                                                                                                                    
+       width: 100%;                                                                                                                                                                     
+       height: 100%;                                                                                                                                                                    
+       display: block;                                                                                                                                                                  
+   }
+

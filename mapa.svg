@@ -1,5 +1,5 @@
-                              <svg xmlns="http://www.w2.org/2000/svg" viewBox="0 -800 1600 2600">
-        <path id="Cordoba" d="M392.34,-158.37L373.55,-158.19L373.88,-162.76L372.22,-165.4L372.06,-167.69L373.88,-171.2L373.55,-174.19L362.11,-180.17L361.45,-182.46L361.45,-188.09C351.57,-188.92 341.71,-189.78 332.27,-191.08L330.61,-191.96L330.11,-195.3L325.97,-196L323.15,-194.95L318.67,-195.12L313.53,-197.58L309.72,-197.76L307.4,-196.71L304.75,-199.34L297.78,-201.1L280.04,-200.75L266.61,-198.82L262.3,-197.59L263.3,-192.13L266.61,-181.76L265.62,-176.48L255.17,-167.86L244.89,-165.93L226.82,-118.27L228.48,-66.21L238.43,-64.1L246.88,-57.24L252.19,-50.2L254.84,-41.41L263.13,-42.29L264.62,-41.23L264.46,-39.12L264.78,-36.48L266.28,-35.43L266.94,-32.09L265.12,-28.22L264.79,-23.82L265.12,-17.84L263.79,-13.8L263.13,-9.22L261.8,-3.95L261.8,0.27L259.48,3.79L256,5.55L257.82,30C258.99,53.22 260.14,79.12 261.31,104.04C288.99,103 317.05,102.01 340.89,100.52L340.39,66.05L363.27,66.4L394.11,12.76L400.57,3.79L409.03,-4.65L410.85,-9.92L411.51,-14.15L409.52,-21.01L407.54,-30.5L406.04,-36.48L403.22,-42.29L399.08,-49.67L395.6,-55.48L392.61,-59.52L391.95,-63.21L392.61,-65.68L396.26,-70.78L396.76,-74.29L394.44,-79.57L393.77,-82.03L394.77,-86.78L400.74,-104.37L409.52,-131.98L410.52,-134.44L393.34,-158.37Z"/>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -800 1600 2600">
+        <path id="Cordoba" d="M392.34,-158.37L373.55,-158.19L373.88,-162.76L372.22,-165.4L372.06,-167.69L373.88,-171.2L373.55,-174.19L362.11,-180.17L361.45,-182.46L361.45,-188.09C351.57,-188.92 341.71,-189.78 332.27,-191.08L330.61,-191.96L330.11,-195.3L325.97,-196L323.15,-194.95L318.67,-195.12L313.53,-197.58L309.72,-197.76L307.4,-196.71L304.75,-199.34L297.78,-201.1L280.04,-200.75L266.61,-198.82L262.3,-197.59L263.3,-192.13L266.61,-181.76L265.62,-176.48L255.17,-167.86L244.89,-165.93L226.82,-118.27L228.48,-66.21L238.43,-64.1L246.88,-57.24L252.19,-50.2L254.84,-41.41L263.13,-42.29L264.62,-41.23L264.46,-39.12L264.78,-36.48L266.28,-35.43L266.94,-32.09L265.12,-28.22L264.79,-23.82L265.12,-17.84L263.79,-13.8L263.13,-9.22L261.8,-3.95L261.8,0.27L259.48,3.79L256,5.55L257.82,30C258.99,53.22 260.14,79.12 261.31,104.04C288.99,103 317.05,102.01 340.89,100.52L340.39,66.05L363.27,66.4L394.11,12.76L400.57,3.79L409.03,-4.65L410.85,-9.92L411.51,-14.15L409.52,-21.01L407.54,-30.5L406.04,-36.48L403.22,-42.29L399.08,-49.67L395.6,-55.48L392.61,-59.52L391.95,-63.21L392.61,-65.68L396.26,-70.78L396.76,-74.29L394.44,-79.57L393.77,-82.03L394.77,-86.78L400.74,-104.37L409.52,-131.98L410.52,-134.44L393.34,-158.37Z"/>
         <path id="Santa Fe" d="M361.23,66.84L413.29,66.98L450.65,20.3C453.63,16.64 457.95,18.6 461.69,19.88C464.27,21.53 466.67,22.25 468.2,18.32L475.11,8.73L478.97,3.23L469.66,-4.81L462.62,-13.27L458.63,-23.99L458.23,-31.89C458.23,-31.89 457.17,-34.29 457.3,-34.85C457.43,-35.42 457.43,-45.15 457.43,-45.15C457.43,-45.15 457.43,-49.1 458.23,-50.23C459.03,-51.35 460.62,-58.69 460.89,-59.68C461.16,-60.66 459.69,-67.43 459.69,-67.43L460.49,-74.91L472.33,-86.76L483.1,-92.54L489.75,-101.57L500.38,-123.99L510.62,-143.18L510.36,-150.94L508.76,-162.64L511.02,-174.49L511.28,-180.7L508.49,-185.92L511.02,-195.37L512.61,-209.89C512.61,-209.89 515.54,-216.38 515.94,-217.09C516.33,-217.79 524.45,-221.88 524.45,-221.88L531.09,-229.36C531.09,-229.36 533.49,-235.28 533.49,-237.82C533.49,-240.36 534.28,-246.43 534.42,-247.69C534.55,-248.96 536.68,-252.77 536.68,-252.77L536.94,-266.03L538.82,-274.54L541.73,-280.42L545.06,-283.66L546.65,-285.21L546.65,-286.06L413.95,-286.91L412.22,-269.56L409.7,-250.37L406.91,-232.88L400.79,-191.27L393.9,-157.85L410.36,-135L409.17,-130.9L395.07,-86.76C394.01,-83.18 393.97,-79.61 395.74,-76.04C397.74,-72.6 395.49,-70.51 394.14,-68.14C392.22,-65.61 391.73,-62.86 392.28,-59.96L406.38,-37.67L406.64,-34.29L407.04,-30.62L408.5,-25.96C408.5,-25.96 409.43,-22.86 409.57,-22.01C409.7,-21.17 411.43,-16.09 411.43,-16.09L411.29,-11.58L409.96,-7.35L409.03,-4.52L398.93,5.35L393.87,12.54L389.36,21.15L380.71,34.69L362.23,66.84Z"/>
         <path id="Chaco" d="M412.84,-286.75L546.81,-285.88L548.63,-290.8L548.8,-298.19L548.96,-307.51L547.64,-311.91C547.64,-311.91 549.46,-318.94 549.63,-320C549.79,-321.05 558.58,-325.62 558.58,-325.62C558.8,-326.95 559.02,-328.77 559.24,-330.55C557.94,-334.7 558.37,-336.22 560.9,-339.52C562.84,-340.87 565.45,-341.39 564.88,-345.85L570.19,-349.37L567.03,-353.59L563.72,-357.46C560.68,-357.48 558.24,-361.37 555.6,-363.96C555.6,-363.96 548.3,-371.7 547.97,-372.41C547.64,-373.11 540.51,-379.09 540.51,-379.09L530.06,-382.78L525.59,-383.66C522.29,-384.91 519.91,-388.59 517.46,-392.1C513.13,-396.44 509.4,-392.71 506.35,-396.15C506.7,-398.01 507.19,-399.72 506.69,-402.48L502.54,-406.7L500.88,-412.33L493.75,-417.78L482.81,-424.29L482.31,-430.27L478.83,-433.08L475.35,-436.78L473.03,-439.59L470.71,-439.41L468.72,-445.22L460.26,-451.2L447,-458.06L443.19,-464.21L436.06,-468.43C435.63,-475.67 432.03,-476.19 429.09,-478.1L423.95,-478.1L410.69,-490.59C404.54,-490.79 412.01,-496 405.38,-497.63C405.62,-495.55 397.35,-499.59 396.1,-501.14C393.25,-503.46 387.76,-502.97 383.33,-503.61L383.66,-489.36L332.1,-417.6L413.51,-417.43L413.84,-286.75Z"/>
         <path id="Jujuy" d="M188.85,-631.47C186.2,-633.58 182.56,-631.12 182.56,-631.12L182.23,-621.8L182.56,-617.23C187.37,-613.74 185.03,-611.66 180.24,-609.49L175.76,-608.08C172.7,-608.33 171.46,-606.66 170.12,-605.09L168.96,-601.75C169.28,-597.37 167.5,-597.29 166.14,-595.95C163.36,-594.85 159.66,-594.4 159.35,-591.55L156.69,-587.15L151.22,-582.58L146.91,-579.24L144.26,-574.14L147.74,-567.98C152.36,-563.98 155.05,-560.32 154.37,-557.26L153.71,-547.23L152.38,-537.38L148.4,-527.01L145.92,-517.51L152.88,-514.52L158.68,-508.71L166.14,-503.09L170.29,-497.11L175.43,-495.17C178.96,-495.87 182.5,-495.68 186.04,-497.63L188.86,-500.1L188.69,-504.67L187.7,-509.42L187.53,-519.44L186.54,-528.24L185.21,-529.82C184.37,-530.86 186.62,-543.23 188.86,-541.78L204.11,-532.46L202.95,-526.65L202.29,-518.04L204.61,-511.7C212.77,-511.56 212.75,-506.73 215.72,-503.61L219.7,-495.7L223.84,-485.15C229.01,-483.36 234.09,-481.91 239.43,-481.28L245.06,-481.45L251.86,-476C252.89,-474.4 255.39,-474.46 258.16,-474.24C261.96,-477.55 260.94,-482.14 264.62,-480.4C273.76,-477.27 273.42,-476.21 276.06,-483.04L281.04,-482.86L284.35,-488.31C288.56,-489.59 290.39,-493.4 292.98,-496.4L295.79,-501.33L295.3,-535.97L283.19,-536.15L277.72,-530.35C277.72,-530.35 275.73,-532.98 275.23,-533.86C274.74,-534.74 272.75,-536.5 272.75,-536.5C270.18,-538.74 267.08,-538.48 263.63,-536.5L258.82,-537.03L256.33,-539.67L253.52,-543.36L250.7,-547.4L249.7,-549.69L249.54,-552.51C253.86,-558.68 251.66,-565.97 246.76,-565.59C243.96,-565.38 242.16,-566.18 241.08,-569.39L238.6,-574.31L236.11,-579.77C237.07,-581 235.59,-582.23 233.95,-583.46C231.06,-586.91 233.11,-588.11 232.96,-590.32L236.27,-598.06L237.1,-604.92C238.74,-608.08 243.23,-611 240.09,-614.59L235.44,-614.77C232.68,-617.46 229.92,-615.81 227.15,-615.47L224.83,-614.24L216.05,-615.29L211.74,-615.47C208.95,-621.38 204.87,-620.9 200.79,-620.39L196.98,-620.57C197.07,-626.01 193.89,-629.02 189.85,-631.47Z"/>
@@ -25,88 +25,3 @@
         <path id="Santiago del Estero" d="M393.66,-157.77L373.45,-158.68C373.31,-160.14 372.62,-161.22 372.24,-162.45C371.8,-163.86 372.33,-165.8 371.91,-166.84C377.88,-177.47 369.06,-175.78 364.38,-178.28C360.81,-180.75 362.02,-185.39 361.3,-189.16L351.38,-189.16L339.4,-188.98C334.77,-189.19 332.12,-190.9 330.68,-193.52C330.97,-196.36 329.43,-195.99 328.45,-196.6C319.07,-193.54 318.17,-194.26 314.25,-198.6C309.78,-199.89 310.5,-194.26 305.53,-199.33L298.52,-201.14L289.79,-200.78L279.53,-200.23L267.72,-198.42L268.07,-204.95L265.67,-210.03C272.21,-216.35 266.11,-212.44 266.53,-220.38C267.93,-223.79 265.07,-225.5 262.59,-228L262.59,-234.53C262.28,-235.96 256.12,-240.93 252.84,-244.15L253.7,-253.23C254.04,-258.73 254.38,-264.24 254.72,-269.74L252.5,-276.64L250.11,-278.81L249.42,-287.71L248.91,-290.79C253.02,-292.86 256.45,-292.52 262.25,-300.41L258.49,-305.13L260.88,-322.73C263.15,-322.66 265.46,-322.48 265.5,-328.54C266.14,-332.84 268.58,-340.4 269.78,-347.05C271.22,-349.99 276.44,-351.91 274.73,-356.33C274.43,-357.11 275.19,-358.18 274.74,-359.21C279.36,-360.62 278.34,-366.02 277.65,-371.19L278.84,-383.89L283.98,-396.05C283.98,-396.05 285.86,-398.95 286.37,-399.68C286.88,-400.41 286.71,-406.21 286.71,-406.21L288.25,-411.66L290.82,-412.2L293.73,-410.93L299.54,-409.84L300.23,-412.93L310.66,-414.2L321.27,-412.56L327.43,-411.11L332.56,-417.64L338.89,-417.28L413.13,-417.83L414.16,-286.8C408.69,-243.79 403.28,-200.78 394.66,-157.77Z"/>
       </svg>
 
-
-
-  Adentro de la imagen al darle click hay algo de dice zoom x2 saca eso y el de cerrar tambien quitalo, ademas no anda el zoom x2 nose porque. 
-
-En el celular no se puede volver para atras en las diapositivas ademas se ve un contorno negro como un borde en las imagenes raro y hay un espacio entre el header y el titulo de la diapositiva, bueno en general hay muchos bugs poero eso podemos resolverlo depsues
-
-
-Creo que nombrar al amazonas no hace falta o es medio raro que opinas? En pleno 2026 casi 2027 
-
-Los cuadros donde esta la informacion esta no me gusta 
-
-Gran Chaco y Yungas: Desmonte permanente con topadoras para soja y ganado
-
-Me gustaria mas que fuese una lista o algo asi 
-
-
-aqui nombrar el satelite es medio ramdon o nose 
-
-No es solo el Norte: fuego en la Patagonia y pinos en el Litoral
-
-                En el último 
-cuarto de siglo, Argentina perdió más de 200.000 hectáreas de cobertura 
-arbórea por año. Pero el satélite no mide lo mismo en todo el 
-territorio: hay tres procesos muy distintos que transforman el país:
-
-Esto es real? 
-
-¿Por qué cada año hay inundaciones más graves?
-
-                El bosque nativo 
-funciona como una esponja natural: cada vez que llueve, el monte absorbe
- el agua y resguarda millones de toneladas de carbono bajo tierra. Si no
- hay bosque, no hay esponja: el agua fluye sin freno arrasando rutas y 
-pueblos enteros. Y plantar pinos comerciales en otro lado no recupera un
- ecosistema que tarda siglos en regenerarse.
-
-Esto esta checkeado ? En todo el Gran Chaco argentino ya quedan menos de 20 yaguaretés estimados por la destrucción de su hábitat
-
-Creo que me gustaria que empiece hablando algo asi com la deforestacion es un caso serio  en ala acutalidad o algo asi y en la primera imagen mostrar la comparacion de salta 
-
-En la segunda expllicar lo de las maquinas o algo del estilo. Si no es muy importante lo de las maquinas entonces lo salteemos. Porque tambien me gustaria nombrar lo que apso antes del 2000 para un poco de historia. 
-
-La Ley de Bosques de 2007 y lo que sigue pasando hoy
-
-                Tras el récord 
-histórico de topadoras de 2007, la Ley 26.331 obligó a las provincias a 
-categorizar sus bosques nativos en tres zonas como un semáforo. Aunque 
-logró bajar aquel pico extremo, hoy más de la mitad de los desmontes 
-siguen ocurriendo de forma ilegal donde la ley lo prohíbe.
-
-esa me gusta pero que de una invitacion a ver el mapa de 2001 a 2025 
-
-
-Y que el  el cartel de 
-                    Toca una provincia para ver sus datos y evolución (2001–2025)
-                 
-
-Nose si me gusta ahi o me gustaria que fuese un cartel antes de pasar al mapa que opinas? Tipo que sea un cartel que señale las cosas que se pueden hacer filtrar, tocar cada provincia etc, Para mi esta bien asi como esta hecho pero dime tu 
-
-Me gustaria tambien que los botones de atras y adelante del navegador funcionen porque te saca de la pagina actualmente ese boton 
-
-
-esto esta checkeado? 
-
-3 veces la provincia de Tucumán entera (o 352 veces la Ciudad de Buenos 
-Aires): un promedio de 785 hectáreas perdidas por día durante 25 años.
-
-Me gustaria que la liena de timepo de deforestacion se pueda ver en pantalla completa si bine no hace falta que se vea como animacion minimo que se pueda pasar las imagenes con una flecha o una mini galeria algo asi 
-
-Cuando se destruye y quema el bosque, todo el dióxido de carbono que 
-guardaban los árboles vuelve a la atmósfera calentando el planeta y 
-agravando sequías e inundaciones. Todavía estamos a tiempo de exigir que
- se cumpla la Ley de Bosques y frenar el desmonte ilegal en las zonas 
-Rojas y Amarillas.
-
-eso me gusta pero me gustaria que haga un pequeño incapie de porque no hay que dejar que esto siga avanzando pero breve en elmismo parrafo 
-
-10 veces menos absorción
-          de agua de lluvia en suelos desmontados para monocultivo frente al bosque nativo (INTA/CONICET)
-
-eso esta checkeado? 
-
-Ademas quiero que sea mas responsive actualmente hay muchas cosas que se bugean. Por ejemplo entre en mi iphone y los botones quedan por debajo del buscador en  safari y en chome tambien es porque no se puede escrolear creo nose. Tambien los años en el mapa interactivo quedan todo solapados, mira eso tambien
-
-Ve haciendo eso y yo ire buscando info de cada año de cada provincia para poner en el mapa
