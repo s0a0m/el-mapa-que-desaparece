@@ -1,4 +1,5 @@
 const CSV_PATH = './argentina_forest_loss_clean.csv';
+const SVG_MAPA_PATH = './mapa.svg';
 
 const NOMBRES_OFICIALES_DB = {
   "Buenos Aires": "Buenos Aires",
@@ -1019,7 +1020,7 @@ function inicializarControlesTiempo() {
 }
 
 function centrarGeometriaSvg() {
-  const svg = document.querySelector('#mapa-contenedor svg');
+  const svg = document.querySelector('#mapa-contenedor svg')
   if (!svg) return;
 
   try {
@@ -1046,6 +1047,26 @@ function cerrarPanelProvincia() {
   document.querySelectorAll('#mapa-contenedor path.provincia-path').forEach(p => p.classList.remove('activa'));
   const bordeActivo = document.getElementById('svg-borde-activo');
   if (bordeActivo) bordeActivo.removeAttribute('d');
+}
+
+async function cargarSvgMapa() {
+  const contenedor = document.querySelector('#mapa-contenedor .mapa-lienzo-wrapper');
+  if (!contenedor) return;
+
+  try {
+    const respuesta = await fetch(SVG_MAPA_PATH);
+    if (!respuesta.ok) throw new Error(`HTTP error ${respuesta.status}`);
+    const svgTexto = await respuesta.text();
+
+    // Inyecta el SVG como nodo real del DOM
+    contenedor.innerHTML = svgTexto;
+
+    // Inicializa los listeners y el centrado geométrico una vez inyectado
+    inicializarEventosMapa();
+  } catch (error) {
+    console.error("Error al cargar el archivo SVG del mapa:", error);
+    contenedor.innerHTML = `<p class="error-carga">No se pudo cargar la cartografía provincial.</p>`;
+  }
 }
 
 function inicializarEventosMapa() {
@@ -1131,11 +1152,11 @@ function inicializarEventosMapa() {
 
 document.getElementById('btn-cerrar-panel')?.addEventListener('click', cerrarPanelProvincia);
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
   inicializarModalZoom();
   inicializarFlujoPresentacion();
   inicializarControlesTiempo();
-  inicializarEventosMapa();
+  await cargarSvgMapa();
   actualizarLimitesControles();
   inicializarDataset();
 });
