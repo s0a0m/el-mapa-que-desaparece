@@ -1983,4 +1983,57 @@ html, body {
        height: 100%;                                                                                                                                                                    
        display: block;                                                                                                                                                                  
    }
+/* ==========================================================================
+   MEJORA TÁCTIL Y ERGONOMÍA DEL COMPARADOR DE SALTA (MÓVIL Y DESKTOP)
+   ========================================================================== */
+.nasa-comparador {
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+}
 
+.nasa-range {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+    z-index: 10;
+    touch-action: pan-y; /* Permite scroll vertical sin trabas */
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+@media (max-width: 1024px) {
+    .nasa-range {
+        opacity: 1;
+        background: transparent;
+        pointer-events: auto;
+    }
+
+    .nasa-range::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #ffffff;
+        border: 3px solid #1c1917;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+        cursor: grab;
+    }
+
+    .nasa-range::-moz-range-thumb {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #ffffff;
+        border: 3px solid #1c1917;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+        cursor: grab;
+    }
+}

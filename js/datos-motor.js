@@ -1,57 +1,41 @@
-// ============================================================================
-// MOTOR DE DATOS Y CÁLCULOS
-// ============================================================================
+import { HITOS_CRONOLOGICOS } from './cronica-historica.js';
+
 const CSV_PATH = './argentina_forest_loss_clean.csv';
 
-const NOMBRES_OFICIALES_DB = {
-  "Buenos Aires": "Buenos Aires",
-  "Catamarca": "Catamarca",
-  "Chaco": "Chaco",
-  "Chubut": "Chubut",
-  "CABA": "Ciudad de Buenos Aires",
-  "Cordoba": "Córdoba",
-  "Corrientes": "Corrientes",
-  "Entre Rios": "Entre Ríos",
-  "Formosa": "Formosa",
-  "Jujuy": "Jujuy",
-  "La Pampa": "La Pampa",
-  "La Rioja": "La Rioja",
-  "Mendoza": "Mendoza",
-  "Misiones": "Misiones",
-  "Neuquen": "Neuquén",
-  "Rio Negro": "Río Negro",
-  "Salta": "Salta",
-  "San Juan": "San Juan",
-  "San Luis": "San Luis",
-  "Santa Cruz": "Santa Cruz",
-  "Santa Fe": "Santa Fe",
-  "Santiago del Estero": "Santiago del Estero",
-  "Tierra del Fuego": "Tierra del Fuego",
+export const NOMBRES_OFICIALES_DB = {
+  "Buenos Aires": "Buenos Aires", "Catamarca": "Catamarca", "Chaco": "Chaco",
+  "Chubut": "Chubut", "CABA": "Ciudad de Buenos Aires", "Cordoba": "Córdoba",
+  "Corrientes": "Corrientes", "Entre Rios": "Entre Ríos", "Formosa": "Formosa",
+  "Jujuy": "Jujuy", "La Pampa": "La Pampa", "La Rioja": "La Rioja",
+  "Mendoza": "Mendoza", "Misiones": "Misiones", "Neuquen": "Neuquén",
+  "Rio Negro": "Río Negro", "Salta": "Salta", "San Juan": "San Juan",
+  "San Luis": "San Luis", "Santa Cruz": "Santa Cruz", "Santa Fe": "Santa Fe",
+  "Santiago del Estero": "Santiago del Estero", "Tierra del Fuego": "Tierra del Fuego",
   "Tucuman": "Tucumán"
 };
 
-let filasDataset = [];
-
-let filtroTiempo = {
+export const filtroTiempo = {
   modo: 'acumulado',
   anioBase: 2000,
   anioSeleccionado: 2025
 };
 
-let datosCalculados = {
+export let datosCalculados = {
   etiquetaPeriodo: '2001–2025',
   totalNacional: 0,
   porProvincia: {}
 };
 
-let estadoVisualActual = {
-  totalNacional: 0,
-  porProvinciaHa: {}
-};
-
+let filasDataset = [];
+let estadoVisualActual = { totalNacional: 0, porProvinciaHa: {} };
 let idAnimacionActiva = null;
+let callbackActualizarInspector = null;
 
-function normalizarNombreProvincia(nombre) {
+export function registrarCallbackInspector(fn) {
+  callbackActualizarInspector = fn;
+}
+
+export function normalizarNombreProvincia(nombre) {
   if (nombre === "Ciudad de Buenos Aires") return "CABA";
   return nombre.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
@@ -71,7 +55,6 @@ function parsearCSV(textoCsv) {
   for (let i = 1; i < lineas.length; i++) {
     if (!lineas[i].trim()) continue;
     const cols = lineas[i].split(',');
-
     const province = cols[idxProv]?.trim();
     const year = parseInt(cols[idxYear], 10);
     const lossHa = parseFloat(cols[idxLoss]) || 0;
@@ -92,20 +75,7 @@ function parsearCSV(textoCsv) {
   return resultado;
 }
 
-async function inicializarDataset() {
-  try {
-    const resCsv = await fetch(CSV_PATH);
-    if (resCsv.ok) {
-      const texto = await resCsv.text();
-      filasDataset = parsearCSV(texto);
-      recalcularYActualizarVista();
-    }
-  } catch (err) {
-    console.error("Error al leer el archivo CSV:", err);
-  }
-}
-
-function obtenerPaletaActiva() {
+export function obtenerPaletaActiva() {
   const limites = filtroTiempo.modo === 'unico'
     ? [0, 300, 2500, 10000, 35000]
     : [0, 5000, 45000, 160000, 600000];
@@ -121,7 +91,7 @@ function obtenerPaletaActiva() {
   return limites.map((limite, i) => ({ limite, rgb: coloresPapel[i] }));
 }
 
-function calcularColorPorHectareas(ha) {
+export function calcularColorPorHectareas(ha) {
   const paleta = obtenerPaletaActiva();
   if (ha <= 0) {
     const base = paleta[0].rgb;
@@ -131,7 +101,6 @@ function calcularColorPorHectareas(ha) {
   for (let i = 0; i < paleta.length - 1; i++) {
     const actual = paleta[i];
     const siguiente = paleta[i + 1];
-
     if (ha >= actual.limite && ha <= siguiente.limite) {
       const factor = (ha - actual.limite) / (siguiente.limite - actual.limite);
       const r = Math.round(actual.rgb[0] + factor * (siguiente.rgb[0] - actual.rgb[0]));
@@ -144,22 +113,67 @@ function calcularColorPorHectareas(ha) {
   return `rgb(${max[0]}, ${max[1]}, ${max[2]})`;
 }
 
-function actualizarCronicaHistorica(anioReferencia) {
-  const hitos = window.HITOS_CRONOLOGICOS || [];
+export function actualizarCronicaHistorica(anioReferencia) {
+  const hitos = HITOS_CRONOLOGICOS || [];
   const hito = hitos.find(h => anioReferencia >= h.rango[0] && anioReferencia <= h.rango[1]) || hitos[hitos.length - 1];
   if (!hito) return;
 
-  document.getElementById('hito-epigrafe').textContent = hito.epigrafe;
-  document.getElementById('hito-titulo').textContent = hito.titulo;
-  document.getElementById('hito-resumen').textContent = hito.resumen;
+  const epigrafe = document.getElementById('hito-epigrafe');
+  const titulo = document.getElementById('hito-titulo');
+  const resumen = document.getElementById('hito-resumen');
   const link = document.getElementById('hito-link');
+
+  if (epigrafe) epigrafe.textContent = hito.epigrafe;
+  if (titulo) titulo.textContent = hito.titulo;
+  if (resumen) resumen.textContent = hito.resumen;
   if (link) {
     link.href = hito.fuenteUrl;
     link.textContent = `↗ Fuente: ${hito.fuenteTexto}`;
   }
 }
 
-function recalcularYActualizarVista() {
+function animarTransicionDelta(totalDestino, mapaProvinciasDestino) {
+  if (idAnimacionActiva) cancelAnimationFrame(idAnimacionActiva);
+
+  const totalOrigen = estadoVisualActual.totalNacional;
+  const provinciasOrigen = { ...estadoVisualActual.porProvinciaHa };
+
+  const duracionMs = 260;
+  const inicioTiempo = performance.now();
+  const paths = document.querySelectorAll('#mapa-contenedor path.provincia-path');
+
+  function frame(tiempoActual) {
+    const transcurrido = tiempoActual - inicioTiempo;
+    const t = Math.min(1, transcurrido / duracionMs);
+    const ease = 1 - Math.pow(1 - t, 3);
+
+    const totalInterpolado = Math.round(totalOrigen + ease * (totalDestino - totalOrigen));
+    estadoVisualActual.totalNacional = totalInterpolado;
+
+    paths.forEach(path => {
+      const idSvg = path.getAttribute('id');
+      const haInicio = provinciasOrigen[idSvg] ?? 0;
+      const haFin = mapaProvinciasDestino[idSvg] ?? 0;
+      const haActual = haInicio + ease * (haFin - haInicio);
+
+      estadoVisualActual.porProvinciaHa[idSvg] = haActual;
+      path.style.fill = calcularColorPorHectareas(haActual);
+    });
+
+    const elAnio = document.getElementById('indicador-anio');
+    const elDato = document.getElementById('dato-narrativo');
+    if (elAnio) elAnio.textContent = datosCalculados.etiquetaPeriodo;
+    if (elDato) elDato.textContent = `${totalInterpolado.toLocaleString("es-AR")} ha`;
+
+    if (t < 1) {
+      idAnimacionActiva = requestAnimationFrame(frame);
+    }
+  }
+
+  idAnimacionActiva = requestAnimationFrame(frame);
+}
+
+export function recalcularYActualizarVista() {
   if (filasDataset.length === 0) return;
 
   const { modo, anioBase, anioSeleccionado } = filtroTiempo;
@@ -216,7 +230,6 @@ function recalcularYActualizarVista() {
 
   Object.values(agrupadoPorProv).forEach(prov => {
     prov.lossHa = Math.round(prov.lossHa);
-
     let topDriver = '';
     let maxDriverHa = 0;
     Object.entries(prov.driversSum).forEach(([drv, ha]) => {
@@ -226,7 +239,6 @@ function recalcularYActualizarVista() {
       }
     });
     prov.dominantDriver = topDriver;
-
     totalNacional += prov.lossHa;
     nuevasProvinciasHa[prov.idSvg] = prov.lossHa;
   });
@@ -250,49 +262,20 @@ function recalcularYActualizarVista() {
   actualizarCronicaHistorica(anioSeleccionado);
   animarTransicionDelta(totalNacional, nuevasProvinciasHa);
 
-  const provActiva = document.querySelector('#mapa-contenedor path.provincia-path.activa');
-  if (provActiva) {
-    abrirInspectorProvincia(provActiva.getAttribute('id'));
+  if (typeof callbackActualizarInspector === 'function') {
+    callbackActualizarInspector();
   }
 }
 
-function animarTransicionDelta(totalDestino, mapaProvinciasDestino) {
-  if (idAnimacionActiva) cancelAnimationFrame(idAnimacionActiva);
-
-  const totalOrigen = estadoVisualActual.totalNacional;
-  const provinciasOrigen = { ...estadoVisualActual.porProvinciaHa };
-
-  const duracionMs = 260;
-  const inicioTiempo = performance.now();
-  const paths = document.querySelectorAll('#mapa-contenedor path.provincia-path');
-
-  function frame(tiempoActual) {
-    const transcurrido = tiempoActual - inicioTiempo;
-    const t = Math.min(1, transcurrido / duracionMs);
-    const ease = 1 - Math.pow(1 - t, 3);
-
-    const totalInterpolado = Math.round(totalOrigen + ease * (totalDestino - totalOrigen));
-    estadoVisualActual.totalNacional = totalInterpolado;
-
-    paths.forEach(path => {
-      const idSvg = path.getAttribute('id');
-      const haInicio = provinciasOrigen[idSvg] ?? 0;
-      const haFin = mapaProvinciasDestino[idSvg] ?? 0;
-      const haActual = haInicio + ease * (haFin - haInicio);
-
-      estadoVisualActual.porProvinciaHa[idSvg] = haActual;
-      path.style.fill = calcularColorPorHectareas(haActual);
-    });
-
-    const elAnio = document.getElementById('indicador-anio');
-    const elDato = document.getElementById('dato-narrativo');
-    if (elAnio) elAnio.textContent = datosCalculados.etiquetaPeriodo;
-    if (elDato) elDato.textContent = `${totalInterpolado.toLocaleString("es-AR")} ha`;
-
-    if (t < 1) {
-      idAnimacionActiva = requestAnimationFrame(frame);
+export async function inicializarDataset() {
+  try {
+    const resCsv = await fetch(CSV_PATH);
+    if (resCsv.ok) {
+      const texto = await resCsv.text();
+      filasDataset = parsearCSV(texto);
+      recalcularYActualizarVista();
     }
+  } catch (err) {
+    console.error("Error al leer el archivo CSV:", err);
   }
-
-  idAnimacionActiva = requestAnimationFrame(frame);
 }

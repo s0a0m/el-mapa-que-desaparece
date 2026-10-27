@@ -1,26 +1,24 @@
-// ============================================================================
-// NARRATIVA Y FLUJO DE PRESENTACIÓN
-// ============================================================================
-let escenaActiva = 'intro';
-let indiceIntro = 0;
-let indiceConclusion = 0;
-let navegandoPorPopstate = false;
+import { DIAPOSITIVAS_INTRO, DIAPOSITIVAS_CONCLUSION, FUENTES_DOCUMENTALES } from './cronica-historica.js';
+import { abrirZoomImagen, abrirZoomGaleria } from './zoom-modal.js';
 
+export let escenaActiva = 'intro';
+export let indiceIntro = 0;
+export let indiceConclusion = 0;
+
+let navegandoPorPopstate = false;
 let galeriasIntroMontadas = false;
 let timerTimelapse = null;
 let frameTimelapseActual = 0;
 let timelapsePausado = false;
+let callbackAlCambiarEscena = null;
 
-// ============================================================================
-// HISTORIAL DEL NAVEGADOR (BOTONES ATRÁS Y ADELANTE FUNCIONAN SIN SALIR DE LA WEB)
-// ============================================================================
-function guardarEstadoEnHistorial(reemplazar = false) {
+export function registrarCallbackEscena(fn) {
+  callbackAlCambiarEscena = fn;
+}
+
+export function guardarEstadoEnHistorial(reemplazar = false) {
   if (navegandoPorPopstate) return;
-  const estado = {
-    escena: escenaActiva,
-    indiceIntro,
-    indiceConclusion
-  };
+  const estado = { escena: escenaActiva, indiceIntro, indiceConclusion };
   if (reemplazar) {
     window.history.replaceState(estado, '');
   } else {
@@ -28,39 +26,16 @@ function guardarEstadoEnHistorial(reemplazar = false) {
   }
 }
 
-window.addEventListener('popstate', (e) => {
-  const modal = document.getElementById('modal-zoom');
-  if (modal && !modal.classList.contains('oculto')) {
-    modal.classList.add('oculto');
-    return;
-  }
-
-  const panelProv = document.getElementById('panel-provincia');
-  if (escenaActiva === 'mapa' && panelProv && !panelProv.classList.contains('oculto')) {
-    cerrarPanelProvincia();
-    return;
-  }
-
-  if (e.state && e.state.escena) {
-    navegandoPorPopstate = true;
-    indiceIntro = e.state.indiceIntro ?? 0;
-    indiceConclusion = e.state.indiceConclusion ?? 0;
-    irAEscena(e.state.escena, false);
-    renderizarIntro();
-    renderizarConclusion();
-    navegandoPorPopstate = false;
-  }
-});
-
-function irAEscena(nombreEscena, empujarHistorial = true) {
+export function irAEscena(nombreEscena, empujarHistorial = true) {
   escenaActiva = nombreEscena;
   document.getElementById('escena-intro')?.classList.toggle('activa', nombreEscena === 'intro');
   document.getElementById('escena-mapa')?.classList.toggle('activa', nombreEscena === 'mapa');
   document.getElementById('escena-conclusion')?.classList.toggle('activa', nombreEscena === 'conclusion');
 
-  if (nombreEscena === 'mapa') {
-    requestAnimationFrame(() => centrarGeometriaSvg());
+  if (typeof callbackAlCambiarEscena === 'function') {
+    callbackAlCambiarEscena(nombreEscena);
   }
+
   if (empujarHistorial) {
     guardarEstadoEnHistorial();
   }
@@ -69,10 +44,9 @@ function irAEscena(nombreEscena, empujarHistorial = true) {
 function actualizarFrameTimelapse(nuevoIdx) {
   const imgs = document.querySelectorAll('.timelapse-frame-img');
   const badgeAnio = document.getElementById('timelapse-badge-anio');
-
   if (imgs.length === 0) return;
-  frameTimelapseActual = ((nuevoIdx % imgs.length) + imgs.length) % imgs.length;
 
+  frameTimelapseActual = ((nuevoIdx % imgs.length) + imgs.length) % imgs.length;
   imgs.forEach((img, i) => img.classList.toggle('activa', i === frameTimelapseActual));
 
   if (badgeAnio && imgs[frameTimelapseActual]) {
@@ -90,7 +64,7 @@ function iniciarMotorTimelapse() {
   }, 1800);
 }
 
-function crearElementoVisual(slide) {
+export function crearElementoVisual(slide) {
   const itemDom = document.createElement('div');
   itemDom.className = 'slide-media-item activa';
 
@@ -119,7 +93,6 @@ function crearElementoVisual(slide) {
     badge.textContent = slide.frames[0].fecha;
     stage.appendChild(badge);
 
-    // Flechas ‹ › para pasar las fotos satelitales manualmente
     const btnAnt = document.createElement('button');
     btnAnt.type = 'button';
     btnAnt.className = 'tl-flecha-galeria izq';
@@ -145,7 +118,6 @@ function crearElementoVisual(slide) {
     stage.appendChild(btnAnt);
     stage.appendChild(btnSig);
 
-    // Tocar la imagen abre la galería en pantalla completa con flechas
     stage.addEventListener('click', () => {
       timelapsePausado = true;
       abrirZoomGaleria(slide.frames, frameTimelapseActual);
@@ -158,14 +130,17 @@ function crearElementoVisual(slide) {
     const stack = document.createElement('div');
     stack.className = 'visual-stack';
 
+    const tagAntes = slide.etiquetaAntes || 'SALTA · 2000';
+    const tagDespues = slide.etiquetaDespues || 'SALTA · 2019';
+
     stack.innerHTML = `
       <div class="nasa-comparador">
-        <img src="${slide.despuesSrc}" onerror="this.onerror=null;this.src='${slide.despuesFallback}';" alt="${slide.titulo} (2019)" class="nasa-img">
+        <img src="${slide.despuesSrc}" onerror="this.onerror=null;this.src='${slide.despuesFallback}';" alt="${slide.titulo} (${tagDespues})" class="nasa-img">
         <div class="nasa-capa-antes" style="width: 50%;">
-          <img src="${slide.antesSrc}" onerror="this.onerror=null;this.src='${slide.antesFallback}';" alt="${slide.titulo} (2000)" class="nasa-img">
+          <img src="${slide.antesSrc}" onerror="this.onerror=null;this.src='${slide.antesFallback}';" alt="${slide.titulo} (${tagAntes})" class="nasa-img">
         </div>
-        <span class="nasa-tag izq">${slide.etiquetaAntes}</span>
-        <span class="nasa-tag der">${slide.etiquetaDespues}</span>
+        <span class="nasa-tag izq">${tagAntes}</span>
+        <span class="nasa-tag der">${tagDespues}</span>
         <input type="range" min="5" max="95" value="50" class="nasa-range" aria-label="Deslizar para comparar antes y después">
       </div>
     `;
@@ -203,13 +178,20 @@ function crearElementoVisual(slide) {
       capaAntes.style.width = `${e.target.value}%`;
     });
 
+    // Toque o clic sin arrastrar: abre la galería con flechas y el año centrado arriba
     rangeInput.addEventListener('click', (e) => {
       if (!huboArrastre) {
         const rect = boxComparador.getBoundingClientRect();
         const clicX = e.clientX - rect.left;
         const corteX = (parseFloat(rangeInput.value) / 100) * rect.width;
-        const imgElegida = clicX < corteX ? imgAntes : imgDespues;
-        abrirZoomImagen(imgElegida.src, imgElegida.alt);
+
+        const framesComparador = [
+          { src: slide.antesSrc || imgAntes.src, fecha: tagAntes, alt: `${slide.titulo} (${tagAntes})` },
+          { src: slide.despuesSrc || imgDespues.src, fecha: tagDespues, alt: `${slide.titulo} (${tagDespues})` }
+        ];
+
+        const idxInicial = clicX < corteX ? 0 : 1;
+        abrirZoomGaleria(framesComparador, idxInicial);
       }
     });
 
@@ -240,12 +222,12 @@ function crearElementoVisual(slide) {
   return itemDom;
 }
 
-function montarGaleriaIntroEnDOM() {
+export function montarGaleriaIntroEnDOM() {
   if (galeriasIntroMontadas) return;
   const contenedor = document.getElementById('intro-ilustracion');
   if (!contenedor) return;
 
-  const lista = window.DIAPOSITIVAS_INTRO || [];
+  const lista = DIAPOSITIVAS_INTRO || [];
   contenedor.innerHTML = '';
 
   lista.forEach((slide, idx) => {
@@ -259,8 +241,8 @@ function montarGaleriaIntroEnDOM() {
   iniciarMotorTimelapse();
 }
 
-function renderizarIntro() {
-  const lista = window.DIAPOSITIVAS_INTRO || [];
+export function renderizarIntro() {
+  const lista = DIAPOSITIVAS_INTRO || [];
   const slide = lista[indiceIntro];
   if (!slide) return;
 
@@ -288,8 +270,8 @@ function renderizarIntro() {
     indiceIntro === lista.length - 1 ? 'Explorar el Mapa (2001–2025) →' : 'Siguiente →';
 }
 
-function renderizarConclusion() {
-  const lista = window.DIAPOSITIVAS_CONCLUSION || [];
+export function renderizarConclusion() {
+  const lista = DIAPOSITIVAS_CONCLUSION || [];
   const slide = lista[indiceConclusion];
   if (!slide) return;
 
@@ -305,10 +287,11 @@ function renderizarConclusion() {
   document.getElementById('conc-contador').textContent = `${indiceConclusion + 1} / ${lista.length}`;
 
   const contenedorFuentes = document.getElementById('contenedor-fuentes-final');
-  if (contenedorFuentes && window.FUENTES_DOCUMENTALES) {
+  if (contenedorFuentes && FUENTES_DOCUMENTALES) {
+    contenedorFuentes.innerHTML = '';
     const ul = document.createElement('ul');
     ul.className = 'lista-fuentes-compacta';
-    window.FUENTES_DOCUMENTALES.forEach(f => {
+    FUENTES_DOCUMENTALES.forEach(f => {
       const li = document.createElement('li');
       const a = document.createElement('a');
       a.href = f.url;
@@ -326,7 +309,7 @@ function renderizarConclusion() {
     indiceConclusion === lista.length - 1 ? '← Volver al Mapa' : 'Siguiente →';
 }
 
-function inicializarFlujoPresentacion() {
+export function inicializarFlujoPresentacion() {
   const btnTemaViejo = document.getElementById('btn-cambiar-tema');
   if (btnTemaViejo) btnTemaViejo.remove();
 
@@ -335,7 +318,7 @@ function inicializarFlujoPresentacion() {
   renderizarConclusion();
 
   document.getElementById('btn-intro-sig')?.addEventListener('click', () => {
-    const lista = window.DIAPOSITIVAS_INTRO || [];
+    const lista = DIAPOSITIVAS_INTRO || [];
     if (indiceIntro < lista.length - 1) {
       indiceIntro++;
       renderizarIntro();
@@ -375,7 +358,7 @@ function inicializarFlujoPresentacion() {
   document.getElementById('btn-volver-mapa')?.addEventListener('click', () => irAEscena('mapa'));
 
   document.getElementById('btn-conc-sig')?.addEventListener('click', () => {
-    const lista = window.DIAPOSITIVAS_CONCLUSION || [];
+    const lista = DIAPOSITIVAS_CONCLUSION || [];
     if (indiceConclusion < lista.length - 1) {
       indiceConclusion++;
       renderizarConclusion();
@@ -395,16 +378,7 @@ function inicializarFlujoPresentacion() {
 
   window.addEventListener('keydown', (e) => {
     const modalZoom = document.getElementById('modal-zoom');
-    if (modalZoom && !modalZoom.classList.contains('oculto')) {
-      if (e.key === 'Escape') modalZoom.classList.add('oculto');
-      if (e.key === 'ArrowRight' && galeriaZoomFrames) {
-        modalZoom.querySelector('.zoom-flecha.der')?.click();
-      }
-      if (e.key === 'ArrowLeft' && galeriaZoomFrames) {
-        modalZoom.querySelector('.zoom-flecha.izq')?.click();
-      }
-      return;
-    }
+    if (modalZoom && !modalZoom.classList.contains('oculto')) return;
 
     if (escenaActiva === 'intro') {
       if (e.key === 'ArrowRight') document.getElementById('btn-intro-sig')?.click();
@@ -412,8 +386,24 @@ function inicializarFlujoPresentacion() {
     } else if (escenaActiva === 'conclusion') {
       if (e.key === 'ArrowRight') document.getElementById('btn-conc-sig')?.click();
       if (e.key === 'ArrowLeft') document.getElementById('btn-conc-ant')?.click();
-    } else if (escenaActiva === 'mapa' && e.key === 'Escape') {
-      cerrarPanelProvincia();
+    }
+  });
+
+  window.addEventListener('popstate', (e) => {
+    const modal = document.getElementById('modal-zoom');
+    if (modal && !modal.classList.contains('oculto')) {
+      modal.classList.add('oculto');
+      return;
+    }
+
+    if (e.state && e.state.escena) {
+      navegandoPorPopstate = true;
+      indiceIntro = e.state.indiceIntro ?? 0;
+      indiceConclusion = e.state.indiceConclusion ?? 0;
+      irAEscena(e.state.escena, false);
+      renderizarIntro();
+      renderizarConclusion();
+      navegandoPorPopstate = false;
     }
   });
 }

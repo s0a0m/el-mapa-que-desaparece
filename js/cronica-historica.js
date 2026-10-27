@@ -7,7 +7,7 @@ const URL_FALLBACK_AEREA = "https://commons.wikimedia.org/wiki/Special:FilePath/
 const URL_SALTA_2000_NASA = "https://eoimages.gsfc.nasa.gov/images/imagerecords/146000/146731/granchaco_tm5_2000353.jpg";
 const URL_SALTA_2019_NASA = "https://eoimages.gsfc.nasa.gov/images/imagerecords/146000/146731/granchaco_oli_2019357.jpg";
 
-window.DIAPOSITIVAS_INTRO = [
+export const DIAPOSITIVAS_INTRO = [
   {
     titulo: "La pérdida de bosques en Argentina avanza a un ritmo crítico",
     texto: "En el último cuarto de siglo, Argentina perdió más de 7,1 millones de hectáreas de cobertura arbórea. No es un fenómeno natural: como muestra esta comparación en la provincia de Salta (2000 vs. 2019), cada rectángulo claro que devora el verde son cientos de hectáreas de bosque nativo arrasadas para expandir la frontera agropecuaria.",
@@ -88,7 +88,7 @@ window.DIAPOSITIVAS_INTRO = [
 // ============================================================================
 // CONCLUSIONES CON GALERÍA DE FLECHAS (2000–2026) Y PANTALLA COMPLETA
 // ============================================================================
-window.DIAPOSITIVAS_CONCLUSION = [
+export const DIAPOSITIVAS_CONCLUSION = [
   {
     titulo: "7,16 millones de hectáreas menos entre 2001 y 2025",
     texto: "Usa las flechas sobre la imagen (o tócala para abrirla en pantalla completa) y observa cómo avanzó el desmonte sobre el norte argentino entre 2000 y 2026. En todo el país, la superficie perdida equivale a más de 3 veces la provincia de Tucumán entera (o 353 veces la Ciudad de Buenos Aires): un promedio de 785 hectáreas perdidas por día durante 25 años.",
@@ -136,7 +136,7 @@ window.DIAPOSITIVAS_CONCLUSION = [
   }
 ];
 
-window.HITOS_CRONOLOGICOS = [
+export const HITOS_CRONOLOGICOS = [
   {
     rango: [2000, 2006],
     epigrafe: "2001–2006 · FRONTERA AGROPECUARIA",
@@ -179,7 +179,7 @@ window.HITOS_CRONOLOGICOS = [
   }
 ];
 
-window.FUENTES_DOCUMENTALES = [
+export const FUENTES_DOCUMENTALES = [
   { titulo: "Global Forest Watch & GLAD (UMD, Hansen et al. 2013 / WRI & DeepMind, Sims et al. 2025)", url: "https://www.globalforestwatch.org/dashboards/country/ARG/" },
   { titulo: "NASA Earth Observatory: 'Deforestation in Argentina’s Gran Chaco' (ID 146731)", url: "https://science.nasa.gov/earth/earth-observatory/deforestation-in-argentinas-gran-chaco-146731/" },
   { titulo: "Greenpeace Argentina (2026): Informe Anual 2025 sobre deforestación en el norte argentino (PDF)", url: "https://www.greenpeace.org/static/planet4-argentina-stateless/2026/02/5812094a-informe-anual-deforestacion-2025.pdf" },
@@ -190,7 +190,7 @@ window.FUENTES_DOCUMENTALES = [
   { titulo: "Jasinski, A. (2021): Tesis doctoral sobre La Forestal (Repositorio UBA)", url: "https://repositorio.filo.uba.ar/server/api/core/bitstreams/ca770f42-ea50-445a-b3ea-7827e084f9ee/content" }
 ];
 
-window.CONTEXTO_PROVINCIAS = {
+export const CONTEXTO_PROVINCIAS = {
   "Santiago del Estero": {
     region: "GRAN CHACO AMERICANO (CHACO SECO)",
     driver: "Desmonte con Topadoras (Soja y Ganadería)",
@@ -403,3 +403,14 @@ window.CONTEXTO_PROVINCIAS = {
     ]
   }
 };
+
+// ============================================================================
+// COMPATIBILIDAD CON ACCESO GLOBAL (WINDOW)
+// ============================================================================
+if (typeof window !== 'undefined') {
+  window.DIAPOSITIVAS_INTRO = DIAPOSITIVAS_INTRO;
+  window.DIAPOSITIVAS_CONCLUSION = DIAPOSITIVAS_CONCLUSION;
+  window.HITOS_CRONOLOGICOS = HITOS_CRONOLOGICOS;
+  window.FUENTES_DOCUMENTALES = FUENTES_DOCUMENTALES;
+  window.CONTEXTO_PROVINCIAS = CONTEXTO_PROVINCIAS;
+}

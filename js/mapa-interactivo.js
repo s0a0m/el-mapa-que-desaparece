@@ -1,11 +1,42 @@
-// ============================================================================
-// MAPA INTERACTIVO Y PANEL DE PROVINCIA
-// ============================================================================
+import { CONTEXTO_PROVINCIAS } from './cronica-historica.js';
+import { NOMBRES_OFICIALES_DB, filtroTiempo, datosCalculados, recalcularYActualizarVista } from './datos-motor.js';
+import { guardarEstadoEnHistorial, escenaActiva } from './narrativa-flujo.js';
+
 const SVG_MAPA_PATH = './mapa.svg';
+
+export function centrarGeometriaSvg() {
+  const svg = document.querySelector('#mapa-contenedor svg');
+  if (!svg) return;
+
+  try {
+    const bbox = svg.getBBox();
+    if (bbox.width > 0 && bbox.height > 0) {
+      const pad = Math.max(bbox.width, bbox.height) * 0.02;
+      svg.setAttribute(
+        'viewBox',
+        `${bbox.x - pad} ${bbox.y - pad} ${bbox.width + pad * 2} ${bbox.height + pad * 2}`
+      );
+      svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    }
+  } catch (e) {
+    console.warn("No se pudo recalcular el viewBox del SVG:", e);
+  }
+}
+
+export function cerrarPanelProvincia() {
+  const panel = document.getElementById('panel-provincia');
+  if (!panel || panel.classList.contains('oculto')) return;
+
+  panel.classList.add('oculto');
+  document.body.classList.remove('inspector-abierto');
+  document.querySelectorAll('#mapa-contenedor path.provincia-path').forEach(p => p.classList.remove('activa'));
+  const bordeActivo = document.getElementById('svg-borde-activo');
+  if (bordeActivo) bordeActivo.removeAttribute('d');
+}
 
 function obtenerContextoProvincia(idNormalizado, nombreOriginal) {
   const nombreProvincia = (nombreOriginal || NOMBRES_OFICIALES_DB[idNormalizado] || idNormalizado).trim();
-  const dic = window.CONTEXTO_PROVINCIAS || {};
+  const dic = CONTEXTO_PROVINCIAS || {};
 
   const paramsGreenpeace = new URLSearchParams({
     q: `site:greenpeace.org/argentina "${nombreProvincia}" bosques OR desmontes OR incendios`
@@ -94,7 +125,7 @@ function renderizarMiniGraficoProvincia(info) {
   }
 }
 
-function abrirInspectorProvincia(idProv) {
+export function abrirInspectorProvincia(idProv) {
   const panel = document.getElementById('panel-provincia');
   const info = datosCalculados.porProvincia[idProv];
   if (!panel || !info) return;
@@ -179,7 +210,7 @@ function abrirInspectorProvincia(idProv) {
   }
 }
 
-function actualizarLimitesControles() {
+export function actualizarLimitesControles() {
   const slider = document.getElementById('slider-anio');
   const labelSlider = document.getElementById('label-slider');
   const lecturaAnio = document.getElementById('valor-slider-lectura') || document.getElementById('valor-slider-texto');
@@ -187,10 +218,7 @@ function actualizarLimitesControles() {
   const inputFinViejo = document.getElementById('input-anio-fin');
 
   if (filaBaseVieja) filaBaseVieja.classList.add('oculto');
-
-  if (filtroTiempo.anioSeleccionado < 2001) {
-    filtroTiempo.anioSeleccionado = 2001;
-  }
+  if (filtroTiempo.anioSeleccionado < 2001) filtroTiempo.anioSeleccionado = 2001;
 
   if (labelSlider) {
     labelSlider.textContent = filtroTiempo.modo === 'unico'
@@ -206,7 +234,7 @@ function actualizarLimitesControles() {
   if (inputFinViejo) inputFinViejo.value = filtroTiempo.anioSeleccionado;
 }
 
-function inicializarControlesTiempo() {
+export function inicializarControlesTiempo() {
   const btnAcumulado = document.getElementById('btn-modo-acumulado');
   const btnUnico = document.getElementById('btn-modo-unico');
   const slider = document.getElementById('slider-anio');
@@ -237,56 +265,6 @@ function inicializarControlesTiempo() {
   });
 }
 
-function centrarGeometriaSvg() {
-  const svg = document.querySelector('#mapa-contenedor svg')
-  if (!svg) return;
-
-  try {
-    const bbox = svg.getBBox();
-    if (bbox.width > 0 && bbox.height > 0) {
-      const pad = Math.max(bbox.width, bbox.height) * 0.02;
-      svg.setAttribute(
-        'viewBox',
-        `${bbox.x - pad} ${bbox.y - pad} ${bbox.width + pad * 2} ${bbox.height + pad * 2}`
-      );
-      svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-    }
-  } catch (e) {
-    console.warn("No se pudo recalcular el viewBox del SVG:", e);
-  }
-}
-
-function cerrarPanelProvincia() {
-  const panel = document.getElementById('panel-provincia');
-  if (!panel || panel.classList.contains('oculto')) return;
-
-  panel.classList.add('oculto');
-  document.body.classList.remove('inspector-abierto');
-  document.querySelectorAll('#mapa-contenedor path.provincia-path').forEach(p => p.classList.remove('activa'));
-  const bordeActivo = document.getElementById('svg-borde-activo');
-  if (bordeActivo) bordeActivo.removeAttribute('d');
-}
-
-async function cargarSvgMapa() {
-  const contenedor = document.querySelector('#mapa-contenedor .mapa-lienzo-wrapper');
-  if (!contenedor) return;
-
-  try {
-    const respuesta = await fetch(SVG_MAPA_PATH);
-    if (!respuesta.ok) throw new Error(`HTTP error ${respuesta.status}`);
-    const svgTexto = await respuesta.text();
-
-    // Inyecta el SVG como nodo real del DOM
-    contenedor.innerHTML = svgTexto;
-
-    // Inicializa los listeners y el centrado geométrico una vez inyectado
-    inicializarEventosMapa();
-  } catch (error) {
-    console.error("Error al cargar el archivo SVG del mapa:", error);
-    contenedor.innerHTML = `<p class="error-carga">No se pudo cargar la cartografía provincial.</p>`;
-  }
-}
-
 function inicializarEventosMapa() {
   const svg = document.querySelector('#mapa-contenedor svg');
   if (!svg) return;
@@ -295,8 +273,8 @@ function inicializarEventosMapa() {
   if (paths.length === 0) return;
 
   const contenedorPaths = paths[0].parentNode;
-
   const NS_SVG = 'http://www.w3.org/2000/svg';
+
   const bordeActivo = document.createElementNS(NS_SVG, 'path');
   bordeActivo.setAttribute('id', 'svg-borde-activo');
   contenedorPaths.appendChild(bordeActivo);
@@ -355,12 +333,8 @@ function inicializarEventosMapa() {
     });
   });
 
-  document.getElementById('panel-provincia')?.addEventListener('click', (e) => {
-    e.stopPropagation();
-  });
-  document.getElementById('mapa-contenedor')?.addEventListener('click', () => {
-    cerrarPanelProvincia();
-  });
+  document.getElementById('panel-provincia')?.addEventListener('click', (e) => e.stopPropagation());
+  document.getElementById('mapa-contenedor')?.addEventListener('click', () => cerrarPanelProvincia());
   document.getElementById('panel-izquierdo')?.addEventListener('click', () => {
     if (window.innerWidth <= 1024) cerrarPanelProvincia();
   });
@@ -368,13 +342,18 @@ function inicializarEventosMapa() {
   centrarGeometriaSvg();
 }
 
-document.getElementById('btn-cerrar-panel')?.addEventListener('click', cerrarPanelProvincia);
+export async function cargarSvgMapa() {
+  const contenedor = document.querySelector('#mapa-contenedor .mapa-lienzo-wrapper');
+  if (!contenedor) return;
 
-window.addEventListener('DOMContentLoaded', async () => {
-  inicializarModalZoom();
-  inicializarFlujoPresentacion();
-  inicializarControlesTiempo();
-  await cargarSvgMapa();
-  actualizarLimitesControles();
-  inicializarDataset();
-});
+  try {
+    const respuesta = await fetch(SVG_MAPA_PATH);
+    if (!respuesta.ok) throw new Error(`HTTP error ${respuesta.status}`);
+    const svgTexto = await respuesta.text();
+    contenedor.innerHTML = svgTexto;
+    inicializarEventosMapa();
+  } catch (error) {
+    console.error("Error al cargar el archivo SVG del mapa:", error);
+    contenedor.innerHTML = `<p class="error-carga">No se pudo cargar la cartografía provincial.</p>`;
+  }
+}

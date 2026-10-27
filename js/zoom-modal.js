@@ -1,6 +1,7 @@
 // ============================================================================
-// VISOR PANTALLA COMPLETA (IMAGEN ÚNICA O GALERÍA CON FLECHAS ‹ ›)
+// MODAL ZOOM / LIGHTBOX (PANTALLA COMPLETA SIMPLE Y GALERÍA CON FLECHAS)
 // ============================================================================
+
 let galeriaZoomFrames = null;
 let galeriaZoomIdx = 0;
 
@@ -15,7 +16,7 @@ function asegurarModalZoomEnDOM() {
   return modal;
 }
 
-function abrirZoomImagen(src, altTexto) {
+export function abrirZoomImagen(src, altTexto) {
   if (!src) return;
   galeriaZoomFrames = null;
   const modal = asegurarModalZoomEnDOM();
@@ -23,10 +24,10 @@ function abrirZoomImagen(src, altTexto) {
   modal.classList.remove('oculto');
 }
 
-function abrirZoomGaleria(frames, idxInicial) {
+export function abrirZoomGaleria(frames, idxInicial = 0) {
   if (!frames || !frames.length) return;
   galeriaZoomFrames = frames;
-  galeriaZoomIdx = idxInicial || 0;
+  galeriaZoomIdx = Math.max(0, Math.min(idxInicial, frames.length - 1));
   const modal = asegurarModalZoomEnDOM();
 
   const renderFrameModal = () => {
@@ -35,22 +36,22 @@ function abrirZoomGaleria(frames, idxInicial) {
       <div class="zoom-galeria-wrap">
         <button type="button" class="zoom-flecha izq" aria-label="Imagen anterior">‹</button>
         <div class="zoom-galeria-centro">
-          <span class="zoom-galeria-fecha">${f.fecha}</span>
-          <img id="modal-zoom-img" src="${f.src}" alt="Satélite ${f.fecha}">
+          <span class="zoom-galeria-fecha">${f.fecha || ''}</span>
+          <img id="modal-zoom-img" src="${f.src}" alt="${f.alt || ('Satélite ' + (f.fecha || ''))}">
         </div>
         <button type="button" class="zoom-flecha der" aria-label="Imagen siguiente">›</button>
       </div>
     `;
+
     modal.querySelector('.zoom-flecha.izq').addEventListener('click', (e) => {
       e.stopPropagation();
       galeriaZoomIdx = (galeriaZoomIdx - 1 + galeriaZoomFrames.length) % galeriaZoomFrames.length;
-      actualizarFrameTimelapse(galeriaZoomIdx);
       renderFrameModal();
     });
+
     modal.querySelector('.zoom-flecha.der').addEventListener('click', (e) => {
       e.stopPropagation();
       galeriaZoomIdx = (galeriaZoomIdx + 1) % galeriaZoomFrames.length;
-      actualizarFrameTimelapse(galeriaZoomIdx);
       renderFrameModal();
     });
   };
@@ -59,12 +60,24 @@ function abrirZoomGaleria(frames, idxInicial) {
   modal.classList.remove('oculto');
 }
 
-function inicializarModalZoom() {
+export function inicializarModalZoom() {
   const modal = asegurarModalZoomEnDOM();
-  modal.innerHTML = '';
 
-  modal.addEventListener('click', () => {
+  modal.addEventListener('click', (e) => {
+    if (e.target.closest('.zoom-flecha')) return;
     modal.classList.add('oculto');
     galeriaZoomFrames = null;
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (modal.classList.contains('oculto')) return;
+    if (e.key === 'Escape') {
+      modal.classList.add('oculto');
+      galeriaZoomFrames = null;
+    } else if (e.key === 'ArrowLeft' && galeriaZoomFrames) {
+      modal.querySelector('.zoom-flecha.izq')?.click();
+    } else if (e.key === 'ArrowRight' && galeriaZoomFrames) {
+      modal.querySelector('.zoom-flecha.der')?.click();
+    }
   });
 }
