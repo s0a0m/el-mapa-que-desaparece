@@ -12,41 +12,65 @@
 <body>
 
     <!-- ==================================================================
-         ETAPA 1: INTRODUCCIÓN VISUAL (CON LÍNEA DE TIEMPO FIJA ARRIBA)
+         ENCABEZADO EDITORIAL TIPO DIARIO
          ================================================================== -->
-    <section id="escena-intro" class="escena activa" aria-label="Introducción histórica">
-        <div class="story-topbar">
-            <span class="story-brand">EL MAPA QUE DESAPARECE</span>
-            <button type="button" id="btn-saltar-al-mapa" class="btn-fantasma">Ir directo al mapa →</button>
+    <header class="cabecera-diario">
+        <div class="cabecera-cintillo">
+            INVESTIGACIÓN ESPECIAL · MONITOREO SATELITAL 2001–2025
+        </div>
+        <h1 class="cabecera-titulo">El Mapa que Desaparece</h1>
+        <p class="cabecera-bajada">25 años de pérdida de cobertura arbórea en Argentina: del quebracho histórico a las topadoras del Gran Chaco y la paradoja de la Ley de Bosques.</p>
+        <div class="cabecera-metadatos">
+            <span>Datos: Global Forest Watch / NASA / UMSEF</span>
+            <span class="separador">·</span>
+            <span>Lectura estimada: 3 min</span>
+        </div>
+    </header>
+
+    <!-- ==================================================================
+         ETAPA 1-4: NARRATIVA EDITORIAL EN 4 ACTOS
+         ================================================================== -->
+    <section id="escena-narrativa" class="escena activa" aria-label="Narrativa editorial en 4 actos">
+        <div class="narrativa-barra-progreso">
+            <span id="narrativa-acto-actual" class="narrativa-acto-label">ACTO 1 DE 4</span>
+            <div class="narrativa-barra-visual">
+                <div id="narrativa-barra-relleno" class="narrativa-barra-relleno"></div>
+            </div>
         </div>
 
-        <div class="story-stage">
-            <!-- Columna Visual: Línea de tiempo ARRIBA para que nunca se mueva al cambiar de imagen -->
-            <div class="story-visual-wrap">
-                <div id="intro-timeline" class="story-timeline" role="tablist" aria-label="Etapas de la introducción"></div>
-                <div id="intro-ilustracion" class="story-visual"></div>
+        <div class="narrativa-stage">
+            <!-- Columna Izquierda: Tarjeta Narrativa -->
+            <div class="narrativa-contenido">
+                <span id="narrativa-badge" class="narrativa-badge">CONTEXTO</span>
+                <h2 id="narrativa-titulo" class="narrativa-titulo">-</h2>
+                <p id="narrativa-texto" class="narrativa-lead">-</p>
+                <div id="narrativa-extra" class="narrativa-extra"></div>
             </div>
 
-            <!-- Columna de Texto -->
-            <div class="story-content">
-                <span id="intro-periodo" class="story-badge">PERÍODO</span>
-                <h1 id="intro-titulo" class="story-title">-</h1>
-                <p id="intro-texto" class="story-lead">-</p>
-                <div id="intro-extra" class="story-extra"></div>
+            <!-- Columna Derecha: Contenedor Visual Dinámico -->
+            <div class="narrativa-visual-wrap">
+                <div id="narrativa-visual" class="narrativa-visual"></div>
             </div>
         </div>
 
-        <div class="story-footer">
-            <button type="button" id="btn-intro-ant" class="btn-nav">← Anterior</button>
-            <span id="intro-contador" class="story-counter">1 / 5</span>
-            <button type="button" id="btn-intro-sig" class="btn-nav btn-destacado">Siguiente →</button>
+        <div class="narrativa-footer">
+            <div class="narrativa-nav-botones">
+                <button type="button" id="btn-narrativa-ant" class="btn-nav">← Anterior</button>
+                <span id="narrativa-contador" class="narrativa-counter">1 / 4</span>
+                <button type="button" id="btn-narrativa-sig" class="btn-nav btn-destacado">Siguiente paso →</button>
+            </div>
+            <a href="#escena-mapa" id="btn-saltar-al-mapa" class="btn-saltar-sutil">Saltar directamente al mapa interactivo</a>
         </div>
     </section>
 
     <!-- ==================================================================
-         ETAPA 2: EL MAPA INTERACTIVO SIMPLIFICADO
+         ETAPA 5: EL MAPA INTERACTIVO SIMPLIFICADO
          ================================================================== -->
-    <section id="escena-mapa" class="escena" aria-label="Exploración del mapa">
+    <section id="escena-mapa" class="escena" aria-label="Exploración del mapa interactivo">
+        <div class="mapa-banner-superior">
+            <span class="mapa-banner-texto">Laboratorio Abierto · Toca cualquier provincia para ver su serie histórica 2001–2025</span>
+        </div>
+
         <div class="layout-mapa">
 
             <aside id="panel-izquierdo">
@@ -182,39 +206,10 @@
         </aside>
     </section>
 
-    <!-- ==================================================================
-         ETAPA 3: CONCLUSIÓN DINÁMICA (CON LÍNEA DE TIEMPO FIJA ARRIBA)
-         ================================================================== -->
-    <section id="escena-conclusion" class="escena" aria-label="Conclusiones e impacto">
-        <div class="story-topbar">
-            <button type="button" id="btn-volver-mapa" class="btn-fantasma">← Volver al mapa interactivo</button>
-            <span class="story-brand">CONCLUSIONES Y FUENTES</span>
-        </div>
-
-        <div class="story-stage">
-            <div class="story-visual-wrap">
-                <div id="conc-timeline" class="story-timeline cols-3" role="tablist"></div>
-                <div id="conc-ilustracion" class="story-visual"></div>
-            </div>
-
-            <div class="story-content">
-                <span id="conc-etiqueta" class="story-badge">CONCLUSIÓN</span>
-                <h2 id="conc-titulo" class="story-title">-</h2>
-                <p id="conc-texto" class="story-lead">-</p>
-                <div id="conc-extra" class="story-extra"></div>
-            </div>
-        </div>
-
-        <div class="story-footer">
-            <button type="button" id="btn-conc-ant" class="btn-nav">← Anterior</button>
-            <span id="conc-contador" class="story-counter">1 / 3</span>
-            <button type="button" id="btn-conc-sig" class="btn-nav btn-destacado">Siguiente →</button>
-        </div>
-    </section>
 
     <!-- MODAL DE ZOOM PARA VER IMÁGENES DE CERCA SIN RECORTE -->
     <!-- VISOR PANTALLA COMPLETA (Se cierra tocando la imagen y permite pasar fotos con flechas) -->
-    <div id="modal-zoom" class="modal-zoom oculto" role="dialog" aria-modal="true" aria-label="Imagen ampliada"></div>
+    <div id="modal-zoom" class="modal-zoom oculto" role="dialog" aria-modal="true" aria-label="Imagen ampliada">
         <div class="modal-zoom-bar">
             <span id="modal-zoom-caption">Vista detallada</span>
             <div class="modal-zoom-actions">
