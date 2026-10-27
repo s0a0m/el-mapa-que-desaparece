@@ -12,6 +12,26 @@ let frameTimelapseActual = 0;
 let timelapsePausado = false;
 let callbackAlCambiarEscena = null;
 
+function setTexto(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+function setHtml(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = val;
+}
+
+function setAtributo(id, attr, val) {
+  const el = document.getElementById(id);
+  if (el) el.setAttribute(attr, val);
+}
+
+function setEstilo(id, prop, val) {
+  const el = document.getElementById(id);
+  if (el) el.style[prop] = val;
+}
+
 export function registrarCallbackEscena(fn) {
   callbackAlCambiarEscena = fn;
 }
@@ -259,11 +279,11 @@ export function renderizarNarrativa() {
     }
   }
 
-  document.getElementById('narrativa-titulo')?.textContent = slide.titulo;
-  document.getElementById('narrativa-texto')?.textContent = slide.texto;
-  document.getElementById('narrativa-extra')?.innerHTML = slide.extraHtml || '';
-  document.getElementById('narrativa-acto-actual')?.textContent = `ACTO ${indiceNarrativa + 1} DE ${lista.length}`;
-  document.getElementById('narrativa-contador')?.textContent = `${indiceNarrativa + 1} / ${lista.length}`;
+  setTexto('narrativa-titulo', slide.titulo);
+  setTexto('narrativa-texto', slide.texto);
+  setHtml('narrativa-extra', slide.extraHtml || '');
+  setTexto('narrativa-acto-actual', `ACTO ${indiceNarrativa + 1} DE ${lista.length}`);
+  setTexto('narrativa-contador', `${indiceNarrativa + 1} / ${lista.length}`);
 
   const btnAnt = document.getElementById('btn-narrativa-ant');
   if (btnAnt) btnAnt.style.visibility = indiceNarrativa === 0 ? 'hidden' : 'visible';
