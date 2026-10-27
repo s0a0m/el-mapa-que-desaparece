@@ -1,12 +1,12 @@
 import { DIAPOSITIVAS_INTRO, DIAPOSITIVAS_CONCLUSION, FUENTES_DOCUMENTALES } from './cronica-historica.js';
 import { abrirZoomImagen, abrirZoomGaleria } from './zoom-modal.js';
+import { filtroTiempo, recalcularYActualizarVista } from './datos-motor.js';
 
-export let escenaActiva = 'intro';
-export let indiceIntro = 0;
-export let indiceConclusion = 0;
+export let escenaActiva = 'narrativa';
+export let indiceNarrativa = 0;
 
 let navegandoPorPopstate = false;
-let galeriasIntroMontadas = false;
+let galeriasMontadas = false;
 let timerTimelapse = null;
 let frameTimelapseActual = 0;
 let timelapsePausado = false;
@@ -18,7 +18,7 @@ export function registrarCallbackEscena(fn) {
 
 export function guardarEstadoEnHistorial(reemplazar = false) {
   if (navegandoPorPopstate) return;
-  const estado = { escena: escenaActiva, indiceIntro, indiceConclusion };
+  const estado = { escena: escenaActiva, indiceNarrativa };
   if (reemplazar) {
     window.history.replaceState(estado, '');
   } else {
@@ -28,9 +28,8 @@ export function guardarEstadoEnHistorial(reemplazar = false) {
 
 export function irAEscena(nombreEscena, empujarHistorial = true) {
   escenaActiva = nombreEscena;
-  document.getElementById('escena-intro')?.classList.toggle('activa', nombreEscena === 'intro');
+  document.getElementById('escena-narrativa')?.classList.toggle('activa', nombreEscena === 'narrativa');
   document.getElementById('escena-mapa')?.classList.toggle('activa', nombreEscena === 'mapa');
-  document.getElementById('escena-conclusion')?.classList.toggle('activa', nombreEscena === 'conclusion');
 
   if (typeof callbackAlCambiarEscena === 'function') {
     callbackAlCambiarEscena(nombreEscena);
@@ -222,9 +221,9 @@ export function crearElementoVisual(slide) {
   return itemDom;
 }
 
-export function montarGaleriaIntroEnDOM() {
-  if (galeriasIntroMontadas) return;
-  const contenedor = document.getElementById('intro-ilustracion');
+export function montarGaleriaNarrativaEnDOM() {
+  if (galeriasMontadas) return;
+  const contenedor = document.getElementById('narrativa-visual');
   if (!contenedor) return;
 
   const lista = DIAPOSITIVAS_INTRO || [];
@@ -237,22 +236,22 @@ export function montarGaleriaIntroEnDOM() {
     contenedor.appendChild(itemDom);
   });
 
-  galeriasIntroMontadas = true;
+  galeriasMontadas = true;
   iniciarMotorTimelapse();
 }
 
-export function renderizarIntro() {
+export function renderizarNarrativa() {
   const lista = DIAPOSITIVAS_INTRO || [];
-  const slide = lista[indiceIntro];
+  const slide = lista[indiceNarrativa];
   if (!slide) return;
 
-  montarGaleriaIntroEnDOM();
+  montarGaleriaNarrativaEnDOM();
 
-  document.querySelectorAll('#intro-ilustracion .slide-media-item').forEach((el, idx) => {
-    el.classList.toggle('activa', idx === indiceIntro);
+  document.querySelectorAll('#narrativa-visual .slide-media-item').forEach((el, idx) => {
+    el.classList.toggle('activa', idx === indiceNarrativa);
   });
 
-  const boxComp = document.querySelector('#intro-ilustracion .slide-media-item.activa .nasa-comparador');
+  const boxComp = document.querySelector('#narrativa-visual .slide-media-item.activa .nasa-comparador');
   if (boxComp) {
     const imgInterna = boxComp.querySelector('.nasa-capa-antes img');
     if (imgInterna && boxComp.offsetWidth > 0) {
@@ -260,132 +259,78 @@ export function renderizarIntro() {
     }
   }
 
-  document.getElementById('intro-titulo').textContent = slide.titulo;
-  document.getElementById('intro-texto').textContent = slide.texto;
-  document.getElementById('intro-extra').innerHTML = slide.extraHtml || '';
-  document.getElementById('intro-contador').textContent = `${indiceIntro + 1} / ${lista.length}`;
+  document.getElementById('narrativa-titulo')?.textContent = slide.titulo;
+  document.getElementById('narrativa-texto')?.textContent = slide.texto;
+  document.getElementById('narrativa-extra')?.innerHTML = slide.extraHtml || '';
+  document.getElementById('narrativa-acto-actual')?.textContent = `ACTO ${indiceNarrativa + 1} DE ${lista.length}`;
+  document.getElementById('narrativa-contador')?.textContent = `${indiceNarrativa + 1} / ${lista.length}`;
 
-  document.getElementById('btn-intro-ant').style.visibility = indiceIntro === 0 ? 'hidden' : 'visible';
-  document.getElementById('btn-intro-sig').textContent =
-    indiceIntro === lista.length - 1 ? 'Explorar el Mapa (2001–2025) →' : 'Siguiente →';
-}
+  const btnAnt = document.getElementById('btn-narrativa-ant');
+  if (btnAnt) btnAnt.style.visibility = indiceNarrativa === 0 ? 'hidden' : 'visible';
 
-export function renderizarConclusion() {
-  const lista = DIAPOSITIVAS_CONCLUSION || [];
-  const slide = lista[indiceConclusion];
-  if (!slide) return;
-
-  const contenedorVisual = document.getElementById('conc-ilustracion');
-  if (contenedorVisual) {
-    contenedorVisual.innerHTML = '';
-    contenedorVisual.appendChild(crearElementoVisual(slide));
+  const btnSig = document.getElementById('btn-narrativa-sig');
+  if (btnSig) {
+    btnSig.textContent =
+      indiceNarrativa === lista.length - 1 ? 'Explorar el Mapa (2001–2025) →' : 'Siguiente paso →';
   }
 
-  document.getElementById('conc-titulo').textContent = slide.titulo;
-  document.getElementById('conc-texto').textContent = slide.texto;
-  document.getElementById('conc-extra').innerHTML = slide.extraHtml || '';
-  document.getElementById('conc-contador').textContent = `${indiceConclusion + 1} / ${lista.length}`;
-
-  const contenedorFuentes = document.getElementById('contenedor-fuentes-final');
-  if (contenedorFuentes && FUENTES_DOCUMENTALES) {
-    contenedorFuentes.innerHTML = '';
-    const ul = document.createElement('ul');
-    ul.className = 'lista-fuentes-compacta';
-    FUENTES_DOCUMENTALES.forEach(f => {
-      const li = document.createElement('li');
-      const a = document.createElement('a');
-      a.href = f.url;
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-      a.textContent = `↗ ${f.titulo}`;
-      li.appendChild(a);
-      ul.appendChild(li);
-    });
-    contenedorFuentes.appendChild(ul);
+  // Actualizar barra de progreso
+  const barraRelleno = document.getElementById('narrativa-barra-relleno');
+  if (barraRelleno) {
+    const porcentaje = ((indiceNarrativa + 1) / lista.length) * 100;
+    barraRelleno.style.width = `${porcentaje}%`;
   }
-
-  document.getElementById('btn-conc-ant').style.visibility = indiceConclusion === 0 ? 'hidden' : 'visible';
-  document.getElementById('btn-conc-sig').textContent =
-    indiceConclusion === lista.length - 1 ? '← Volver al Mapa' : 'Siguiente →';
 }
+
 
 export function inicializarFlujoPresentacion() {
   const btnTemaViejo = document.getElementById('btn-cambiar-tema');
   if (btnTemaViejo) btnTemaViejo.remove();
 
   guardarEstadoEnHistorial(true);
-  renderizarIntro();
-  renderizarConclusion();
+  renderizarNarrativa();
 
-  document.getElementById('btn-intro-sig')?.addEventListener('click', () => {
+  document.getElementById('btn-narrativa-sig')?.addEventListener('click', () => {
     const lista = DIAPOSITIVAS_INTRO || [];
-    if (indiceIntro < lista.length - 1) {
-      indiceIntro++;
-      renderizarIntro();
+    if (indiceNarrativa < lista.length - 1) {
+      indiceNarrativa++;
+      renderizarNarrativa();
       guardarEstadoEnHistorial();
     } else {
       irAEscena('mapa');
     }
   });
 
-  document.getElementById('btn-intro-ant')?.addEventListener('click', () => {
-    if (indiceIntro > 0) {
-      indiceIntro--;
-      renderizarIntro();
+  document.getElementById('btn-narrativa-ant')?.addEventListener('click', () => {
+    if (indiceNarrativa > 0) {
+      indiceNarrativa--;
+      renderizarNarrativa();
       guardarEstadoEnHistorial();
     }
   });
 
   document.getElementById('btn-saltar-al-mapa')?.addEventListener('click', () => irAEscena('mapa'));
   document.getElementById('btn-volver-intro')?.addEventListener('click', () => {
-    indiceIntro = 0;
-    renderizarIntro();
-    irAEscena('intro');
+    indiceNarrativa = 0;
+    renderizarNarrativa();
+    irAEscena('narrativa');
   });
 
   document.getElementById('btn-ir-conclusion')?.addEventListener('click', () => {
-    indiceConclusion = 0;
-    renderizarConclusion();
-    irAEscena('conclusion');
+    irAEscena('mapa');
   });
 
   document.getElementById('btn-ir-conclusion-mobile')?.addEventListener('click', () => {
-    indiceConclusion = 0;
-    renderizarConclusion();
-    irAEscena('conclusion');
-  });
-
-  document.getElementById('btn-volver-mapa')?.addEventListener('click', () => irAEscena('mapa'));
-
-  document.getElementById('btn-conc-sig')?.addEventListener('click', () => {
-    const lista = DIAPOSITIVAS_CONCLUSION || [];
-    if (indiceConclusion < lista.length - 1) {
-      indiceConclusion++;
-      renderizarConclusion();
-      guardarEstadoEnHistorial();
-    } else {
-      irAEscena('mapa');
-    }
-  });
-
-  document.getElementById('btn-conc-ant')?.addEventListener('click', () => {
-    if (indiceConclusion > 0) {
-      indiceConclusion--;
-      renderizarConclusion();
-      guardarEstadoEnHistorial();
-    }
+    irAEscena('mapa');
   });
 
   window.addEventListener('keydown', (e) => {
     const modalZoom = document.getElementById('modal-zoom');
     if (modalZoom && !modalZoom.classList.contains('oculto')) return;
 
-    if (escenaActiva === 'intro') {
-      if (e.key === 'ArrowRight') document.getElementById('btn-intro-sig')?.click();
-      if (e.key === 'ArrowLeft') document.getElementById('btn-intro-ant')?.click();
-    } else if (escenaActiva === 'conclusion') {
-      if (e.key === 'ArrowRight') document.getElementById('btn-conc-sig')?.click();
-      if (e.key === 'ArrowLeft') document.getElementById('btn-conc-ant')?.click();
+    if (escenaActiva === 'narrativa') {
+      if (e.key === 'ArrowRight') document.getElementById('btn-narrativa-sig')?.click();
+      if (e.key === 'ArrowLeft') document.getElementById('btn-narrativa-ant')?.click();
     }
   });
 
@@ -398,11 +343,9 @@ export function inicializarFlujoPresentacion() {
 
     if (e.state && e.state.escena) {
       navegandoPorPopstate = true;
-      indiceIntro = e.state.indiceIntro ?? 0;
-      indiceConclusion = e.state.indiceConclusion ?? 0;
+      indiceNarrativa = e.state.indiceNarrativa ?? 0;
       irAEscena(e.state.escena, false);
-      renderizarIntro();
-      renderizarConclusion();
+      renderizarNarrativa();
       navegandoPorPopstate = false;
     }
   });
