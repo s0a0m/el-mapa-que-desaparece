@@ -1,5 +1,5 @@
 // ============================================================================
-// CONTROLADOR DE NARRATIVA, RADIOGRAFÍA COMPACTA DE LA LEY Y TIMELAPSE
+// CONTROLADOR DE NARRATIVA, GLOSARIO UNIVERSAL (PC/MÓVIL), LEY Y TIMELAPSE
 // ============================================================================
 import { ETAPAS_HISTORIA_LEY, FUENTES_DOCUMENTALES } from './cronica-historica.js';
 import { abrirZoomGaleria } from './zoom-modal.js';
@@ -34,7 +34,100 @@ function inicializarScrollAnimations() {
   }, { passive: true });
 }
 
-// 2. COMPARADOR INTERACTIVO DE SALTA (MECANISMO ORIGINAL FIABLE CON WIDTH)
+// 2. GLOSARIO INTERACTIVO UNIVERSAL (HOVER EN PC + TAP EN CELULAR Y CERRAR AFUERA)
+function inicializarGlosarioInteractivo() {
+  let popover = document.getElementById('glosario-popover');
+  if (!popover) {
+    popover = document.createElement('div');
+    popover.id = 'glosario-popover';
+    popover.className = 'glosario-popover oculto';
+    document.body.appendChild(popover);
+  }
+
+  let terminoActivoEl = null;
+
+  const ocultarGlosario = () => {
+    popover.classList.add('oculto');
+    if (terminoActivoEl) {
+      terminoActivoEl.classList.remove('termino-activo');
+      terminoActivoEl = null;
+    }
+  };
+
+  const mostrarGlosario = (el) => {
+    const texto = el.getAttribute('data-tooltip');
+    if (!texto) return;
+
+    if (terminoActivoEl && terminoActivoEl !== el) {
+      terminoActivoEl.classList.remove('termino-activo');
+    }
+
+    terminoActivoEl = el;
+    el.classList.add('termino-activo');
+    popover.textContent = texto;
+    popover.classList.remove('oculto');
+
+    const rect = el.getBoundingClientRect();
+    const popRect = popover.getBoundingClientRect();
+    const margen = 12;
+
+    let left = rect.left + (rect.width / 2) - (popRect.width / 2);
+    left = Math.max(margen, Math.min(window.innerWidth - popRect.width - margen, left));
+
+    let top = rect.top - popRect.height - 10;
+    if (top < margen) {
+      top = rect.bottom + 10;
+    }
+
+    popover.style.left = `${Math.round(left)}px`;
+    popover.style.top = `${Math.round(top)}px`;
+  };
+
+  document.querySelectorAll('.termino-glosario').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      if (window.matchMedia('(hover: hover)').matches) {
+        mostrarGlosario(el);
+      }
+    });
+
+    el.addEventListener('mouseleave', () => {
+      if (window.matchMedia('(hover: hover)').matches) {
+        ocultarGlosario();
+      }
+    });
+
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (terminoActivoEl === el && !popover.classList.contains('oculto')) {
+        ocultarGlosario();
+      } else {
+        mostrarGlosario(el);
+      }
+    });
+
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        e.stopPropagation();
+        mostrarGlosario(el);
+      } else if (e.key === 'Escape') {
+        ocultarGlosario();
+      }
+    });
+  });
+
+  // Cerrar al tocar cualquier punto fuera de la palabra o al hacer scroll
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.termino-glosario')) {
+      ocultarGlosario();
+    }
+  });
+
+  window.addEventListener('scroll', ocultarGlosario, { passive: true });
+  window.addEventListener('resize', ocultarGlosario);
+}
+
+// 3. COMPARADOR INTERACTIVO DE SALTA
 function inicializarComparadorSalta() {
   const box = document.getElementById('comparador-salta');
   const slider = document.getElementById('slider-salta');
@@ -94,7 +187,7 @@ function inicializarComparadorSalta() {
   btnZoomSalta?.addEventListener('click', () => abrirGaleriaSalta(0));
 }
 
-// 3. PULSO ANUAL COMPACTO Y COMPARATIVA DE ETAPAS DE LA LEY (CAPÍTULO III)
+// 4. PULSO ANUAL COMPACTO Y COMPARATIVA DE ETAPAS DE LA LEY (CAPÍTULO III)
 export function construirGraficoHistoriaLey(serieNacionalAnual) {
   serieNacionalCache = serieNacionalAnual || {};
   const contenedor = document.getElementById('grafico-nacional-barras');
@@ -204,7 +297,7 @@ function inicializarBotonesLey() {
   });
 }
 
-// 4. REPRODUCTOR TIMELAPSE EN GRANDE (2000–2026) EN EL CAPÍTULO V
+// 5. REPRODUCTOR TIMELAPSE EN GRANDE (2000–2026) EN EL CAPÍTULO V
 function inicializarTimelapseConclusion() {
   const imgs = document.querySelectorAll('#timelapse-stage .tl-img');
   const badge = document.getElementById('tl-badge-fecha');
@@ -269,7 +362,7 @@ function inicializarTimelapseConclusion() {
   }, 1800);
 }
 
-// 5. RENDERIZAR FUENTES EN EL FOOTER
+// 6. RENDERIZAR FUENTES EN EL FOOTER
 function renderizarFuentesFooter() {
   const ul = document.getElementById('contenedor-fuentes-final');
   if (!ul || !FUENTES_DOCUMENTALES) return;
@@ -288,6 +381,7 @@ function renderizarFuentesFooter() {
 
 export function inicializarFlujoPresentacion() {
   inicializarScrollAnimations();
+  inicializarGlosarioInteractivo();
   inicializarComparadorSalta();
   inicializarBotonesLey();
   inicializarTimelapseConclusion();

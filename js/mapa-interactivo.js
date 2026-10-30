@@ -1,5 +1,5 @@
 // ============================================================================
-// MAPA INTERACTIVO, PELÍCULA AUTOMÁTICA (2001–2025) Y BOTTOM SHEET EN MÓVIL
+// MAPA INTERACTIVO, NOTICIAS DINÁMICAS POR ÉPOCA Y BOTTOM SHEET EN MÓVIL
 // ============================================================================
 import { CONTEXTO_PROVINCIAS } from './cronica-historica.js';
 import {
@@ -51,6 +51,7 @@ function obtenerContextoProvincia(idNormalizado, nombreOriginal) {
     explicacion: `Registros satelitales de pérdida de dosel arbóreo entre 2001 y 2025 en la jurisdicción de ${nombreProvincia}.`,
     noticias: [
       {
+        rango: [2001, 2025],
         titulo: `Sistema Nacional de Monitoreo de Bosques Nativos (UMSEF)`,
         fuente: `Ministerio de Ambiente / Argentina.gob.ar`,
         url: "https://www.argentina.gob.ar/ambiente/bosques/umsef"
@@ -59,7 +60,57 @@ function obtenerContextoProvincia(idNormalizado, nombreOriginal) {
   };
 }
 
-function renderizarMiniGraficoProvincia(info) {
+// Selecciona la noticia de la provincia correspondiente al año o época activa
+function renderizarNoticiaPorAnio(ctxData, anioReferencia) {
+  const ulNoticias = document.getElementById('prov-noticias');
+  const tituloSeccion = document.getElementById('prov-noticias-titulo');
+  if (!ulNoticias) return;
+
+  ulNoticias.innerHTML = '';
+  const lista = ctxData.noticias || [];
+  if (lista.length === 0) return;
+
+  // 1. Buscar si hay una noticia con rango explícito [inicio, fin] que incluya el año
+  let noticiaElegida = lista.find(n => Array.isArray(n.rango) && anioReferencia >= n.rango[0] && anioReferencia <= n.rango[1]);
+
+  // 2. Si aún no tiene rango explícito pero hay varias noticias, repartirlas por época
+  if (!noticiaElegida) {
+    if (lista.length >= 3) {
+      noticiaElegida = anioReferencia <= 2009 ? lista[0] : (anioReferencia <= 2019 ? lista[1] : lista[lista.length - 1]);
+    } else if (lista.length === 2) {
+      noticiaElegida = anioReferencia <= 2014 ? lista[0] : lista[1];
+    } else {
+      noticiaElegida = lista[0];
+    }
+  }
+
+  if (tituloSeccion) {
+    if (Array.isArray(noticiaElegida.rango)) {
+      tituloSeccion.textContent = `REFERENCIA DOCUMENTAL (${noticiaElegida.rango[0]}–${noticiaElegida.rango[1]})`;
+    } else {
+      const epocaLabel = lista.length > 1
+        ? (anioReferencia <= 2012 ? 'ETAPA 2001–2012' : 'ETAPA 2013–2025')
+        : 'SERIE 2001–2025';
+      tituloSeccion.textContent = `REFERENCIA DOCUMENTAL (${epocaLabel})`;
+    }
+  }
+
+  const li = document.createElement('li');
+  const a = document.createElement('a');
+  a.href = noticiaElegida.url;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  a.textContent = noticiaElegida.titulo;
+
+  const span = document.createElement('span');
+  span.textContent = `Fuente: ${noticiaElegida.fuente}`;
+
+  li.appendChild(a);
+  li.appendChild(span);
+  ulNoticias.appendChild(li);
+}
+
+function renderizarMiniGraficoProvincia(info, ctxData) {
   const contenedor = document.getElementById('prov-grafico-barras');
   if (!contenedor) return;
   contenedor.innerHTML = '';
@@ -98,6 +149,9 @@ function renderizarMiniGraficoProvincia(info) {
     const mostrarDatoBarra = () => {
       if (labelHover) {
         labelHover.textContent = `Año ${y}: ${val.toLocaleString("es-AR")} ha`;
+      }
+      if (ctxData) {
+        renderizarNoticiaPorAnio(ctxData, y);
       }
     };
 
@@ -189,30 +243,13 @@ export function abrirInspectorProvincia(idProv, abrirDrawerEnMovil = false) {
     lossHa > 0 ? `Emisiones: ${formatearEmisionesCO2(info.emissionsMg)}` : `Sin emisiones registradas`
   );
 
-  renderizarMiniGraficoProvincia(info);
+  renderizarMiniGraficoProvincia(info, ctxData);
 
   setTxt('prov-driver', ctxData.driver || info.dominantDriver);
   setTxt('prov-explicacion', ctxData.explicacion);
 
-  const ulNoticias = document.getElementById('prov-noticias');
-  if (ulNoticias) {
-    ulNoticias.innerHTML = '';
-    (ctxData.noticias || []).slice(0, 1).forEach(n => {
-      const li = document.createElement('li');
-      const a = document.createElement('a');
-      a.href = n.url;
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-      a.textContent = n.titulo;
-
-      const span = document.createElement('span');
-      span.textContent = `Fuente: ${n.fuente}`;
-
-      li.appendChild(a);
-      li.appendChild(span);
-      ulNoticias.appendChild(li);
-    });
-  }
+  // Actualizar la noticia según el año seleccionado en el control principal
+  renderizarNoticiaPorAnio(ctxData, filtroTiempo.anioSeleccionado);
 
   const pathActivo = document.querySelector(`#mapa-contenedor path[id="${targetId}"]`);
   const bordeActivo = document.getElementById('svg-borde-activo');
