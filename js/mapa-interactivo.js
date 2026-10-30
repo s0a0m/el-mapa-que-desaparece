@@ -1,8 +1,21 @@
+// ============================================================================
+// MAPA INTERACTIVO, PELÍCULA AUTOMÁTICA (2001–2025) Y BOTTOM SHEET EN MÓVIL
+// ============================================================================
 import { CONTEXTO_PROVINCIAS } from './cronica-historica.js';
-import { NOMBRES_OFICIALES_DB, filtroTiempo, datosCalculados, recalcularYActualizarVista } from './datos-motor.js';
-import { guardarEstadoEnHistorial, escenaActiva } from './narrativa-flujo.js';
+import {
+  NOMBRES_OFICIALES_DB,
+  filtroTiempo,
+  datosCalculados,
+  recalcularYActualizarVista,
+  formatearEmisionesCO2
+} from './datos-motor.js';
 
 const SVG_MAPA_PATH = './mapa.svg';
+
+let provinciaSeleccionadaId = 'Santiago del Estero';
+let timerPeliculaMapa = null;
+let reproduciendoPelicula = false;
+let peliculaAutoDisparada = false;
 
 export function centrarGeometriaSvg() {
   const svg = document.querySelector('#mapa-contenedor svg');
@@ -11,7 +24,7 @@ export function centrarGeometriaSvg() {
   try {
     const bbox = svg.getBBox();
     if (bbox.width > 0 && bbox.height > 0) {
-      const pad = Math.max(bbox.width, bbox.height) * 0.02;
+      const pad = Math.max(bbox.width, bbox.height) * 0.025;
       svg.setAttribute(
         'viewBox',
         `${bbox.x - pad} ${bbox.y - pad} ${bbox.width + pad * 2} ${bbox.height + pad * 2}`
@@ -23,52 +36,26 @@ export function centrarGeometriaSvg() {
   }
 }
 
-export function cerrarPanelProvincia() {
-  const panel = document.getElementById('panel-provincia');
-  if (!panel || panel.classList.contains('oculto')) return;
-
-  panel.classList.add('oculto');
-  document.body.classList.remove('inspector-abierto');
-  document.querySelectorAll('#mapa-contenedor path.provincia-path').forEach(p => p.classList.remove('activa'));
-  const bordeActivo = document.getElementById('svg-borde-activo');
-  if (bordeActivo) bordeActivo.removeAttribute('d');
-}
-
 function obtenerContextoProvincia(idNormalizado, nombreOriginal) {
   const nombreProvincia = (nombreOriginal || NOMBRES_OFICIALES_DB[idNormalizado] || idNormalizado).trim();
   const dic = CONTEXTO_PROVINCIAS || {};
 
-  const paramsGreenpeace = new URLSearchParams({
-    q: `site:greenpeace.org/argentina "${nombreProvincia}" bosques OR desmontes OR incendios`
-  });
-  const paramsNoticias = new URLSearchParams({
-    tbm: 'nws',
-    q: `deforestacion desmontes incendios bosques "${nombreProvincia}" Argentina`
-  });
-
-  const linksDinamicos = [
-    {
-      titulo: `Reportes de Greenpeace Argentina sobre ${nombreProvincia}`,
-      fuente: `Greenpeace Argentina`,
-      url: "https://www.google.com/search?" + paramsGreenpeace.toString()
-    },
-    {
-      titulo: `Noticias recientes sobre bosques e incendios en ${nombreProvincia}`,
-      fuente: `Google Noticias`,
-      url: "https://www.google.com/search?" + paramsNoticias.toString()
-    }
-  ];
-
   if (dic[idNormalizado]) {
-    const base = dic[idNormalizado];
-    return { ...base, noticias: [...(base.noticias || []), ...linksDinamicos] };
+    return dic[idNormalizado];
   }
 
   return {
     region: "TERRITORIO PROVINCIAL",
     driver: "Transformación de Cobertura Arbórea",
-    explicacion: `Monitoreo satelital de pérdida de cobertura arbórea (>30% de dosel) en ${nombreProvincia} entre 2001 y 2025.`,
-    noticias: linksDinamicos
+    fraseEditorial: `Monitoreo satelital de pérdida de cobertura arbórea (>30% de dosel) en ${nombreProvincia}.`,
+    explicacion: `Registros satelitales de pérdida de dosel arbóreo entre 2001 y 2025 en la jurisdicción de ${nombreProvincia}.`,
+    noticias: [
+      {
+        titulo: `Sistema Nacional de Monitoreo de Bosques Nativos (UMSEF)`,
+        fuente: `Ministerio de Ambiente / Argentina.gob.ar`,
+        url: "https://www.argentina.gob.ar/ambiente/bosques/umsef"
+      }
+    ]
   };
 }
 
@@ -77,7 +64,7 @@ function renderizarMiniGraficoProvincia(info) {
   if (!contenedor) return;
   contenedor.innerHTML = '';
 
-  let labelHover = document.getElementById('chart-hover-info') || document.querySelector('.chart-leyenda');
+  const labelHover = document.getElementById('chart-hover-info');
 
   const valores = [];
   for (let y = 2001; y <= 2025; y++) {
@@ -125,80 +112,98 @@ function renderizarMiniGraficoProvincia(info) {
   }
 }
 
-export function abrirInspectorProvincia(idProv) {
-  const panel = document.getElementById('panel-provincia');
-  const info = datosCalculados.porProvincia[idProv];
-  if (!panel || !info) return;
+export function cerrarDossierMovil() {
+  document.getElementById('panel-provincia')?.classList.remove('abierto-movil');
+  document.getElementById('dossier-backdrop')?.classList.remove('activo');
+  document.body.style.overflow = '';
+}
 
-  const estabaOculto = panel.classList.contains('oculto');
+export function abrirInspectorProvincia(idProv, abrirDrawerEnMovil = false) {
+  if (idProv) provinciaSeleccionadaId = idProv;
+  const targetId = provinciaSeleccionadaId;
+  const info = datosCalculados.porProvincia[targetId];
+  if (!info) return;
+
   const nombreConsulta = info.nombreOriginal;
   const lossHa = info.lossHa;
   const extent2000 = Math.round(info.extent2000Ha);
-  const ctxData = obtenerContextoProvincia(idProv, nombreConsulta);
+  const ctxData = obtenerContextoProvincia(targetId, nombreConsulta);
 
-  panel.classList.remove('oculto');
-  document.body.classList.add('inspector-abierto');
-  if (estabaOculto) {
-    guardarEstadoEnHistorial();
+  const setTxt = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  };
+
+  setTxt('prov-region', ctxData.region);
+  setTxt('prov-nombre', nombreConsulta);
+  setTxt('prov-frase-editorial', `“${ctxData.fraseEditorial || ctxData.explicacion}”`);
+
+  const alertaRotacion = document.getElementById('prov-alerta-rotacion');
+  if (alertaRotacion) {
+    alertaRotacion.classList.toggle('oculto', !ctxData.notaRotacion);
   }
 
-  document.getElementById('prov-nombre').textContent = nombreConsulta;
-  document.getElementById('prov-label-superficie').textContent =
-    `PÉRDIDA (${datosCalculados.etiquetaPeriodo.toUpperCase()})`;
-  document.getElementById('prov-hectareas').textContent = `${lossHa.toLocaleString("es-AR")} ha`;
+  setTxt('prov-label-superficie', `PÉRDIDA (${datosCalculados.etiquetaPeriodo})`);
+  setTxt('prov-hectareas', `${lossHa.toLocaleString("es-AR")} ha`);
 
-  if (extent2000 > 0 && lossHa > 0) {
-    const pctPropio = ((lossHa / extent2000) * 100).toFixed(1).replace('.', ',');
-    document.getElementById('prov-bosque-propio').textContent = `${pctPropio}%`;
-    document.getElementById('prov-base-2000').textContent = ctxData.notaRotacion
-      ? `Dosel 2000: ${extent2000.toLocaleString("es-AR")} ha (incluye rotación forestal)`
-      : `Dosel base 2000: ${extent2000.toLocaleString("es-AR")} ha`;
-  } else {
-    document.getElementById('prov-bosque-propio').textContent = `0%`;
-    document.getElementById('prov-base-2000').textContent = extent2000 > 0
-      ? `Dosel base 2000: ${extent2000.toLocaleString("es-AR")} ha`
-      : `Baja densidad de dosel (>30%)`;
-  }
-
-  let textoPorcentaje = "0% del país";
+  let textoPorcentaje = "0% del total nacional";
   if (lossHa > 0 && datosCalculados.totalNacional > 0) {
     const pct = (lossHa / datosCalculados.totalNacional) * 100;
     textoPorcentaje = pct < 0.1
-      ? "< 0,1% del país"
-      : `${pct.toFixed(1).replace('.', ',')}% del país`;
+      ? "< 0,1% del total del país"
+      : `${pct.toFixed(1).replace('.', ',')}% del total del país`;
   }
-  document.getElementById('prov-porcentaje').textContent = textoPorcentaje;
+  setTxt('prov-porcentaje', textoPorcentaje);
+
+  if (extent2000 > 0 && lossHa > 0) {
+    const pctPropio = ((lossHa / extent2000) * 100).toFixed(1).replace('.', ',');
+    setTxt('prov-bosque-propio', `${pctPropio}%`);
+    setTxt(
+      'prov-base-2000',
+      ctxData.notaRotacion
+        ? `Dosel 2000: ${extent2000.toLocaleString("es-AR")} ha (incl. forestación)`
+        : `Dosel base 2000: ${extent2000.toLocaleString("es-AR")} ha`
+    );
+  } else {
+    setTxt('prov-bosque-propio', `0%`);
+    setTxt(
+      'prov-base-2000',
+      extent2000 > 0
+        ? `Dosel base 2000: ${extent2000.toLocaleString("es-AR")} ha`
+        : `Vegetación árida de copa abierta (<30% dosel)`
+    );
+  }
 
   if (filtroTiempo.modo === 'unico') {
-    document.getElementById('prov-label-pico').textContent = "RÉCORD (2001–2025)";
+    setTxt('prov-label-pico', "RÉCORD HISTÓRICO");
     const hLoss = Math.round(info.historicalPeakLossHa);
-    document.getElementById('prov-peor-anio').textContent = hLoss > 0
-      ? `${info.historicalPeakYear} (${hLoss.toLocaleString("es-AR")} ha)`
-      : "Sin pico";
+    setTxt('prov-peor-anio', hLoss > 0 ? `${info.historicalPeakYear} (${hLoss.toLocaleString("es-AR")} ha)` : "Sin registro");
   } else {
-    document.getElementById('prov-label-pico').textContent = "AÑO PICO DEL PERÍODO";
+    setTxt('prov-label-pico', "AÑO PICO DEL PERÍODO");
     const pLoss = Math.round(info.peakLossHa);
-    document.getElementById('prov-peor-anio').textContent = (lossHa > 0 && pLoss > 0)
-      ? `${info.peakYear} (${pLoss.toLocaleString("es-AR")} ha)`
-      : "Sin pico";
+    setTxt('prov-peor-anio', (lossHa > 0 && pLoss > 0) ? `${info.peakYear} (${pLoss.toLocaleString("es-AR")} ha)` : "Sin registro");
   }
+
+  setTxt(
+    'prov-emisiones-dato',
+    lossHa > 0 ? `Emisiones: ${formatearEmisionesCO2(info.emissionsMg)}` : `Sin emisiones registradas`
+  );
 
   renderizarMiniGraficoProvincia(info);
 
-  document.getElementById('prov-region').textContent = ctxData.region;
-  document.getElementById('prov-driver').textContent = ctxData.driver || info.dominantDriver;
-  document.getElementById('prov-explicacion').textContent = ctxData.explicacion;
+  setTxt('prov-driver', ctxData.driver || info.dominantDriver);
+  setTxt('prov-explicacion', ctxData.explicacion);
 
   const ulNoticias = document.getElementById('prov-noticias');
   if (ulNoticias) {
     ulNoticias.innerHTML = '';
-    ctxData.noticias.forEach(n => {
+    (ctxData.noticias || []).slice(0, 1).forEach(n => {
       const li = document.createElement('li');
       const a = document.createElement('a');
       a.href = n.url;
       a.target = '_blank';
       a.rel = 'noopener noreferrer';
-      a.textContent = `↗ ${n.titulo}`;
+      a.textContent = n.titulo;
 
       const span = document.createElement('span');
       span.textContent = `Fuente: ${n.fuente}`;
@@ -208,40 +213,110 @@ export function abrirInspectorProvincia(idProv) {
       ulNoticias.appendChild(li);
     });
   }
+
+  const pathActivo = document.querySelector(`#mapa-contenedor path[id="${targetId}"]`);
+  const bordeActivo = document.getElementById('svg-borde-activo');
+  if (pathActivo && bordeActivo) {
+    document.querySelectorAll('#mapa-contenedor path.provincia-path').forEach(p => p.classList.remove('activa'));
+    pathActivo.classList.add('activa');
+    bordeActivo.setAttribute('d', pathActivo.getAttribute('d') || '');
+    const tr = pathActivo.getAttribute('transform');
+    if (tr) bordeActivo.setAttribute('transform', tr);
+    else bordeActivo.removeAttribute('transform');
+  }
+
+  if (abrirDrawerEnMovil && window.innerWidth <= 1024) {
+    const panel = document.getElementById('panel-provincia');
+    const backdrop = document.getElementById('dossier-backdrop');
+    if (panel) {
+      panel.scrollTop = 0;
+      panel.classList.add('abierto-movil');
+    }
+    backdrop?.classList.add('activo');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+export function detenerPeliculaMapa() {
+  reproduciendoPelicula = false;
+  if (timerPeliculaMapa) {
+    clearInterval(timerPeliculaMapa);
+    timerPeliculaMapa = null;
+  }
+  const btnPlay = document.getElementById('btn-play-mapa');
+  if (btnPlay) btnPlay.textContent = 'Reproducir serie (2001–2025)';
+}
+
+export function iniciarPeliculaMapa(desdeAnio = 2001) {
+  detenerPeliculaMapa();
+  reproduciendoPelicula = true;
+  filtroTiempo.anioSeleccionado = desdeAnio;
+
+  const btnPlay = document.getElementById('btn-play-mapa');
+  if (btnPlay) btnPlay.textContent = 'Pausar reproducción';
+
+  actualizarLimitesControles();
+  recalcularYActualizarVista();
+
+  timerPeliculaMapa = setInterval(() => {
+    if (filtroTiempo.anioSeleccionado < 2025) {
+      filtroTiempo.anioSeleccionado++;
+      actualizarLimitesControles();
+      recalcularYActualizarVista();
+    } else {
+      detenerPeliculaMapa();
+    }
+  }, 450);
 }
 
 export function actualizarLimitesControles() {
   const slider = document.getElementById('slider-anio');
-  const labelSlider = document.getElementById('label-slider');
-  const lecturaAnio = document.getElementById('valor-slider-lectura') || document.getElementById('valor-slider-texto');
-  const filaBaseVieja = document.getElementById('fila-anio-base');
-  const inputFinViejo = document.getElementById('input-anio-fin');
+  const labelSlider = document.getElementById('label-modo-actual');
+  const lecturaAnio = document.getElementById('lectura-anio-mapa');
 
-  if (filaBaseVieja) filaBaseVieja.classList.add('oculto');
   if (filtroTiempo.anioSeleccionado < 2001) filtroTiempo.anioSeleccionado = 2001;
 
   if (labelSlider) {
     labelSlider.textContent = filtroTiempo.modo === 'unico'
-      ? "Año seleccionado:"
-      : "Acumulado 2001 hasta:";
+      ? "MOSTRANDO EXCLUSIVAMENTE EL AÑO:"
+      : "ACUMULADO DESDE 2001 HASTA EL AÑO:";
   }
 
   if (slider) {
     slider.min = 2001;
     slider.value = filtroTiempo.anioSeleccionado;
   }
-  if (lecturaAnio) lecturaAnio.textContent = filtroTiempo.anioSeleccionado;
-  if (inputFinViejo) inputFinViejo.value = filtroTiempo.anioSeleccionado;
+  if (lecturaAnio) {
+    lecturaAnio.textContent = filtroTiempo.anioSeleccionado;
+  }
 }
 
 export function inicializarControlesTiempo() {
   const btnAcumulado = document.getElementById('btn-modo-acumulado');
   const btnUnico = document.getElementById('btn-modo-unico');
   const slider = document.getElementById('slider-anio');
-  const lecturaAnio = document.getElementById('valor-slider-lectura') || document.getElementById('valor-slider-texto');
-  const inputFinViejo = document.getElementById('input-anio-fin');
+  const btnPlay = document.getElementById('btn-play-mapa');
+  const btnCerrarMovil = document.getElementById('btn-cerrar-dossier');
+  const backdropMovil = document.getElementById('dossier-backdrop');
+
+  btnCerrarMovil?.addEventListener('click', cerrarDossierMovil);
+  backdropMovil?.addEventListener('click', cerrarDossierMovil);
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') cerrarDossierMovil();
+  });
+
+  btnPlay?.addEventListener('click', () => {
+    if (reproduciendoPelicula) {
+      detenerPeliculaMapa();
+    } else {
+      const inicio = filtroTiempo.anioSeleccionado >= 2025 ? 2001 : filtroTiempo.anioSeleccionado;
+      iniciarPeliculaMapa(inicio);
+    }
+  });
 
   btnAcumulado?.addEventListener('click', () => {
+    detenerPeliculaMapa();
     filtroTiempo.modo = 'acumulado';
     btnAcumulado.classList.add('activo');
     btnUnico?.classList.remove('activo');
@@ -250,6 +325,7 @@ export function inicializarControlesTiempo() {
   });
 
   btnUnico?.addEventListener('click', () => {
+    detenerPeliculaMapa();
     filtroTiempo.modo = 'unico';
     btnUnico.classList.add('activo');
     btnAcumulado?.classList.remove('activo');
@@ -258,11 +334,24 @@ export function inicializarControlesTiempo() {
   });
 
   slider?.addEventListener('input', (e) => {
+    detenerPeliculaMapa();
     filtroTiempo.anioSeleccionado = parseInt(e.target.value, 10);
-    if (lecturaAnio) lecturaAnio.textContent = filtroTiempo.anioSeleccionado;
-    if (inputFinViejo) inputFinViejo.value = filtroTiempo.anioSeleccionado;
+    actualizarLimitesControles();
     recalcularYActualizarVista();
   });
+
+  const seccionMapa = document.getElementById('cap-4');
+  if (seccionMapa) {
+    const obsMapa = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !peliculaAutoDisparada) {
+          peliculaAutoDisparada = true;
+          iniciarPeliculaMapa(2001);
+        }
+      });
+    }, { threshold: 0.25 });
+    obsMapa.observe(seccionMapa);
+  }
 }
 
 function inicializarEventosMapa() {
@@ -290,6 +379,9 @@ function inicializarEventosMapa() {
     if (!idProv || idProv.startsWith('svg-borde')) return;
 
     path.classList.add('provincia-path');
+    path.setAttribute('tabindex', '0');
+    path.setAttribute('role', 'button');
+    path.setAttribute('aria-label', NOMBRES_OFICIALES_DB[idProv] || idProv);
 
     path.addEventListener('mouseenter', () => {
       bordeHover.setAttribute('d', path.getAttribute('d') || '');
@@ -307,7 +399,7 @@ function inicializarEventosMapa() {
       tooltip.innerHTML = `
         <strong>${nombreMostrar}</strong>
         Pérdida (${datosCalculados.etiquetaPeriodo}): <span class="tt-ha">${hectareasMostrar} ha</span>
-        <span class="tt-hint">Clic para abrir ficha</span>
+        <span class="tt-hint">Clic para ver crónica provincial</span>
       `;
       tooltip.classList.remove('oculto');
       tooltip.style.left = `${e.clientX + 16}px`;
@@ -319,31 +411,28 @@ function inicializarEventosMapa() {
       tooltip?.classList.add('oculto');
     });
 
+    const seleccionarProvincia = () => {
+      abrirInspectorProvincia(idProv, true);
+    };
+
     path.addEventListener('click', (e) => {
       e.stopPropagation();
-      paths.forEach(p => p.classList.remove('activa'));
-      path.classList.add('activa');
-
-      bordeActivo.setAttribute('d', path.getAttribute('d') || '');
-      const transform = path.getAttribute('transform');
-      if (transform) bordeActivo.setAttribute('transform', transform);
-      else bordeActivo.removeAttribute('transform');
-
-      abrirInspectorProvincia(idProv);
+      seleccionarProvincia();
     });
-  });
 
-  document.getElementById('panel-provincia')?.addEventListener('click', (e) => e.stopPropagation());
-  document.getElementById('mapa-contenedor')?.addEventListener('click', () => cerrarPanelProvincia());
-  document.getElementById('panel-izquierdo')?.addEventListener('click', () => {
-    if (window.innerWidth <= 1024) cerrarPanelProvincia();
+    path.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        seleccionarProvincia();
+      }
+    });
   });
 
   centrarGeometriaSvg();
 }
 
 export async function cargarSvgMapa() {
-  const contenedor = document.querySelector('#mapa-contenedor .mapa-lienzo-wrapper');
+  const contenedor = document.getElementById('svg-wrapper');
   if (!contenedor) return;
 
   try {
@@ -354,6 +443,6 @@ export async function cargarSvgMapa() {
     inicializarEventosMapa();
   } catch (error) {
     console.error("Error al cargar el archivo SVG del mapa:", error);
-    contenedor.innerHTML = `<p class="error-carga">No se pudo cargar la cartografía provincial.</p>`;
+    contenedor.innerHTML = `<p>No se pudo cargar ./mapa.svg. Verifica que esté en la raíz de Frontend.</p>`;
   }
 }

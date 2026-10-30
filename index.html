@@ -1,230 +1,669 @@
 <!DOCTYPE html>
-<html lang="es" data-tema="papel">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Mapa que Desaparece | Bosques en Argentina (2001–2025)</title>
+    <title>El Mapa que Desaparece | Contar con Datos 2026</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,700;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/editorial.css?v=9">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/editorial.css?v=6">
 </head>
 <body>
 
-    <!-- ==================================================================
-         ENCABEZADO EDITORIAL TIPO DIARIO
-         ================================================================== -->
-    <header class="cabecera-diario">
-        <div class="cabecera-cintillo">
-            INVESTIGACIÓN ESPECIAL · MONITOREO SATELITAL 2001–2025
+    <!-- BARRA DE PROGRESO DE LECTURA -->
+    <div class="reading-progress-bar" id="reading-progress"></div>
+
+    <!-- NAVEGACIÓN EDITORIAL (SOLO ESCRITORIO) -->
+    <nav class="nav-diario" aria-label="Navegación de capítulos">
+        <div class="nav-diario-inner">
+            <a href="#portada" class="nav-marca">EL MAPA QUE DESAPARECE</a>
+            <div class="nav-capitulos">
+                <a href="#cap-1" class="nav-link">I. Contexto Histórico</a>
+                <a href="#cap-2" class="nav-link">II. Evidencia Espacial</a>
+                <a href="#cap-3" class="nav-link">III. La Ley 26.331</a>
+                <a href="#cap-4" class="nav-link">IV. Mapa Interactivo</a>
+                <a href="#cap-5" class="nav-link">V. Secuencia e Impacto</a>
+            </div>
         </div>
-        <h1 class="cabecera-titulo">El Mapa que Desaparece</h1>
-        <p class="cabecera-bajada">25 años de pérdida de cobertura arbórea en Argentina: del quebracho histórico a las topadoras del Gran Chaco y la paradoja de la Ley de Bosques.</p>
-        <div class="cabecera-metadatos">
-            <span>Datos: Global Forest Watch / NASA / UMSEF</span>
-            <span class="separador">·</span>
-            <span>Lectura estimada: 3 min</span>
+    </nav>
+
+    <!-- ==================================================================
+         PORTADA DE DIARIO / ESPECIAL PERIODÍSTICO
+         ================================================================== -->
+    <header id="portada" class="hero-diario">
+        <div class="hero-cintillo reveal-up">
+            <span>CONTAR CON DATOS 2026</span>
+            <span class="separador-punto">&middot;</span>
+            <span>REGISTRO SATELITAL 2001–2025</span>
+            <span class="separador-punto">&middot;</span>
+            <span>ARGENTINA</span>
+        </div>
+
+        <div class="hero-bloque-central reveal-up">
+            <h1 class="hero-titulo">El Mapa que Desaparece</h1>
+
+            <p class="hero-bajada">
+                En un cuarto de siglo, Argentina perdió más de <strong>7,16 millones de hectáreas</strong> de cobertura arbórea y <span class="termino-glosario" data-tooltip="Dosel arbóreo: Copa de los árboles que supera los 5 metros de altura y cubre más del 30% del suelo.">dosel</span>. Una crónica visual desde los obrajes de quebracho en el siglo XX hasta el avance de las topadoras en el Gran Chaco, los megaincendios patagónicos y una Ley de Bosques vulnerada en los territorios.
+            </p>
+        </div>
+
+        <div class="hero-kpis-banda reveal-up">
+            <div class="hero-kpi-item">
+                <span class="hero-kpi-num" id="hero-total-ha">7.166.627 ha</span>
+                <span class="hero-kpi-label">Pérdida de dosel acumulada (2001–2025)</span>
+            </div>
+            <div class="hero-kpi-item">
+                <span class="hero-kpi-num">18,3%</span>
+                <span class="hero-kpi-label">Del dosel que tenía el país en el año 2000</span>
+            </div>
+            <div class="hero-kpi-item">
+                <span class="hero-kpi-num">76,3%</span>
+                <span class="hero-kpi-label">Concentrado en 4 provincias del Norte</span>
+            </div>
+        </div>
+
+        <div class="hero-scroll-cta reveal-up">
+            <span>Desliza para leer la investigación</span>
+            <div class="linea-scroll-indicador"></div>
         </div>
     </header>
 
-    <!-- ==================================================================
-         ETAPA 1-4: NARRATIVA EDITORIAL EN 4 ACTOS
-         ================================================================== -->
-    <section id="escena-narrativa" class="escena activa" aria-label="Narrativa editorial en 4 actos">
-        <div class="narrativa-barra-progreso">
-            <span id="narrativa-acto-actual" class="narrativa-acto-label">ACTO 1 DE 4</span>
-            <div class="narrativa-barra-visual">
-                <div id="narrativa-barra-relleno" class="narrativa-barra-relleno"></div>
-            </div>
-        </div>
+    <main class="contenedor-diario">
 
-        <div class="narrativa-stage">
-            <!-- Columna Izquierda: Tarjeta Narrativa -->
-            <div class="narrativa-contenido">
-                <span id="narrativa-badge" class="narrativa-badge">CONTEXTO</span>
-                <h2 id="narrativa-titulo" class="narrativa-titulo">-</h2>
-                <p id="narrativa-texto" class="narrativa-lead">-</p>
-                <div id="narrativa-extra" class="narrativa-extra"></div>
+        <!-- ==================================================================
+             CAPÍTULO I: ANTES DE LOS SATÉLITES (1880–2000)
+             ================================================================== -->
+        <article id="cap-1" class="capitulo-seccion">
+            <div class="capitulo-encabezado-centrado reveal-up">
+                <span class="capitulo-num">CAPÍTULO I &middot; 1880 – 2000</span>
+                <h2 class="capitulo-titulo">La tala no empezó con la soja: el siglo del quebracho y el ferrocarril</h2>
             </div>
 
-            <!-- Columna Derecha: Contenedor Visual Dinámico -->
-            <div class="narrativa-visual-wrap">
-                <div id="narrativa-visual" class="narrativa-visual"></div>
+            <div class="grilla-editorial-2col">
+                <div class="columna-texto reveal-up">
+                    <p class="parrafo-capitular">
+                        Mucho antes de que el monitoreo satelital global comenzara a registrar el planeta de forma continua en el año 2000, los bosques nativos argentinos ya habían sufrido su primera gran amputación histórica. Entre fines del siglo XIX y mediados del siglo XX, el tendido de la red ferroviaria nacional demandó millones de quebrachos colorados para transformarlos en durmientes, postes y leña industrial.
+                    </p>
+                    <p>
+                        En el norte de Santa Fe y el sur del Chaco, compañías monopólicas como <strong>La Forestal</strong> instalaron ciudades enteras, puertos y ramales propios para extraer tanino de los quebrachales. Cuando la veta maderera se agotó a mediados del siglo XX, levantaron las vías y dinamitaron las fábricas, dejando tras de sí una cuña boscosa diezmada.
+                    </p>
+                    <div class="caja-cita-periodistica">
+                        <strong>La línea base del año 2000:</strong> Cuando comenzó el monitoreo satelital moderno, a la Argentina le quedaban <strong>39.069.969 hectáreas</strong> con cobertura arbórea densa (&gt;30% de dosel), refugiadas en el Gran Chaco, las Yungas, la Selva Misionera y los Andes Patagónicos.
+                    </div>
+                </div>
+
+                <figure class="figura-diario reveal-up">
+                    <div class="marco-imagen-zoom" data-zoom-src="img/quebracho-1910.jpg" data-zoom-caption="Locomotora cargada con rollizos de quebracho colorado en Villa Ángela, Chaco (c. 1910).">
+                        <img src="img/quebracho-1910.jpg" 
+                             onerror="this.onerror=null;this.src='https://commons.wikimedia.org/wiki/Special:FilePath/Fabrica_de_extracto_de_quebracho_%27La_Chaque%C3%B1a%27_S._A.,_en_Villa_%C3%81ngela.jpg?width=900';" 
+                             alt="Locomotora con rollizos de quebracho en fábrica de tanino de Chaco, c. 1910" 
+                             class="img-editorial">
+                    </div>
+                    <figcaption class="epigrafe-diario">
+                        <strong>ARCHIVO HISTÓRICO (c. 1910):</strong> Locomotora cargada con rollizos de quebracho colorado frente a la fábrica de tanino en Villa Ángela, Chaco. Durante décadas el monte nativo financió la expansión ferroviaria y la exportación de curtientes.
+                        <div class="links-cita-imagen">
+                            <a href="https://repositorio.filo.uba.ar/server/api/core/bitstreams/ca770f42-ea50-445a-b3ea-7827e084f9ee/content" target="_blank" rel="noopener noreferrer">Fuente académica: Tesis Doctoral sobre La Forestal (Jasinski, UBA 2021)</a>
+                        </div>
+                    </figcaption>
+                </figure>
             </div>
-        </div>
+        </article>
 
-        <div class="narrativa-footer">
-            <div class="narrativa-nav-botones">
-                <button type="button" id="btn-narrativa-ant" class="btn-nav">← Anterior</button>
-                <span id="narrativa-contador" class="narrativa-counter">1 / 4</span>
-                <button type="button" id="btn-narrativa-sig" class="btn-nav btn-destacado">Siguiente paso →</button>
+        <hr class="filete-diario">
+
+        <!-- ==================================================================
+             CAPÍTULO II: LA GEOMETRÍA DEL DESMONTE Y LOS 3 MOTORES (2000–2019)
+             ================================================================== -->
+        <article id="cap-2" class="capitulo-seccion">
+            <div class="capitulo-encabezado-centrado reveal-up">
+                <span class="capitulo-num">CAPÍTULO II &middot; LA EVIDENCIA ESPACIAL</span>
+                <h2 class="capitulo-titulo">En la naturaleza no existen las líneas rectas</h2>
+                <p class="capitulo-subtitulo">
+                    Tras la introducción de la soja transgénica en los años 90 y la devaluación de 2002, la siembra directa y el desplazamiento de la ganadería pampeana empujaron la frontera agropecuaria hacia el norte. Desde el espacio, la cicatriz geométrica es inconfundible.
+                </p>
             </div>
-            <a href="#escena-mapa" id="btn-saltar-al-mapa" class="btn-saltar-sutil">Saltar directamente al mapa interactivo</a>
-        </div>
-    </section>
 
-    <!-- ==================================================================
-         ETAPA 5: EL MAPA INTERACTIVO SIMPLIFICADO
-         ================================================================== -->
-    <section id="escena-mapa" class="escena" aria-label="Exploración del mapa interactivo">
-        <div class="mapa-banner-superior">
-            <span class="mapa-banner-texto">Laboratorio Abierto · Toca cualquier provincia para ver su serie histórica 2001–2025</span>
-        </div>
+            <!-- COMPARADOR INTERACTIVO DE SALTA (2000 VS 2019) -->
+            <figure class="figura-diario figura-ancha reveal-up">
+                <div class="nasa-comparador" id="comparador-salta">
+                    <img src="img/salta-2019.jpg" 
+                         onerror="this.onerror=null;this.src='https://eoimages.gsfc.nasa.gov/images/imagerecords/146000/146731/granchaco_oli_2019357.jpg';" 
+                         alt="Salta en diciembre de 2019 mostrando lotes rectangulares desmontados" 
+                         class="nasa-img" id="img-salta-despues">
+                    <div class="nasa-capa-antes" id="capa-salta-antes" style="width: 50%;">
+                        <img src="img/salta-2000.jpg" 
+                             onerror="this.onerror=null;this.src='https://eoimages.gsfc.nasa.gov/images/imagerecords/146000/146731/granchaco_tm5_2000353.jpg';" 
+                             alt="Salta en diciembre de 2000 con bosque chaqueño continuo" 
+                             class="nasa-img" id="img-salta-antes">
+                    </div>
+                    <div class="nasa-divisor-linea" id="divisor-salta" style="left: 50%;">
+                        <div class="nasa-divisor-circulo">&harr;</div>
+                    </div>
+                    <span class="nasa-tag izq">SALTA &middot; AÑO 2000</span>
+                    <span class="nasa-tag der">SALTA &middot; AÑO 2019</span>
+                    <input type="range" min="2" max="98" value="50" class="nasa-range" id="slider-salta" aria-label="Deslizar para comparar Salta en 2000 y 2019">
+                </div>
+                <figcaption class="epigrafe-diario">
+                    <strong>DESLIZA LA CORTINA SOBRE LA IMAGEN:</strong> Capturas del satélite Landsat (NASA) sobre el departamento de Anta y el Chaco salteño entre diciembre de 2000 y diciembre de 2019. Cada bloque rectangular claro mide entre 100 y 500 hectáreas de bosque nativo arrasado.
+                    <div class="links-cita-imagen">
+                        <a href="https://science.nasa.gov/earth/earth-observatory/deforestation-in-argentinas-gran-chaco-146731/" target="_blank" rel="noopener noreferrer">Fuente oficial: NASA Earth Observatory (#146731)</a>
+                        <button type="button" class="btn-link-zoom" id="btn-zoom-salta">Abrir comparación</button>
+                    </div>
+                </figcaption>
+            </figure>
 
-        <div class="layout-mapa">
+            <!-- DOS FICHAS DOCUMENTALES (AMPLIABLES AL TOCAR LA FOTO SIN CARTELES) -->
+            <div class="bloque-evidencia-terreno margen-top-lg reveal-up">
+                <div class="encabezado-subbloque-centrado">
+                    <span class="capitulo-num">MECANISMO E IMPACTO FÍSICO EN EL TERRITORIO</span>
+                    <h3 class="subtitulo-bloque">Cómo se borra un bosque milenario y qué ocurre con el agua</h3>
+                </div>
 
-            <aside id="panel-izquierdo">
-                <div class="bloque-controles-mapa">
-                    <div class="cabecera-compacta">
-                        <h2 class="titulo-app">El Mapa que Desaparece</h2>
-                        <div class="acciones-mini">
-                            <button type="button" id="btn-volver-intro" class="btn-mini">← Intro</button>
+                <div class="grilla-editorial-2col">
+                    <div class="ficha-terreno-card">
+                        <div class="marco-imagen-zoom" data-zoom-src="img/topadoras.jpg" data-zoom-caption="Desmonte mecánico en el Gran Chaco: dos topadoras pesadas unidas por cadenas de acero.">
+                            <img src="img/topadoras.jpg" 
+                                 onerror="this.onerror=null;this.src='https://commons.wikimedia.org/wiki/Special:FilePath/Quebracho_colorado_wood.jpg?width=900';" 
+                                 alt="Desmonte mecánico con topadoras y quebrachos derribados" 
+                                 class="img-ficha-terreno">
+                        </div>
+                        <div class="ficha-terreno-cuerpo">
+                            <span class="ficha-kicker">01 &middot; EL MECANISMO EN EL NORTE</span>
+                            <h4>"Cadenéo" mecánico y desmonte químico</h4>
+                            <p>
+                                En el Gran Chaco, dos topadoras blindadas avanzan en paralelo unidas por una pesada cadena naval de acero que arranca quebrachos y algarrobos de raíz. En los últimos años se sumó el <em>desmonte químico</em>: aviones fumigadores que rocían herbicidas desecantes para matar el monte en pie antes de quemarlo.
+                            </p>
+                            <div class="links-cita-imagen">
+                                <a href="https://www.greenpeace.org/argentina/blog/problemas/bosques/asi-se-ve-la-deforestacion-en-argentina-en-10-fotos-impactantes/" target="_blank" rel="noopener noreferrer">Fuente documental: Relevamiento Greenpeace Argentina</a>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- CONTROL TEMPORAL DE 1 SOLO PUNTO (Sin inputs numéricos redundantes) -->
-                    <div class="bloque-control">
-                        <div class="modo-tabs" role="group" aria-label="Modo de línea de tiempo">
-                            <button type="button" id="btn-modo-acumulado" class="modo-tab activo">Acumulado (desde 2001)</button>
-                            <button type="button" id="btn-modo-unico" class="modo-tab">1 año específico</button>
+                    <div class="ficha-terreno-card">
+                        <div class="marco-imagen-zoom" data-zoom-src="img/aerea-desmonte.jpg" data-zoom-caption="Pérdida del efecto esponja: suelos compactados que absorben 10 veces menos agua de lluvia.">
+                            <img src="img/aerea-desmonte.jpg" 
+                                 onerror="this.onerror=null;this.src='img/desmonte-chaco.jpg';" 
+                                 alt="Contraste aéreo del desmonte y pérdida de absorción hídrica" 
+                                 class="img-ficha-terreno">
                         </div>
-
-                        <div class="control-header">
-                            <label id="label-slider" for="slider-anio">Acumulado 2001 hasta:</label>
-                            <strong id="valor-slider-texto" class="badge-anio">2025</strong>
+                        <div class="ficha-terreno-cuerpo">
+                            <span class="ficha-kicker">02 &middot; CONSECUENCIA HIDROLÓGICA</span>
+                            <h4>El fin del "efecto esponja" y las inundaciones</h4>
+                            <p>
+                                El bosque nativo funciona como regulador de las cuencas hídricas. Estudios del INTA y CONICET demostraron que un suelo desmontado para monocultivo se compacta y <strong>absorbe hasta 10 veces menos agua por hora</strong> (de 300 mm/h a 30 mm/h), provocando inundaciones devastadoras aguas abajo.
+                            </p>
+                            <div class="links-cita-imagen">
+                                <a href="https://www.argentina.gob.ar/ambiente/bosques/umsef" target="_blank" rel="noopener noreferrer">Fuente técnica: Monitoreo de Bosques (UMSEF / INTA)</a>
+                            </div>
                         </div>
+                    </div>
+                </div>
+            </div>
 
-                        <input type="range" id="slider-anio" min="2001" max="2025" value="2025" step="1">
-                        <div class="slider-ticks">
-                            <span id="tick-min">2001</span>
+            <!-- RIGOR METODOLÓGICO -->
+            <div class="caja-metodologia-wri reveal-up">
+                <div class="metodologia-header">
+                    <h3>Por qué "pérdida de cobertura arbórea" no siempre es igual a desmonte</h3>
+                </div>
+                <p>
+                    El satélite mide la pérdida de todo dosel mayor a 5 metros con densidad superior al 30%. Según la clasificación de motores globales (<em>drivers</em>) de WRI y Google DeepMind para Argentina (2001–2025), los 7,16 millones de hectáreas perdidas se dividen en tres procesos territoriales distintos:
+                </p>
+                <div class="grilla-3-motores">
+                    <div class="motor-card motor-chaco">
+                        <div class="motor-top-row">
+                            <span class="motor-tag">1. GRAN CHACO Y YUNGAS</span>
+                            <strong class="motor-pct">79,8%</strong>
+                        </div>
+                        <h4>Desmonte Nativo Permanente</h4>
+                        <div class="barra-driver-bg"><div class="barra-driver-fill chaco" style="width: 79.8%;"></div></div>
+                        <span class="motor-cifra-ha">5.716.400 ha (2001–2025)</span>
+                        <p>En Santiago del Estero, Salta, Chaco y Formosa, la pérdida corresponde a la conversión irreversible de bosque nativo con topadoras para agricultura y ganadería.</p>
+                    </div>
+
+                    <div class="motor-card motor-litoral">
+                        <div class="motor-top-row">
+                            <span class="motor-tag">2. MISIONES, CORRIENTES Y DELTA</span>
+                            <strong class="motor-pct">10,6%</strong>
+                        </div>
+                        <h4>Rotación Forestal Comercial</h4>
+                        <div class="barra-driver-bg"><div class="barra-driver-fill litoral" style="width: 18%;"></div></div>
+                        <span class="motor-cifra-ha">758.624 ha (2001–2025)</span>
+                        <p>En la Mesopotamia, gran parte de la pérdida satelital mide la cosecha programada y replantación de pinos, eucaliptos y sauces industriales, no bosque nativo.</p>
+                    </div>
+
+                    <div class="motor-card motor-patagonia">
+                        <div class="motor-top-row">
+                            <span class="motor-tag">3. CÓRDOBA Y PATAGONIA ANDINA</span>
+                            <strong class="motor-pct">6,7%</strong>
+                        </div>
+                        <h4>Megaincendios Forestales</h4>
+                        <div class="barra-driver-bg"><div class="barra-driver-fill patagonia" style="width: 12%;"></div></div>
+                        <span class="motor-cifra-ha">480.297 ha (+ 2,9% otros)</span>
+                        <p>En las sierras de Córdoba y en los bosques andino-patagónicos (Chubut, Río Negro, Neuquén y Tierra del Fuego), los picos anuales responden al fuego.</p>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <hr class="filete-diario">
+
+        <!-- ==================================================================
+             CAPÍTULO III: LA PARADOJA DE LA LEY DE BOSQUES
+             ================================================================== -->
+        <article id="cap-3" class="capitulo-seccion">
+            <div class="capitulo-encabezado-centrado reveal-up">
+                <span class="capitulo-num">CAPÍTULO III &middot; EL QUIEBRE DE 2007–2009</span>
+                <h2 class="capitulo-titulo">La paradoja de la Ley de Bosques: ¿por qué se siguió deforestando después de prohibirlo?</h2>
+                <p class="capitulo-subtitulo">
+                    En noviembre de 2007 el Congreso sancionó la Ley Nacional 26.331: cada provincia debió zonificar sus bosques nativos en tres categorías legales. Sin embargo, el récord histórico ocurrió entre 2007 y 2008, y desde su reglamentación en 2009 se perdieron más de 4,1 millones de hectáreas adicionales.
+                </p>
+            </div>
+
+            <!-- 1. EL SEMÁFORO DE LA LEY EN CINTA HORIZONTAL DE 3 COLUMNAS -->
+            <div class="cinta-semaforo-otbn reveal-up">
+                <div class="semaforo-cinta-header">
+                    <span class="ficha-kicker">LO QUE ORDENÓ LA LEY 26.331 (ORDENAMIENTO TERRITORIAL DE BOSQUES NATIVOS)</span>
+                </div>
+                <div class="grilla-semaforo-3col">
+                    <div class="semaforo-card-compacta rojo">
+                        <div class="sem-titulo-fila">
+                            <span class="punto-sem"></span>
+                            <strong>Categoría I &middot; Zona Roja</strong>
+                        </div>
+                        <span class="sem-sub-badge">PROHIBIDO DESMONTAR</span>
+                        <p>Sectores de muy alto valor de conservación (cuencas hídricas, refugios del yaguareté y territorios indígenas). No pueden transformarse.</p>
+                    </div>
+                    <div class="semaforo-card-compacta amarillo">
+                        <div class="sem-titulo-fila">
+                            <span class="punto-sem"></span>
+                            <strong>Categoría II &middot; Zona Amarilla</strong>
+                        </div>
+                        <span class="sem-sub-badge">USO SOSTENIBLE</span>
+                        <p>Valor medio de conservación. Prohibido el desmonte raso; solo permite turismo, recolección y aprovechamiento sustentable.</p>
+                    </div>
+                    <div class="semaforo-card-compacta verde">
+                        <div class="sem-titulo-fila">
+                            <span class="punto-sem"></span>
+                            <strong>Categoría III &middot; Zona Verde</strong>
+                        </div>
+                        <span class="sem-sub-badge">DESMONTE CON PERMISO</span>
+                        <p>Sectores de menor valor de conservación que las provincias pueden autorizar a desmontar previa Evaluación de Impacto Ambiental.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. RADIOGRAFÍA VISUAL DE LAS 3 ETAPAS -->
+            <div class="panel-radiografia-ley reveal-up">
+                <div class="radiografia-header">
+                    <div>
+                        <span class="ficha-kicker" id="ley-etapa-kicker">SERIE COMPLETA &middot; 2001 A 2025 (25 AÑOS)</span>
+                        <h3 class="radiografia-titulo" id="ley-etapa-titulo">7,16 millones de hectáreas de cobertura arbórea perdidas (dosel &gt;30%)</h3>
+                    </div>
+                    <div class="controles-historia-ley">
+                        <button type="button" class="btn-etapa-ley" data-etapa="1">Etapa 1 (2001–06)</button>
+                        <button type="button" class="btn-etapa-ley" data-etapa="2">Pico Ley (2007–08)</button>
+                        <button type="button" class="btn-etapa-ley" data-etapa="3">Post-Ley (2009–25)</button>
+                        <button type="button" class="btn-etapa-ley activo" data-etapa="todas">Ver las 3 etapas</button>
+                    </div>
+                </div>
+
+                <!-- 3 TARJETAS COMPARATIVAS -->
+                <div class="grilla-3-etapas-comparadas">
+                    <div class="etapa-comparada-card" data-card-etapa="1">
+                        <span class="etapa-tag">ETAPA 1 &middot; 2001 A 2006 (6 AÑOS)</span>
+                        <h4>El Boom sin Ley Nacional</h4>
+                        <strong class="etapa-cifra-grande">1.884.000 ha</strong>
+                        <span class="etapa-promedio">Promedio: ~314.000 ha / año</span>
+                        <div class="etapa-barra-Comparacion">
+                            <div class="etapa-barra-relleno" style="width: 56%;"></div>
+                        </div>
+                        <p>Expansión desregulada de soja y ganadería tras la devaluación de 2002 sin marco legal nacional de protección.</p>
+                    </div>
+
+                    <div class="etapa-comparada-card pico-destacado" data-card-etapa="2">
+                        <span class="etapa-tag alerta">ETAPA 2 &middot; 2007 A 2008 (2 AÑOS)</span>
+                        <h4>La "Carrera" previa a la Veda</h4>
+                        <strong class="etapa-cifra-grande alerta">1.104.000 ha</strong>
+                        <span class="etapa-promedio alerta">Promedio récord: ~552.000 ha / año</span>
+                        <div class="etapa-barra-Comparacion">
+                            <div class="etapa-barra-relleno alerta" style="width: 100%;"></div>
+                        </div>
+                        <p>Mientras se votaba la Ley 26.331, las provincias otorgaron permisos preventivos masivos. <strong>2008 marcó el récord absoluto (592.719 ha)</strong>.</p>
+                    </div>
+
+                    <div class="etapa-comparada-card" data-card-etapa="3">
+                        <span class="etapa-tag">ETAPA 3 &middot; 2009 A 2025 (17 AÑOS)</span>
+                        <h4>Post-Reglamentación</h4>
+                        <strong class="etapa-cifra-grande">4.178.600 ha</strong>
+                        <span class="etapa-promedio">Promedio: ~245.800 ha / año</span>
+                        <div class="etapa-barra-Comparacion">
+                            <div class="etapa-barra-relleno" style="width: 44%;"></div>
+                        </div>
+                        <p>El ritmo anual bajó respecto al pico de 2008, pero la pérdida acumulada siguió creciendo sin pausa durante 17 años.</p>
+                    </div>
+                </div>
+
+                <!-- PULSO ANUAL COMPACTO (SOLO EN ESCRITORIO PARA EVITAR DESBORDES EN MÓVIL) -->
+                <div class="pulso-compacto-box">
+                    <div class="pulso-compacto-top">
+                        <span>PULSO ANUAL DE PÉRDIDA DE DOSEL (2001–2025) &middot; PASA EL CURSOR SOBRE CADA AÑO:</span>
+                        <strong id="barra-hover-lectura">Año 2008: 592.719 ha perdidas (Récord histórico del dataset)</strong>
+                    </div>
+                    <div class="barras-nacionales-stage compacto" id="grafico-nacional-barras" aria-label="Pulso anual de pérdida arbórea de 2001 a 2025"></div>
+                    <div class="pulso-compacto-footer">
+                        <span id="ley-etapa-texto">En un cuarto de siglo, Argentina perdió 7,16 millones de hectáreas de cobertura arbórea (dosel &gt;30%). El 76,3% se concentró en Santiago del Estero, Salta, Chaco y Formosa.</span>
+                        <a id="ley-etapa-link" href="https://servicios.infoleg.gob.ar/infolegInternet/anexos/135000-139999/136125/norma.htm" target="_blank" rel="noopener noreferrer">Fuente legal: Ley 26.331 (InfoLEG)</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. LOS 3 MECANISMOS QUE BURLARON LA LEY -->
+            <div class="bloque-trampas-3col margen-top-lg reveal-up">
+                <div class="encabezado-subbloque-centrado">
+                    <span class="capitulo-num">EVIDENCIA DOCUMENTADA (2009–2026)</span>
+                    <h3 class="subtitulo-bloque">Los tres mecanismos que vulneraron la ley después de su reglamentación</h3>
+                </div>
+
+                <div class="grilla-3-mecanismos">
+                    <div class="mecanismo-card">
+                        <span class="mecanismo-num">01</span>
+                        <h4>Recategorizaciones prediales a medida</h4>
+                        <p>
+                            En provincias como Salta y Chaco, decretos locales cambiaron el color de fincas particulares de Amarillo o Rojo a Verde a pedido del propietario. En agosto de 2026, un estudio en <em>Nature Sustainability</em> demostró cómo estos mecanismos subnacionales socavaron la política ambiental.
+                        </p>
+                        <a href="https://www.nature.com/articles/s41893-026-01917-5" target="_blank" rel="noopener noreferrer" class="link-mecanismo">Estudio en Nature Sustainability (2026)</a>
+                    </div>
+
+                    <div class="mecanismo-card">
+                        <span class="mecanismo-num">02</span>
+                        <h4>Desfinanciamiento crónico del Fondo Nacional</h4>
+                        <p>
+                            El artículo 31 de la Ley 26.331 estableció que el Fondo Nacional de Bosques debía recibir el 0,3% del Presupuesto Nacional. Jamás se cumplió: históricamente recibió <strong>menos del 10% de lo correspondiente</strong>, dejando a las provincias sin inspectores, brigadistas ni control satelital.
+                        </p>
+                        <a href="https://servicios.infoleg.gob.ar/infolegInternet/anexos/135000-139999/136125/norma.htm" target="_blank" rel="noopener noreferrer" class="link-mecanismo">Artículo 31 &middot; Ley Nacional 26.331</a>
+                    </div>
+
+                    <div class="mecanismo-card">
+                        <span class="mecanismo-num">03</span>
+                        <h4>Desmonte ilegal y abuso "silvopastoril"</h4>
+                        <p>
+                            Más de la mitad del desmonte en el norte ocurrió de forma ilegal en zonas Rojas y Amarillas porque las multas económicas resultaban más baratas que una sola cosecha de soja, o se disfrazaban como "limpieza para ganadería bajo monte" (MBGI) eliminando el sotobosque.
+                        </p>
+                        <a href="https://www.argentina.gob.ar/ambiente/bosques/umsef" target="_blank" rel="noopener noreferrer" class="link-mecanismo">Reportes Oficiales UMSEF</a>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <hr class="filete-diario">
+
+        <!-- ==================================================================
+             CAPÍTULO IV: EL MAPA EN VIVO (EN UNA SOLA PANTALLA + BOTTOM SHEET EN MÓVIL)
+             ================================================================== -->
+        <section id="cap-4" class="capitulo-seccion seccion-mapa-completa">
+            <div class="capitulo-encabezado-centrado compacto-mapa reveal-up">
+                <span class="capitulo-num">CAPÍTULO IV &middot; CARTOGRAFÍA INTERACTIVA (2001–2025)</span>
+                <h2 class="capitulo-titulo">La película del territorio: 25 años provincia por provincia</h2>
+                <p class="capitulo-subtitulo">
+                    Reproduce el avance de la pérdida de cobertura arbórea desde 2001 hasta 2025 o selecciona cualquier provincia en el mapa para inspeccionar su crónica y sus cifras locales.
+                </p>
+            </div>
+
+            <!-- BARRA COMPACTA UNIFICADA: REPRODUCTOR + HITO NACIONAL -->
+            <div class="tablero-control-mapa reveal-up">
+                <div class="barra-reproductor-mapa">
+                    <button type="button" id="btn-play-mapa" class="btn-play-editorial" aria-label="Reproducir o pausar evolución del mapa">
+                        Reproducir serie (2001–2025)
+                    </button>
+
+                    <div class="reproductor-slider-box">
+                        <div class="reproductor-labels">
+                            <span id="label-modo-actual">ACUMULADO DESDE 2001 HASTA EL AÑO:</span>
+                            <strong id="lectura-anio-mapa" class="anio-gigante-inline">2025</strong>
+                        </div>
+                        <input type="range" id="slider-anio" min="2001" max="2025" value="2025" step="1" aria-label="Seleccionar año en el mapa">
+                        <div class="ticks-mapa">
+                            <span>2001</span>
                             <span>2007 (Ley)</span>
+                            <span>2008 (Pico)</span>
+                            <span>2015</span>
+                            <span>2022</span>
+                            <span>2025</span>
+                        </div>
+                    </div>
+
+                    <div class="modo-switch-mapa">
+                        <button type="button" id="btn-modo-acumulado" class="btn-modo activo">Acumulado</button>
+                        <button type="button" id="btn-modo-unico" class="btn-modo">Solo 1 Año</button>
+                    </div>
+                </div>
+
+                <div class="cinta-hito-nacional">
+                    <div class="cinta-hito-kpi">
+                        <span class="cinta-kpi-label" id="kpi-titulo-periodo">PÉRDIDA ACUMULADA (2001–2025)</span>
+                        <strong class="cinta-kpi-num" id="dato-narrativo">7.166.627 ha</strong>
+                    </div>
+                    <div class="cinta-hito-texto">
+                        <span class="cinta-epigrafe" id="hito-epigrafe">CRÓNICA 2001–2025</span>
+                        <h3 id="hito-titulo">Balance de un cuarto de siglo</h3>
+                        <p id="hito-resumen">Desliza la barra o presiona Reproducir para recorrer los hitos históricos año por año.</p>
+                    </div>
+                    <div class="cinta-hito-fuente">
+                        <a id="hito-link" href="https://www.argentina.gob.ar/ambiente/bosques/umsef" target="_blank" rel="noopener noreferrer">Fuente oficial</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ESCENARIO EN UNA SOLA PANTALLA: HOJA DE MAPA IZQUIERDA + DOSSIER DERECHA -->
+            <div class="escenario-mapa-dossier reveal-up">
+                
+                <!-- HOJA CARTOGRÁFICA CON MINI LEYENDA SEMITRANSPARENTE ABAJO A LA IZQUIERDA -->
+                <div class="lienzo-mapa-card" id="mapa-contenedor">
+                    <div class="mapa-lienzo-wrapper" id="svg-wrapper">
+                        <div class="cargando-mapa">Cargando cartografía vectorial de Argentina...</div>
+                    </div>
+
+                    <!-- LEYENDA MÍNIMA Y SEMITRANSPARENTE ABAJO A LA IZQUIERDA -->
+                    <div class="leyenda-hoja-mapa" aria-hidden="true">
+                        <i class="gradiente-tinta"></i>
+                        <div class="leyenda-hoja-extremos">
+                            <span>Menor</span>
+                            <span>Crítica</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OVERLAY PARA CERRAR EL PANEL EN CELULAR AL TOCAR AFUERA -->
+                <div class="dossier-backdrop-movil" id="dossier-backdrop"></div>
+
+                <!-- DOSSIER PROVINCIAL (EN CELULAR SALE DESDE ABAJO COMO BOTTOM SHEET) -->
+                <aside class="dossier-provincia-card" id="panel-provincia" aria-live="polite">
+                    <div class="dossier-handle-movil" aria-hidden="true"></div>
+                    <div class="dossier-cabecera">
+                        <div>
+                            <span class="dossier-region" id="prov-region">GRAN CHACO AMERICANO (CHACO SECO)</span>
+                            <h3 class="dossier-nombre" id="prov-nombre">Santiago del Estero</h3>
+                        </div>
+                        <div class="dossier-cabecera-acciones">
+                            <span class="dossier-badge-seleccion">DOSSIER PROVINCIAL</span>
+                            <button type="button" class="btn-cerrar-dossier-movil" id="btn-cerrar-dossier" aria-label="Cerrar panel de provincia">&times;</button>
+                        </div>
+                    </div>
+
+                    <blockquote class="dossier-frase-editorial" id="prov-frase-editorial">
+                        “El epicentro histórico del desmonte chaqueño, donde el avance de la frontera agropecuaria arrasa sistemáticamente el mayor bosque seco de Sudamérica.”
+                    </blockquote>
+
+                    <div class="alerta-rotacion oculto" id="prov-alerta-rotacion">
+                        <strong>Nota metodológica (Silvicultura Comercial):</strong> En esta jurisdicción, gran parte de la pérdida de dosel detectada por satélite corresponde a la cosecha rotativa de plantaciones industriales (pino, eucalipto o álamo) que se talan y replantan, y no a desmonte de bosque nativo.
+                    </div>
+
+                    <div class="dossier-kpis-grid">
+                        <div class="dossier-kpi-box">
+                            <span class="d-kpi-label" id="prov-label-superficie">PÉRDIDA (2001–2025)</span>
+                            <strong class="d-kpi-valor alerta" id="prov-hectareas">2.123.599 ha</strong>
+                            <small class="d-kpi-sub" id="prov-porcentaje">29,6% del total del país</small>
+                        </div>
+                        <div class="dossier-kpi-box">
+                            <span class="d-kpi-label">SOBRE SU DOSEL 2000</span>
+                            <strong class="d-kpi-valor" id="prov-bosque-propio">28,6%</strong>
+                            <small class="d-kpi-sub" id="prov-base-2000">Dosel base 2000: 7.365.587 ha</small>
+                        </div>
+                        <div class="dossier-kpi-box">
+                            <span class="d-kpi-label" id="prov-label-pico">AÑO RÉCORD</span>
+                            <strong class="d-kpi-valor" id="prov-peor-anio">2007 (215.400 ha)</strong>
+                            <small class="d-kpi-sub" id="prov-emisiones-dato">Emisiones: Calculando...</small>
+                        </div>
+                    </div>
+
+                    <div class="dossier-grafico-box">
+                        <div class="dossier-grafico-header">
+                            <span>EVOLUCIÓN ANUAL EN LA PROVINCIA (2001–2025)</span>
+                            <strong id="chart-hover-info">Toca una barra para ver el año</strong>
+                        </div>
+                        <div class="mini-chart-container" id="prov-grafico-barras"></div>
+                        <div class="mini-chart-axis">
+                            <span>2001</span>
+                            <span>| Ley 2007</span>
                             <span>2016</span>
                             <span>2025</span>
                         </div>
                     </div>
 
-                    <!-- KPI NACIONAL: Intervalo de años ARRIBA de todo para que nunca se bugee -->
-                    <div class="kpi-limpio">
-                        <div class="kpi-periodo-top">
-                            <span id="indicador-anio" class="badge-anio">PERÍODO 2001–2025</span>
-                        </div>
-                        <span id="kpi-titulo-periodo" class="kpi-label">PÉRDIDA ARBÓREA NACIONAL</span>
-                        <div id="dato-narrativo" class="kpi-numero">0 ha</div>
-                        <div class="escala-integrada">
-                            <div class="barra-gradiente"></div>
-                            <div class="barra-labels">
-                                <span>Mínima</span>
-                                <span>Moderada</span>
-                                <span>Crítica (&gt;600k ha)</span>
-                            </div>
+                    <div class="dossier-contexto-box">
+                        <span class="d-seccion-titulo">CAUSA PRINCIPAL DOCUMENTADA</span>
+                        <div class="dossier-driver-pill" id="prov-driver">Desmonte mecánico con topadoras (Soja y Ganadería)</div>
+                        <p class="dossier-explicacion" id="prov-explicacion"></p>
+                    </div>
+
+                    <div class="dossier-noticias-box">
+                        <span class="d-seccion-titulo">REFERENCIA DOCUMENTAL VERIFICADA</span>
+                        <ul class="dossier-lista-noticias" id="prov-noticias"></ul>
+                    </div>
+                </aside>
+
+            </div>
+        </section>
+
+        <hr class="filete-diario">
+
+        <!-- ==================================================================
+             CAPÍTULO V: SECUENCIA SATELITAL EN GRANDE Y 3 ESCALAS DE IMPACTO
+             ================================================================== -->
+        <article id="cap-5" class="capitulo-seccion">
+            <div class="capitulo-encabezado-centrado reveal-up">
+                <span class="capitulo-num">CAPÍTULO V &middot; SECUENCIA MULTITEMPORAL (2000–2026)</span>
+                <h2 class="capitulo-titulo">26 años a vista de pájaro: el timelapse de la frontera norte</h2>
+                <p class="capitulo-subtitulo">
+                    A diferencia del detalle departamental de Salta (Capítulo II), esta secuencia de la NASA abarca la triple frontera completa entre <strong>Salta, Santiago del Estero y Chaco</strong> entre agosto de 2000 y septiembre de 2026, mostrando cómo la fragmentación partió los corredores biológicos del Gran Chaco.
+                </p>
+            </div>
+
+            <!-- REPRODUCTOR TIMELAPSE A ANCHO COMPLETO -->
+            <figure class="figura-diario figura-ancha reveal-up">
+                <div class="timelapse-contenedor" id="timelapse-box">
+                    <div class="timelapse-visor-grande" id="timelapse-stage">
+                        <img src="img/sat-2000.jpg" alt="Satélite NASA Gran Chaco Agosto 2000" class="tl-img activa" data-anio="2000" data-fecha="Agosto 2000">
+                        <img src="img/sat-2005.jpg" alt="Satélite NASA Gran Chaco Mayo 2005" class="tl-img" data-anio="2005" data-fecha="Mayo 2005">
+                        <img src="img/sat-2010.jpg" alt="Satélite NASA Gran Chaco Mayo 2010" class="tl-img" data-anio="2010" data-fecha="Mayo 2010">
+                        <img src="img/sat-2015.jpg" alt="Satélite NASA Gran Chaco Agosto 2015" class="tl-img" data-anio="2015" data-fecha="Agosto 2015">
+                        <img src="img/sat-2020.jpg" alt="Satélite NASA Gran Chaco Agosto 2020" class="tl-img" data-anio="2020" data-fecha="Agosto 2020">
+                        <img src="img/sat-2026.jpg" alt="Satélite NASA Gran Chaco Septiembre 2026" class="tl-img" data-anio="2026" data-fecha="Septiembre 2026">
+                        
+                        <div class="tl-badge-fecha" id="tl-badge-fecha">Agosto 2000</div>
+                        <button type="button" class="tl-flecha izq" id="tl-btn-ant" aria-label="Captura anterior">&lsaquo;</button>
+                        <button type="button" class="tl-flecha der" id="tl-btn-sig" aria-label="Captura siguiente">&rsaquo;</button>
+                    </div>
+
+                    <div class="timelapse-controles">
+                        <button type="button" id="tl-btn-play" class="btn-tl-play">Pausar secuencia</button>
+                        <div class="tl-botones-anios" id="tl-selector-anios">
+                            <button type="button" class="btn-tl-anio activo" data-idx="0">2000</button>
+                            <button type="button" class="btn-tl-anio" data-idx="1">2005</button>
+                            <button type="button" class="btn-tl-anio" data-idx="2">2010</button>
+                            <button type="button" class="btn-tl-anio" data-idx="3">2015</button>
+                            <button type="button" class="btn-tl-anio" data-idx="4">2020</button>
+                            <button type="button" class="btn-tl-anio" data-idx="5">2026</button>
                         </div>
                     </div>
                 </div>
+                <figcaption class="epigrafe-diario">
+                    <strong>SECUENCIA SATELITAL (2000–2026):</strong> Evolución de los lotes de desmonte sobre el límite tripartito entre Salta, Santiago del Estero y Chaco. Toca la imagen para abrir el visor en alta resolución.
+                    <div class="links-cita-imagen">
+                        <a href="https://worldview.earthdata.nasa.gov/" target="_blank" rel="noopener noreferrer">Fuente de las capturas: NASA EOSDIS Worldview (MODIS / VIIRS / Landsat)</a>
+                    </div>
+                </figcaption>
+            </figure>
 
-                <div class="bloque-cronica-mapa">
-                    <article class="cronica-box" aria-live="polite">
-                        <span id="hito-epigrafe" class="cronica-epigrafe">CONTEXTO DEL PERÍODO</span>
-                        <h3 id="hito-titulo" class="cronica-titulo">-</h3>
-                        <p id="hito-resumen" class="cronica-texto">-</p>
-                        <a id="hito-link" href="#" target="_blank" rel="noopener noreferrer" class="cronica-link">↗ Ver fuente</a>
-                    </article>
-
-                    <button type="button" id="btn-ir-conclusion" class="btn-ir-cierre">
-                        Ver conclusiones e impacto final →
-                    </button>
+            <!-- SÍNTESIS DE IMPACTO Y DIMENSIONAMIENTO FINAL -->
+            <div class="grilla-cierre-impacto margen-top-lg reveal-up">
+                <div class="tarjeta-impacto">
+                    <span class="impacto-etiqueta">ESCALA TERRITORIAL (7.166.627 HA)</span>
+                    <strong class="impacto-cifra">3,1 veces Tucumán</strong>
+                    <div class="impacto-barra-comparativa">
+                        <div class="impacto-seg lleno">1x</div>
+                        <div class="impacto-seg lleno">2x</div>
+                        <div class="impacto-seg lleno">3x</div>
+                        <div class="impacto-seg fraccion"></div>
+                    </div>
+                    <p>Las 7.166.627 hectáreas perdidas entre 2001 y 2025 equivalen a más de tres veces la superficie completa de la provincia de Tucumán (2,25 M ha), o <strong>353 veces la Ciudad Autónoma de Buenos Aires</strong> (un promedio de 785 ha por día durante 25 años).</p>
                 </div>
-            </aside>
 
-            <main id="mapa-contenedor">
-                <div class="instruccion-flotante">
-                    Toca una provincia para ver sus datos y evolución (2001–2025)
+                <div class="tarjeta-impacto">
+                    <span class="impacto-etiqueta">EMISIONES BRUTAS ACUMULADAS</span>
+                    <strong class="impacto-cifra">1.739,5 M t CO₂e</strong>
+                    <div class="impacto-barra-unica">
+                        <div class="impacto-barra-fill ocre" style="width: 86%;"></div>
+                    </div>
+                    <p>Al talar y quemar la biomasa forestal (con una densidad media de 37 Mg C/ha), el carbono almacenado durante siglos regresa a la atmósfera: un promedio de <strong>69,58 millones de t CO₂e por año</strong>, equivalente al parque automotor de 378 millones de vehículos.</p>
                 </div>
 
-                <div class="mapa-lienzo-wrapper">
-                                                               </div>
-
-                <button type="button" id="btn-ir-conclusion-mobile" class="btn-cierre-flotante-mobile">
-                    Conclusión final →
-                </button>
-            </main>
-
-        </div>
-
-        <!-- PANEL DETALLE DE PROVINCIA -->
-        <aside id="panel-provincia" class="oculto" aria-live="polite">
-            <div class="panel-top-bar">
-                <span id="prov-region" class="tag-region">REGIÓN</span>
-                <button id="btn-cerrar-panel" title="Cerrar">✕ Cerrar</button>
-            </div>
-            
-            <h2 id="prov-nombre">Provincia</h2>
-
-            <div class="ficha-kpis">
-                <div class="ficha-kpi">
-                    <span id="prov-label-superficie" class="kpi-label">HECTÁREAS PERDIDAS</span>
-                    <strong id="prov-hectareas" class="texto-alerta">0 ha</strong>
-                </div>
-                <div class="ficha-kpi">
-                    <span class="kpi-label">EQUIV. SOBRE DOSEL 2000</span>
-                    <strong id="prov-bosque-propio">0%</strong>
-                    <span id="prov-base-2000" class="kpi-micro"></span>
-                </div>
-                <div class="ficha-kpi">
-                    <span class="kpi-label">PESO NACIONAL</span>
-                    <strong id="prov-porcentaje">0%</strong>
-                </div>
-                <div class="ficha-kpi">
-                    <span id="prov-label-pico" class="kpi-label">AÑO PICO</span>
-                    <strong id="prov-peor-anio">-</strong>
+                <div class="tarjeta-impacto">
+                    <span class="impacto-etiqueta">BIODIVERSIDAD CRÍTICA EN EL GRAN CHACO</span>
+                    <strong class="impacto-cifra">&lt; 20 Yaguaretés</strong>
+                    <div class="impacto-barra-unica">
+                        <div class="impacto-barra-fill alerta" style="width: 8%;"></div>
+                    </div>
+                    <p>Es la población crítica estimada que sobrevive hoy en todo el Gran Chaco argentino (Proyecto Yaguareté / CONICET) debido al aislamiento de los corredores biológicos y la fragmentación de su hábitat.</p>
                 </div>
             </div>
+        </article>
 
-            <div class="ficha-seccion">
-                <div class="chart-header">
-                    <h3>SERIE ANUAL (2001–2025)</h3>
-                    <strong id="chart-hover-info" class="chart-hover-lectura">Pasá el mouse por el gráfico</strong>
-                </div>
-                <div id="prov-grafico-barras" class="mini-chart-container"></div>
-                <div class="chart-axis">
-                    <span>2001</span>
-                    <span>2007 (Ley)</span>
-                    <span>2016</span>
-                    <span>2025</span>
-                </div>
+    </main>
+
+    <!-- ==================================================================
+         PIE DE PÁGINA DOCUMENTAL: METODOLOGÍA Y FUENTES CIENTÍFICAS
+         ================================================================== -->
+    <footer class="footer-diario">
+        <div class="footer-inner">
+            <div class="footer-col-metodologia">
+                <h3>Nota Metodológica y Rigor de Datos</h3>
+                <p>
+                    Esta investigación interactiva procesa los registros abiertos del dataset <em>Subnational 1 Tree Cover Loss (2001–2025)</em> generado por el laboratorio <strong>GLAD de la Universidad de Maryland</strong> (Hansen et al.) y <strong>Global Forest Watch (World Resources Institute)</strong>, complementado con la clasificación de motores de pérdida (<em>dominant drivers</em>) de <strong>WRI / Google DeepMind</strong> (Sims et al., 2025).
+                </p>
+                <p>
+                    Se define como <strong>dosel base 2000</strong> a toda vegetación leñosa que superaba los 5 metros de altura con una densidad de copa mayor al 30%. Por rigor científico, la interfaz distingue explícitamente el desmonte nativo permanente (Gran Chaco y Yungas) de la silvicultura comercial rotativa (Misiones, Corrientes, Entre Ríos y Delta) y de los incendios estacionales (Córdoba y Patagonia).
+                </p>
             </div>
-
-            <div class="ficha-seccion">
-                <h3>CAUSA PRINCIPAL Y CONTEXTO</h3>
-                <div id="prov-driver" class="badge-driver">-</div>
-                <p id="prov-explicacion" class="texto-contexto"></p>
-            </div>
-
-            <div class="ficha-seccion">
-                <h3>INFORMES, GREENPEACE Y FUENTES</h3>
-                <ul id="prov-noticias" class="lista-noticias"></ul>
-            </div>
-        </aside>
-    </section>
-
-
-    <!-- MODAL DE ZOOM PARA VER IMÁGENES DE CERCA SIN RECORTE -->
-    <!-- VISOR PANTALLA COMPLETA (Se cierra tocando la imagen y permite pasar fotos con flechas) -->
-    <div id="modal-zoom" class="modal-zoom oculto" role="dialog" aria-modal="true" aria-label="Imagen ampliada">
-        <div class="modal-zoom-bar">
-            <span id="modal-zoom-caption">Vista detallada</span>
-            <div class="modal-zoom-actions">
-                <button type="button" id="btn-toggle-zoom" class="btn-mini">🔍 Zoom 2x</button>
-                <button type="button" id="btn-cerrar-zoom" class="btn-mini">✕ Cerrar</button>
+            <div class="footer-col-fuentes">
+                <h3>Fuentes Documentales y Normativas</h3>
+                <ul class="lista-fuentes-footer" id="contenedor-fuentes-final"></ul>
             </div>
         </div>
-        <div id="modal-zoom-body" class="modal-zoom-body">
-            <img id="modal-zoom-img" src="" alt="Imagen ampliada">
+        <div class="footer-bottom-bar">
+            <span>Contar con Datos 2026 &middot; Visualización de Datos Abiertos de Argentina (2001–2026)</span>
+            <a href="#portada" class="link-volver-arriba">Volver al inicio</a>
         </div>
-    </div>
+    </footer>
 
+    <!-- TOOLTIP DEL MAPA -->
     <div id="tooltip" class="oculto"></div>
-    <div id="anunciador-accesible" class="sr-only" aria-live="polite"></div>
 
-   <script type="module" src="js/main.js"></script>
+    <!-- MODAL LIGHTBOX PARA ZOOM DE IMÁGENES Y GALERÍAS -->
+    <div id="modal-zoom" class="modal-zoom oculto" aria-hidden="true"></div>
+
+    <!-- ENTRY POINT ES6 MODULE -->
+    <script type="module" src="js/main.js?v=6"></script>
 </body>
 </html>

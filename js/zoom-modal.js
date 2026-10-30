@@ -1,5 +1,5 @@
 // ============================================================================
-// MODAL ZOOM / LIGHTBOX (PANTALLA COMPLETA SIMPLE Y GALERÍA CON FLECHAS)
+// MODAL ZOOM / LIGHTBOX (BOTÓN 'X' LIMPIO Y SIN DESBORDE EN MÓVIL)
 // ============================================================================
 
 let galeriaZoomFrames = null;
@@ -20,7 +20,13 @@ export function abrirZoomImagen(src, altTexto) {
   if (!src) return;
   galeriaZoomFrames = null;
   const modal = asegurarModalZoomEnDOM();
-  modal.innerHTML = `<img id="modal-zoom-img" src="${src}" alt="${altTexto || 'Imagen ampliada'}">`;
+  modal.innerHTML = `
+    <button type="button" class="btn-cerrar-zoom" aria-label="Cerrar vista ampliada">&times;</button>
+    <div class="zoom-galeria-centro">
+      <span class="zoom-galeria-fecha">${altTexto || 'Vista ampliada'}</span>
+      <img id="modal-zoom-img" src="${src}" alt="${altTexto || 'Imagen ampliada'}">
+    </div>
+  `;
   modal.classList.remove('oculto');
 }
 
@@ -33,13 +39,14 @@ export function abrirZoomGaleria(frames, idxInicial = 0) {
   const renderFrameModal = () => {
     const f = galeriaZoomFrames[galeriaZoomIdx];
     modal.innerHTML = `
+      <button type="button" class="btn-cerrar-zoom" aria-label="Cerrar galería">&times;</button>
       <div class="zoom-galeria-wrap">
-        <button type="button" class="zoom-flecha izq" aria-label="Imagen anterior">‹</button>
+        <button type="button" class="zoom-flecha izq" aria-label="Imagen anterior">&lsaquo;</button>
         <div class="zoom-galeria-centro">
           <span class="zoom-galeria-fecha">${f.fecha || ''}</span>
           <img id="modal-zoom-img" src="${f.src}" alt="${f.alt || ('Satélite ' + (f.fecha || ''))}">
         </div>
-        <button type="button" class="zoom-flecha der" aria-label="Imagen siguiente">›</button>
+        <button type="button" class="zoom-flecha der" aria-label="Imagen siguiente">&rsaquo;</button>
       </div>
     `;
 
@@ -67,6 +74,16 @@ export function inicializarModalZoom() {
     if (e.target.closest('.zoom-flecha')) return;
     modal.classList.add('oculto');
     galeriaZoomFrames = null;
+  });
+
+  document.body.addEventListener('click', (e) => {
+    const marco = e.target.closest('.marco-imagen-zoom');
+    if (marco) {
+      const img = marco.querySelector('img');
+      const src = marco.getAttribute('data-zoom-src') || img?.src;
+      const cap = marco.getAttribute('data-zoom-caption') || img?.alt;
+      abrirZoomImagen(src, cap);
+    }
   });
 
   window.addEventListener('keydown', (e) => {

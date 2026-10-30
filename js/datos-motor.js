@@ -1,3 +1,6 @@
+// ============================================================================
+// MOTOR DE DATOS CSV, SERIES ANUALES Y PALETA DE TINTA EDITORIAL
+// ============================================================================
 import { HITOS_CRONOLOGICOS } from './cronica-historica.js';
 
 const CSV_PATH = './argentina_forest_loss_clean.csv';
@@ -23,6 +26,7 @@ export const filtroTiempo = {
 export let datosCalculados = {
   etiquetaPeriodo: '2001–2025',
   totalNacional: 0,
+  serieNacionalAnual: {},
   porProvincia: {}
 };
 
@@ -30,14 +34,30 @@ let filasDataset = [];
 let estadoVisualActual = { totalNacional: 0, porProvinciaHa: {} };
 let idAnimacionActiva = null;
 let callbackActualizarInspector = null;
+let callbackDatasetListo = null;
 
 export function registrarCallbackInspector(fn) {
   callbackActualizarInspector = fn;
 }
 
+export function registrarCallbackDatasetListo(fn) {
+  callbackDatasetListo = fn;
+}
+
 export function normalizarNombreProvincia(nombre) {
   if (nombre === "Ciudad de Buenos Aires") return "CABA";
   return nombre.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+export function formatearEmisionesCO2(emisionesMg) {
+  if (!emisionesMg || emisionesMg <= 0) return "0 t CO₂e";
+  if (emisionesMg >= 1000000) {
+    return `${(emisionesMg / 1000000).toFixed(1).replace('.', ',')} M t CO₂e`;
+  }
+  if (emisionesMg >= 10000) {
+    return `${(emisionesMg / 1000).toFixed(1).replace('.', ',')} mil t CO₂e`;
+  }
+  return `${Math.round(emisionesMg).toLocaleString("es-AR")} t CO₂e`;
 }
 
 function parsearCSV(textoCsv) {
@@ -49,6 +69,7 @@ function parsearCSV(textoCsv) {
   const idxYear = cabeceras.indexOf('year');
   const idxLoss = cabeceras.indexOf('loss_ha');
   const idxExtent = cabeceras.indexOf('extent_2000_ha');
+  const idxEmis = cabeceras.indexOf('emissions_co2e_mg');
   const idxDriver = cabeceras.indexOf('dominant_driver');
 
   const resultado = [];
@@ -59,6 +80,7 @@ function parsearCSV(textoCsv) {
     const year = parseInt(cols[idxYear], 10);
     const lossHa = parseFloat(cols[idxLoss]) || 0;
     const extent2000Ha = idxExtent !== -1 ? (parseFloat(cols[idxExtent]) || 0) : 0;
+    const rawEmis = idxEmis !== -1 ? (parseFloat(cols[idxEmis]) || 0) : 0;
     const driver = idxDriver !== -1 ? cols[idxDriver]?.trim() : '';
 
     if (province && !isNaN(year)) {
@@ -68,6 +90,8 @@ function parsearCSV(textoCsv) {
         year,
         lossHa,
         extent2000Ha,
+        // Regla estricta: si lossHa es 0, las emisiones son 0 (evita contradicciones en San Juan)
+        emissionsMg: lossHa > 0 ? rawEmis : 0,
         driver
       });
     }
@@ -138,7 +162,7 @@ function animarTransicionDelta(totalDestino, mapaProvinciasDestino) {
   const totalOrigen = estadoVisualActual.totalNacional;
   const provinciasOrigen = { ...estadoVisualActual.porProvinciaHa };
 
-  const duracionMs = 260;
+  const duracionMs = 240;
   const inicioTiempo = performance.now();
   const paths = document.querySelectorAll('#mapa-contenedor path.provincia-path');
 
@@ -160,9 +184,7 @@ function animarTransicionDelta(totalDestino, mapaProvinciasDestino) {
       path.style.fill = calcularColorPorHectareas(haActual);
     });
 
-    const elAnio = document.getElementById('indicador-anio');
     const elDato = document.getElementById('dato-narrativo');
-    if (elAnio) elAnio.textContent = datosCalculados.etiquetaPeriodo;
     if (elDato) elDato.textContent = `${totalInterpolado.toLocaleString("es-AR")} ha`;
 
     if (t < 1) {
@@ -178,12 +200,18 @@ export function recalcularYActualizarVista() {
 
   const { modo, anioBase, anioSeleccionado } = filtroTiempo;
   const agrupadoPorProv = {};
+  const serieNacionalAnual = {};
+
+  for (let y = 2001; y <= 2025; y++) {
+    serieNacionalAnual[y] = 0;
+  }
 
   Object.keys(NOMBRES_OFICIALES_DB).forEach(idSvg => {
     agrupadoPorProv[idSvg] = {
       idSvg,
       nombreOriginal: NOMBRES_OFICIALES_DB[idSvg],
       lossHa: 0,
+      emissionsMg: 0,
       extent2000Ha: 0,
       peakYear: 0,
       peakLossHa: 0,
@@ -195,6 +223,8 @@ export function recalcularYActualizarVista() {
   });
 
   filasDataset.forEach(fila => {
+    serieNacionalAnual[fila.year] = (serieNacionalAnual[fila.year] || 0) + fila.lossHa;
+
     const item = agrupadoPorProv[fila.idSvg];
     if (!item) return;
 
@@ -213,6 +243,7 @@ export function recalcularYActualizarVista() {
 
     if (entraEnFiltro) {
       item.lossHa += fila.lossHa;
+      item.emissionsMg += fila.emissionsMg;
 
       if (fila.lossHa > item.peakLossHa) {
         item.peakLossHa = fila.lossHa;
@@ -230,6 +261,8 @@ export function recalcularYActualizarVista() {
 
   Object.values(agrupadoPorProv).forEach(prov => {
     prov.lossHa = Math.round(prov.lossHa);
+    prov.emissionsMg = prov.lossHa > 0 ? Math.round(prov.emissionsMg) : 0;
+
     let topDriver = '';
     let maxDriverHa = 0;
     Object.entries(prov.driversSum).forEach(([drv, ha]) => {
@@ -247,15 +280,16 @@ export function recalcularYActualizarVista() {
   const kpiTitulo = document.getElementById('kpi-titulo-periodo');
   if (modo === 'unico') {
     etiquetaPeriodo = `AÑO ${anioSeleccionado}`;
-    if (kpiTitulo) kpiTitulo.textContent = `PÉRDIDA ARBÓREA EN EL AÑO`;
+    if (kpiTitulo) kpiTitulo.textContent = `PÉRDIDA NACIONAL EN EL AÑO ${anioSeleccionado}`;
   } else {
-    if (kpiTitulo) kpiTitulo.textContent = `PÉRDIDA ARBÓREA ACUMULADA`;
-    etiquetaPeriodo = anioSeleccionado === 2001 ? `AÑO 2001` : `2001 – ${anioSeleccionado}`;
+    etiquetaPeriodo = anioSeleccionado === 2001 ? `AÑO 2001` : `2001–${anioSeleccionado}`;
+    if (kpiTitulo) kpiTitulo.textContent = `PÉRDIDA ACUMULADA (${etiquetaPeriodo})`;
   }
 
   datosCalculados = {
     etiquetaPeriodo,
     totalNacional,
+    serieNacionalAnual,
     porProvincia: agrupadoPorProv
   };
 
@@ -274,6 +308,9 @@ export async function inicializarDataset() {
       const texto = await resCsv.text();
       filasDataset = parsearCSV(texto);
       recalcularYActualizarVista();
+      if (typeof callbackDatasetListo === 'function') {
+        callbackDatasetListo(datosCalculados);
+      }
     }
   } catch (err) {
     console.error("Error al leer el archivo CSV:", err);

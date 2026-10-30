@@ -1,44 +1,32 @@
 // ============================================================================
-// MAIN ENTRY POINT (INICIALIZACIÓN COMPLETA DE LA APLICACIÓN)
+// ENTRY POINT PRINCIPAL: INICIALIZACIÓN DEL ESPECIAL EDITORIAL
 // ============================================================================
 import { inicializarModalZoom } from './zoom-modal.js';
-import { inicializarDataset, recalcularYActualizarVista, registrarCallbackInspector } from './datos-motor.js';
-import { inicializarFlujoPresentacion, registrarCallbackEscena } from './narrativa-flujo.js';
+import {
+  inicializarDataset,
+  registrarCallbackInspector,
+  registrarCallbackDatasetListo
+} from './datos-motor.js';
+import {
+  inicializarFlujoPresentacion,
+  construirGraficoHistoriaLey
+} from './narrativa-flujo.js';
 import {
   cargarSvgMapa,
   inicializarControlesTiempo,
   actualizarLimitesControles,
-  centrarGeometriaSvg,
-  abrirInspectorProvincia,
-  cerrarPanelProvincia
+  abrirInspectorProvincia
 } from './mapa-interactivo.js';
 
-// Si el mapa está activo y hay una provincia seleccionada, actualizar su panel al mover el año
 registrarCallbackInspector(() => {
-  const provActiva = document.querySelector('#mapa-contenedor path.provincia-path.activa');
-  if (provActiva) {
-    abrirInspectorProvincia(provActiva.getAttribute('id'));
-  }
+  abrirInspectorProvincia(null, false);
 });
 
-// Al cambiar a la escena del mapa, centrar el SVG en el lienzo
-registrarCallbackEscena((nombreEscena) => {
-  if (nombreEscena === 'mapa') {
-    requestAnimationFrame(() => centrarGeometriaSvg());
-  }
+registrarCallbackDatasetListo((datos) => {
+  construirGraficoHistoriaLey(datos.serieNacionalAnual);
+  abrirInspectorProvincia('Santiago del Estero', false);
 });
 
-// Listener del botón cerrar panel
-document.getElementById('btn-cerrar-panel')?.addEventListener('click', cerrarPanelProvincia);
-
-// Listener global para cerrar panel con Escape
-window.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    cerrarPanelProvincia();
-  }
-});
-
-// Arranque de la aplicación
 window.addEventListener('DOMContentLoaded', async () => {
   inicializarModalZoom();
   inicializarFlujoPresentacion();
