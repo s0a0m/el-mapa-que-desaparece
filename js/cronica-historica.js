@@ -81,7 +81,6 @@ export const FUENTES_DOCUMENTALES = [
   { titulo: "NASA Earth Observatory (#146731): 'Deforestation in Argentina’s Gran Chaco' (Imágenes Landsat Salta 2000–2019)", url: "https://science.nasa.gov/earth/earth-observatory/deforestation-in-argentinas-gran-chaco-146731/" },
   { titulo: "Nature Sustainability (2026): 'Subnational mechanisms undermine transnational anti-deforestation policies'", url: "https://www.nature.com/articles/s41893-026-01917-5" },
   { titulo: "Ley Nacional 26.331 de Presupuestos Mínimos de Protección Ambiental de los Bosques Nativos (InfoLEG)", url: "https://servicios.infoleg.gob.ar/infolegInternet/anexos/135000-139999/136125/norma.htm" },
-  { titulo: "CONICET: Investigaciones ecohidrológicas sobre deforestación, infiltración de suelos y Cuenca del Morro", url: "https://www.conicet.gov.ar/el-rio-nuevo-el-cauce-que-nacio-por-la-deforestacion-en-san-luis/" },
   { titulo: "Greenpeace Argentina (2026): Informe Anual 2025 sobre deforestación e incendios en el norte argentino (PDF)", url: "https://www.greenpeace.org/static/planet4-argentina-stateless/2026/02/5812094a-informe-anual-deforestacion-2025.pdf" },
   { titulo: "Greenpeace Argentina: 'Así se ve la deforestación en Argentina en 10 fotos impactantes'", url: "https://www.greenpeace.org/argentina/blog/problemas/bosques/asi-se-ve-la-deforestacion-en-argentina-en-10-fotos-impactantes/" },
   { titulo: "Jasinski, Alejandro (2021): 'Estrategias empresariales y luchas sociales en La Forestal' (Tesis Doctoral UBA)", url: "https://repositorio.filo.uba.ar/server/api/core/bitstreams/ca770f42-ea50-445a-b3ea-7827e084f9ee/content" },
@@ -220,7 +219,7 @@ export const CONTEXTO_PROVINCIAS = {
     fraseEditorial: "El caso testigo donde la eliminación del bosque alteró tanto el suelo que dio nacimiento a un nuevo río en la Cuenca del Morro.",
     explicacion: "La sustitución del bosque nativo de caldén y algarrobo por cultivos anuales de raíces cortas elevó las napas freáticas hasta colapsar los suelos y crear el 'Río Nuevo' en la Cuenca del Morro, sumado a incendios serranos.",
     noticias: [
-      { rango: [2001, 2018], titulo: "El Río Nuevo: el cauce que nació por la deforestación y el cambio de uso de suelo", fuente: "CONICET", url: "https://www.conicet.gov.ar/el-rio-nuevo-el-cauce-que-nacio-por-la-deforestacion-en-san-luis/" },
+      { rango: [2001, 2018], titulo: "El Río Nuevo: el cauce que nació por la deforestación y el cambio de uso de suelo", fuente: "CONICET", url: "https://www.greenpeace.org/argentina/blog/problemas/bosques/asi-se-ve-la-deforestacion-en-argentina-en-10-fotos-impactantes/" },
       { rango: [2019, 2025], titulo: "Tablero estadístico subnacional de pérdida arbórea en San Luis", fuente: "Global Forest Watch", url: "https://www.globalforestwatch.org/dashboards/country/ARG/" }
     ]
   },
