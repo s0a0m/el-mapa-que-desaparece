@@ -1,6 +1,3 @@
-// ============================================================================
-// MOTOR DE DATOS CSV, SERIES ANUALES Y PALETA DE TINTA EDITORIAL
-// ============================================================================
 import { HITOS_CRONOLOGICOS } from './cronica-historica.js';
 
 const CSV_PATH = './argentina_forest_loss_clean.csv';
@@ -90,7 +87,6 @@ function parsearCSV(textoCsv) {
         year,
         lossHa,
         extent2000Ha,
-        // Regla estricta: si lossHa es 0, las emisiones son 0 (evita contradicciones en San Juan)
         emissionsMg: lossHa > 0 ? rawEmis : 0,
         driver
       });

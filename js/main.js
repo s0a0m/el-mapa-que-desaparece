@@ -1,6 +1,3 @@
-// ============================================================================
-// ENTRY POINT PRINCIPAL: INICIALIZACIÓN DEL ESPECIAL EDITORIAL
-// ============================================================================
 import { inicializarModalZoom } from './zoom-modal.js';
 import {
   inicializarDataset,

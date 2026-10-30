@@ -1,27 +1,20 @@
-/* ==========================================================================
-   HOJA DE ESTILOS EDITORIAL: "EL MAPA QUE DESAPARECE" (v7)
-   Estética de Diario Impreso / Texto Justificado / Glosario Universal
-   ========================================================================== */
-
 :root {
-    --bg-paper: #F4EFE6;          /* Papel prensa cálido principal */
-    --bg-card: #FAF7F2;           /* Marfil editorial para tarjetas */
-    --bg-subtle: #EAE3D5;         /* Fondo secundario de contraste */
-    --ink-main: #1C1917;          /* Tinta negra grafito */
-    --ink-secondary: #44403C;     /* Tinta gris oscura para lectura larga */
-    --ink-muted: #78716C;         /* Gris piedra para epígrafes y fechas */
-    --border-hairline: #D6CEBF;   /* Filete fino de diario */
-    --border-heavy: #292524;      /* Filete grueso de sección */
+    --bg-paper: #F4EFE6;
+    --bg-card: #FAF7F2;
+    --bg-subtle: #EAE3D5;
+    --ink-main: #1C1917;
+    --ink-secondary: #44403C;
+    --ink-muted: #78716C;
+    --border-hairline: #D6CEBF;
+    --border-heavy: #292524;
 
-    --accent-carmine: #8B1E0F;    /* Rojo carmín periodístico */
-    --accent-ochre: #B45309;      /* Ocre quemado */
-    --accent-forest: #1E3A2F;     /* Verde bosque profundo */
+    --accent-carmine: #8B1E0F;
+    --accent-ochre: #B45309;
+    --accent-forest: #1E3A2F;
 
-    /* Sombras sutiles editoriales */
     --shadow-card: 0 6px 22px -4px rgba(28, 25, 23, 0.07), 0 2px 6px -1px rgba(28, 25, 23, 0.04);
     --shadow-media: 0 10px 28px -6px rgba(28, 25, 23, 0.12), 0 3px 8px -2px rgba(28, 25, 23, 0.06);
 
-    /* Escala cartográfica secuencial sobre papel */
     --tier-1: #DDD5C4;
     --tier-2: #E0B26B;
     --tier-3: #D47A2A;
@@ -54,9 +47,6 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* ==========================================================================
-   ANIMACIONES DE APARICIÓN ONE-WAY AL SCROLLEAR
-   ========================================================================== */
 .reveal-up {
     opacity: 0;
     transform: translateY(20px);
@@ -80,9 +70,6 @@ body {
     transition: width 0.1s ease-out;
 }
 
-/* ==========================================================================
-   GLOSARIO INTERACTIVO UNIVERSAL (PC Y CELULAR)
-   ========================================================================== */
 .termino-glosario {
     color: inherit;
     border-bottom: 1.5px dotted var(--accent-carmine);
@@ -125,9 +112,6 @@ body {
     visibility: hidden;
 }
 
-/* ==========================================================================
-   NAVEGACIÓN FIJA ESTILO DIARIO (SOLO PC)
-   ========================================================================== */
 .nav-diario {
     position: sticky;
     top: 0;
@@ -180,9 +164,6 @@ body {
     background: var(--bg-subtle);
 }
 
-/* ==========================================================================
-   PORTADA / HERO PERIODÍSTICO (TÍTULO EN 1 SOLA LÍNEA EN PC)
-   ========================================================================== */
 .hero-diario {
     max-width: 1180px;
     margin: 0 auto;
@@ -311,9 +292,6 @@ body {
     50% { transform: scaleY(1); opacity: 1; }
 }
 
-/* ==========================================================================
-   CUERPO DEL DIARIO, ENCABEZADOS CENTRADOS Y TEXTO JUSTIFICADO
-   ========================================================================== */
 .contenedor-diario {
     max-width: 1200px;
     margin: 0 auto;
@@ -360,7 +338,6 @@ body {
     letter-spacing: -0.8px;
 }
 
-/* Subtítulo en su espacio centrado pero con texto justificado como diario */
 .capitulo-subtitulo {
     font-family: var(--font-serif);
     font-size: clamp(1.1rem, 1.75vw, 1.26rem);
@@ -436,9 +413,6 @@ body {
     -webkit-hyphens: auto;
 }
 
-/* ==========================================================================
-   FIGURAS, FOTOS CON SOMBRA SUTIL Y FICHAS DE TERRENO
-   ========================================================================== */
 .figura-diario {
     margin: 0;
     background: var(--bg-card);
@@ -583,9 +557,6 @@ body {
     -webkit-hyphens: auto;
 }
 
-/* ==========================================================================
-   COMPARADOR SATELITAL NASA (SALTA 2000 VS 2019)
-   ========================================================================== */
 .nasa-comparador {
     position: relative;
     width: 100%;
@@ -679,9 +650,6 @@ body {
     touch-action: pan-y;
 }
 
-/* ==========================================================================
-   CAJA DE RIGOR METODOLÓGICO (3 MOTORES)
-   ========================================================================== */
 .caja-metodologia-wri {
     margin-top: 3rem;
     background: var(--bg-card);
@@ -779,9 +747,6 @@ body {
     -webkit-hyphens: auto;
 }
 
-/* ==========================================================================
-   CAPÍTULO III: SEMÁFORO HORIZONTAL, RADIOGRAFÍA COMPACTA Y 3 MECANISMOS
-   ========================================================================== */
 .cinta-semaforo-otbn {
     background: var(--bg-card);
     border: 1px solid var(--border-hairline);
@@ -847,7 +812,6 @@ body {
     -webkit-hyphens: auto;
 }
 
-/* Panel Radiografía de las 3 Etapas */
 .panel-radiografia-ley {
     background: var(--bg-card);
     border: 1.5px solid var(--border-heavy);
@@ -1155,9 +1119,6 @@ body {
     text-decoration: underline;
 }
 
-/* ==========================================================================
-   CAPÍTULO IV: EL MAPA EN VIVO (EN UNA SOLA PANTALLA + LEYENDA SUTIL)
-   ========================================================================== */
 .tablero-control-mapa {
     background: var(--bg-card);
     border: 1.5px solid var(--border-heavy);
@@ -1307,7 +1268,6 @@ body {
     white-space: nowrap;
 }
 
-/* Escenario Mapa + Dossier */
 .escenario-mapa-dossier {
     display: grid;
     grid-template-columns: 0.96fr 1.04fr;
@@ -1409,7 +1369,6 @@ body {
     display: none;
 }
 
-/* Dossier de la Provincia */
 .dossier-provincia-card {
     background: var(--bg-card);
     border: 1.5px solid var(--border-heavy);
@@ -1638,9 +1597,6 @@ body {
     color: var(--ink-muted);
 }
 
-/* ==========================================================================
-   CAPÍTULO V: TIMELAPSE EN GRANDE Y 3 TARJETAS DE IMPACTO FINAL
-   ========================================================================== */
 .timelapse-contenedor {
     background: var(--bg-subtle);
 }
@@ -1824,9 +1780,6 @@ body {
     -webkit-hyphens: auto;
 }
 
-/* ==========================================================================
-   PIE DE PÁGINA DOCUMENTAL Y FUENTES
-   ========================================================================== */
 .footer-diario {
     background: var(--bg-subtle);
     border-top: 3px double var(--border-heavy);
@@ -1900,9 +1853,6 @@ body {
     text-decoration: none;
 }
 
-/* ==========================================================================
-   TOOLTIP Y MODAL ZOOM
-   ========================================================================== */
 #tooltip {
     position: fixed;
     pointer-events: none;
@@ -2013,9 +1963,6 @@ body {
 .zoom-flecha.izq { left: -56px; }
 .zoom-flecha.der { right: -56px; }
 
-/* ==========================================================================
-   DISEÑO RESPONSIVE Y PANEL INFERIOR (BOTTOM SHEET) EN CELULAR (<= 1024px)
-   ========================================================================== */
 @media (max-width: 1024px) {
     .nav-diario,
     .nav-capitulos {
@@ -2083,7 +2030,6 @@ body {
         max-height: 430px;
     }
 
-    /* BOTTOM SHEET SLIDE-UP EN MÓVIL */
     .dossier-backdrop-movil {
         display: block;
         position: fixed;
@@ -2180,9 +2126,6 @@ body {
     #tooltip { display: none !important; }
 }
 
-/* ==========================================================================
-   ACCESIBILIDAD (SKIP LINK) Y BLOQUEO DE AUTO-DETECTORES MÓVILES (MAPS/TEL)
-   ========================================================================== */
 .skip-link {
     position: fixed;
     top: -120px;

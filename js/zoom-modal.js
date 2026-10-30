@@ -1,7 +1,3 @@
-// ============================================================================
-// MODAL ZOOM / LIGHTBOX (BOTÓN 'X' LIMPIO Y SIN DESBORDE EN MÓVIL)
-// ============================================================================
-
 let galeriaZoomFrames = null;
 let galeriaZoomIdx = 0;
 

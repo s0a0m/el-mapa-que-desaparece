@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bloquea la detección automática de direcciones/teléfonos que intenta abrir Maps en móviles -->
     <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
     
     <title>El Mapa que Desaparece | Contar con Datos 2026</title>
     <meta name="description" content="Crónica visual e interactiva sobre la pérdida de 7,16 millones de hectáreas de cobertura arbórea en Argentina (2001–2025).">
     <meta name="theme-color" content="#F4EFE6">
 
-    <!-- Open Graph / Vista previa limpia al compartir el link (100% anónima) -->
     <meta property="og:type" content="article">
     <meta property="og:locale" content="es_AR">
     <meta property="og:title" content="El Mapa que Desaparece | Crónica Satelital (2001–2025)">
@@ -21,8 +19,7 @@
     <meta name="twitter:description" content="Visualización interactiva sobre la pérdida de cobertura arbórea en Argentina entre 2001 y 2025.">
     <meta name="twitter:image" content="img/salta-2019.jpg">
 
-    <!-- Favicon SVG Editorial integrado (Copa arbórea sobre papel oscuro con corte carmín) -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHBhdGggZD0iTTMyIDEwQzIyIDEwIDE2IDE4IDE2IDI4QzE2IDM2IDIxIDQyIDI4IDQ0WiIgZmlsbD0iIzJFNkY0MCIvPjxwYXRoIGQ9Ik0yOCA0NEwyOCA1NEwzMiA1NEwzMiA0NFoiIGZpbGw9IiM2RTQ3M0IiLz48cGF0aCBkPSJNMzIgMTBDMzggMTAgNDIgMTMgNDQgMTZMMzIgMjRaIiBmaWxsPSIjNEE2MTQ0Ii8+PHJlY3QgeD0iMzYiIHk9IjIyIiB3aWR0aD0iMTAiIGhlaWdodD0iNiIgZmlsbD0iIzRBNjE0NCIgb3BhY2l0eT0iMC44Ii8+PHJlY3QgeD0iNDIiIHk9IjMwIiB3aWR0aD0iOCIgaGVpZ2h0PSI1IiBmaWxsPSIjNUM1MzQ2IiBvcGFjaXR5PSIwLjciLz48cmVjdCB4PSIzNCIgeT0iMzQiIHdpZHRoPSIxMiIgaGVpZ2h0PSI0IiBmaWxsPSIjNkU0NzNCIiBvcGFjaXR5PSIwLjUiLz48cmVjdCB4PSIzOCIgeT0iNDIiIHdpZHRoPSI2IiBoZWlnaHQ9IjQiIGZpbGw9IiM4QzVFNTEiIG9wYWNpdHk9IjAuMyIvPjxwYXRoIGQ9Ik0zMiA0NEwzMiA1NEwzNiA1NEwzOCA0OEwzNSA0NloiIGZpbGw9IiM0QTMwMjgiLz48L3N2Zz4=">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHBhdGggZD0iTTMyIDEwQzIyIDEwIDE2IDE4IDE2IDI4QzE2IDM2IDIxIDQyIDI4IDQ0WiIgZmlsbD0iIzJFNkY0MCIvPjxwYXRoIGQ9Ik0yOCA0NEwyOCA1NEwzMiA1NEwzMiA0NFoiIGZpbGw9IiM2RTQ3M0IiLz48cGF0aCBkPSJNMzIgMTBDMzggMTAgNDIgMTMgNDQgMTZMMzIgMjRaIiBmaWxsPSIjNEE2MTQ0Ii8+PHJlY3QgeD0iMzYiIHk9IjIyIiB3aWR0aD0iMTAiIGhlaWdodD0iNiIgZmlsbD0iIzRBNjE0NCIgb3BhY2l0eT0iMC44Ii8+PHJlY3QgeD0iNDIiIHk9IjMwIiB3aWR0aD0iOCIgaGVpZ2h0PSI1IiBmaWxsPSIjNUM1MzQ2IiBvcGFjaXR5PSIwLjciLz48cmVjdCB4PSIzNCIgeT0iMzQiIHdpZHRoPSIxMiIgaGVpZ2h0PSI0IiBmaWxsPSIjNkU0NzNCIiBvcGFjaXR5PSIwLjUiLz48cmVjdCB4PSIzOCIgeT0iNDIiIHdpZHRoPSI2IiBoZWlnaHQ9IjQiIGZpbGw9IiM4QzVFNTEiIG9wYWNpdHk9IjAuMyIvPjxwYXRoIGQ9Ik0zMiA0NEwzMiA1NEwzNiA1NEwzOCA0OEwzNSA0NloiIGZpbGw9IiM0QTMwMjgiLz48L3N2Zz4=">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,13 +28,10 @@
 </head>
 <body>
 
-    <!-- BOTÓN INVISIBLE DE ACCESIBILIDAD (APARECE AL PRESIONAR TAB) -->
     <a href="#contenido-principal" class="skip-link">Saltar al contenido principal</a>
 
-    <!-- BARRA DE PROGRESO DE LECTURA -->
     <div class="reading-progress-bar" id="reading-progress"></div>
 
-    <!-- NAVEGACIÓN EDITORIAL (SOLO ESCRITORIO) -->
     <nav class="nav-diario" aria-label="Navegación de capítulos">
         <div class="nav-diario-inner">
             <a href="#portada" class="nav-marca">EL MAPA QUE DESAPARECE</a>
@@ -51,9 +45,6 @@
         </div>
     </nav>
 
-    <!-- ==================================================================
-         PORTADA DE DIARIO / ESPECIAL PERIODÍSTICO
-         ================================================================== -->
     <header id="portada" class="hero-diario">
         <div class="hero-cintillo reveal-up">
             <span>CONTAR CON DATOS 2026</span>
@@ -94,9 +85,6 @@
 
     <main class="contenedor-diario">
 
-        <!-- ==================================================================
-             CAPÍTULO I: ANTES DE LOS SATÉLITES (1880–2000)
-             ================================================================== -->
         <article id="cap-1" class="capitulo-seccion">
             <div class="capitulo-encabezado-centrado reveal-up">
                 <span class="capitulo-num">CAPÍTULO I &middot; 1880 – 2000</span>
@@ -136,9 +124,6 @@
 
         <hr class="filete-diario">
 
-        <!-- ==================================================================
-             CAPÍTULO II: LA GEOMETRÍA DEL DESMONTE Y LOS 3 MOTORES (2000–2019)
-             ================================================================== -->
         <article id="cap-2" class="capitulo-seccion">
             <div class="capitulo-encabezado-centrado reveal-up">
                 <span class="capitulo-num">CAPÍTULO II &middot; LA EVIDENCIA ESPACIAL</span>
@@ -148,7 +133,6 @@
                 </p>
             </div>
 
-            <!-- COMPARADOR INTERACTIVO DE SALTA (2000 VS 2019) -->
             <figure class="figura-diario figura-ancha reveal-up">
                 <div class="nasa-comparador" id="comparador-salta">
                     <img src="img/salta-2019.jpg" 
@@ -179,7 +163,6 @@
                 </figcaption>
             </figure>
 
-            <!-- DOS FICHAS DOCUMENTALES (AMPLIABLES AL TOCAR LA FOTO SIN CARTELES) -->
             <div class="bloque-evidencia-terreno margen-top-lg reveal-up">
                 <div class="encabezado-subbloque-centrado">
                     <span class="capitulo-num">MECANISMO E IMPACTO FÍSICO EN EL TERRITORIO</span>
@@ -229,7 +212,6 @@
                 </div>
             </div>
 
-            <!-- RIGOR METODOLÓGICO -->
             <div class="caja-metodologia-wri reveal-up">
                 <div class="metodologia-header">
                     <h3>Por qué "pérdida de cobertura arbórea" no siempre es igual a desmonte</h3>
@@ -276,9 +258,6 @@
 
         <hr class="filete-diario">
 
-        <!-- ==================================================================
-             CAPÍTULO III: LA PARADOJA DE LA LEY DE BOSQUES
-             ================================================================== -->
         <article id="cap-3" class="capitulo-seccion">
             <div class="capitulo-encabezado-centrado reveal-up">
                 <span class="capitulo-num">CAPÍTULO III &middot; EL QUIEBRE DE 2007–2009</span>
@@ -288,7 +267,6 @@
                 </p>
             </div>
 
-            <!-- 1. EL SEMÁFORO DE LA LEY EN CINTA HORIZONTAL DE 3 COLUMNAS -->
             <div class="cinta-semaforo-otbn reveal-up">
                 <div class="semaforo-cinta-header">
                     <span class="ficha-kicker">LO QUE ORDENÓ LA LEY 26.331 (ORDENAMIENTO TERRITORIAL DE BOSQUES NATIVOS)</span>
@@ -321,7 +299,6 @@
                 </div>
             </div>
 
-            <!-- 2. RADIOGRAFÍA VISUAL DE LAS 3 ETAPAS -->
             <div class="panel-radiografia-ley reveal-up">
                 <div class="radiografia-header">
                     <div>
@@ -336,7 +313,6 @@
                     </div>
                 </div>
 
-                <!-- 3 TARJETAS COMPARATIVAS -->
                 <div class="grilla-3-etapas-comparadas">
                     <div class="etapa-comparada-card" data-card-etapa="1">
                         <span class="etapa-tag">ETAPA 1 &middot; 2001 A 2006 (6 AÑOS)</span>
@@ -372,7 +348,6 @@
                     </div>
                 </div>
 
-                <!-- PULSO ANUAL COMPACTO -->
                 <div class="pulso-compacto-box">
                     <div class="pulso-compacto-top">
                         <span>PULSO ANUAL DE PÉRDIDA DE DOSEL (2001–2025) &middot; PASA EL CURSOR SOBRE CADA AÑO:</span>
@@ -386,7 +361,6 @@
                 </div>
             </div>
 
-            <!-- 3. LOS 3 MECANISMOS QUE BURLARON LA LEY -->
             <div class="bloque-trampas-3col margen-top-lg reveal-up">
                 <div class="encabezado-subbloque-centrado">
                     <span class="capitulo-num">EVIDENCIA DOCUMENTADA (2009–2026)</span>
@@ -426,9 +400,6 @@
 
         <hr class="filete-diario">
 
-        <!-- ==================================================================
-             CAPÍTULO IV: EL MAPA EN VIVO (EN UNA SOLA PANTALLA + BOTTOM SHEET EN MÓVIL)
-             ================================================================== -->
         <section id="cap-4" class="capitulo-seccion seccion-mapa-completa">
             <div class="capitulo-encabezado-centrado compacto-mapa reveal-up">
                 <span class="capitulo-num">CAPÍTULO IV &middot; CARTOGRAFÍA INTERACTIVA (2001–2025)</span>
@@ -438,7 +409,6 @@
                 </p>
             </div>
 
-            <!-- BARRA COMPACTA UNIFICADA: REPRODUCTOR + HITO NACIONAL -->
             <div class="tablero-control-mapa reveal-up">
                 <div class="barra-reproductor-mapa">
                     <button type="button" id="btn-play-mapa" class="btn-play-editorial" aria-label="Reproducir o pausar evolución del mapa">
@@ -483,16 +453,13 @@
                 </div>
             </div>
 
-            <!-- ESCENARIO EN UNA SOLA PANTALLA: HOJA DE MAPA IZQUIERDA + DOSSIER DERECHA -->
             <div class="escenario-mapa-dossier reveal-up">
                 
-                <!-- HOJA CARTOGRÁFICA CON MINI LEYENDA SEMITRANSPARENTE ABAJO A LA IZQUIERDA -->
                 <div class="lienzo-mapa-card" id="mapa-contenedor">
                     <div class="mapa-lienzo-wrapper" id="svg-wrapper">
                         <div class="cargando-mapa">Cargando cartografía vectorial de Argentina...</div>
                     </div>
 
-                    <!-- LEYENDA MÍNIMA Y SEMITRANSPARENTE ABAJO A LA IZQUIERDA -->
                     <div class="leyenda-hoja-mapa" aria-hidden="true">
                         <i class="gradiente-tinta"></i>
                         <div class="leyenda-hoja-extremos">
@@ -502,10 +469,8 @@
                     </div>
                 </div>
 
-                <!-- OVERLAY PARA CERRAR EL PANEL EN CELULAR AL TOCAR AFUERA -->
                 <div class="dossier-backdrop-movil" id="dossier-backdrop"></div>
 
-                <!-- DOSSIER PROVINCIAL (EN CELULAR SALE DESDE ABAJO COMO BOTTOM SHEET) -->
                 <aside class="dossier-provincia-card" id="panel-provincia" aria-live="polite">
                     <div class="dossier-handle-movil" aria-hidden="true"></div>
                     <div class="dossier-cabecera">
@@ -576,9 +541,6 @@
 
         <hr class="filete-diario">
 
-        <!-- ==================================================================
-             CAPÍTULO V: SECUENCIA SATELITAL EN GRANDE Y 3 ESCALAS DE IMPACTO
-             ================================================================== -->
         <article id="cap-5" class="capitulo-seccion">
             <div class="capitulo-encabezado-centrado reveal-up">
                 <span class="capitulo-num">CAPÍTULO V &middot; SECUENCIA MULTITEMPORAL (2000–2026)</span>
@@ -588,7 +550,6 @@
                 </p>
             </div>
 
-            <!-- REPRODUCTOR TIMELAPSE A ANCHO COMPLETO -->
             <figure class="figura-diario figura-ancha reveal-up">
                 <div class="timelapse-contenedor" id="timelapse-box">
                     <div class="timelapse-visor-grande" id="timelapse-stage">
@@ -624,7 +585,6 @@
                 </figcaption>
             </figure>
 
-            <!-- SÍNTESIS DE IMPACTO Y DIMENSIONAMIENTO FINAL -->
             <div class="grilla-cierre-impacto margen-top-lg reveal-up">
                 <div class="tarjeta-impacto">
                     <span class="impacto-etiqueta">ESCALA TERRITORIAL (7.166.627 HA)</span>
@@ -660,9 +620,6 @@
 
     </main>
 
-    <!-- ==================================================================
-         PIE DE PÁGINA DOCUMENTAL: METODOLOGÍA Y FUENTES CIENTÍFICAS
-         ================================================================== -->
     <footer class="footer-diario">
         <div class="footer-inner">
             <div class="footer-col-metodologia">
@@ -685,16 +642,12 @@
         </div>
     </footer>
 
-    <!-- TOOLTIP DEL MAPA -->
     <div id="tooltip" class="oculto"></div>
 
-    <!-- POPOVER INTERACTIVO DE GLOSARIO (PC Y CELULAR) -->
     <div id="glosario-popover" class="glosario-popover oculto" role="tooltip" aria-live="polite"></div>
 
-    <!-- MODAL LIGHTBOX PARA ZOOM DE IMÁGENES Y GALERÍAS -->
     <div id="modal-zoom" class="modal-zoom oculto" aria-hidden="true"></div>
 
-    <!-- ENTRY POINT ES6 MODULE -->
     <script type="module" src="js/main.js?v=7"></script>
 </body>
 </html>

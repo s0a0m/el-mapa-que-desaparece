@@ -1,6 +1,3 @@
-// ============================================================================
-// MAPA INTERACTIVO, NOTICIAS DINÁMICAS POR ÉPOCA Y BOTTOM SHEET EN MÓVIL
-// ============================================================================
 import { CONTEXTO_PROVINCIAS } from './cronica-historica.js';
 import {
   NOMBRES_OFICIALES_DB,
@@ -60,7 +57,6 @@ function obtenerContextoProvincia(idNormalizado, nombreOriginal) {
   };
 }
 
-// Selecciona la noticia de la provincia correspondiente al año o época activa
 function renderizarNoticiaPorAnio(ctxData, anioReferencia) {
   const ulNoticias = document.getElementById('prov-noticias');
   const tituloSeccion = document.getElementById('prov-noticias-titulo');
@@ -70,10 +66,8 @@ function renderizarNoticiaPorAnio(ctxData, anioReferencia) {
   const lista = ctxData.noticias || [];
   if (lista.length === 0) return;
 
-  // 1. Buscar si hay una noticia con rango explícito [inicio, fin] que incluya el año
   let noticiaElegida = lista.find(n => Array.isArray(n.rango) && anioReferencia >= n.rango[0] && anioReferencia <= n.rango[1]);
 
-  // 2. Si aún no tiene rango explícito pero hay varias noticias, repartirlas por época
   if (!noticiaElegida) {
     if (lista.length >= 3) {
       noticiaElegida = anioReferencia <= 2009 ? lista[0] : (anioReferencia <= 2019 ? lista[1] : lista[lista.length - 1]);
@@ -248,7 +242,6 @@ export function abrirInspectorProvincia(idProv, abrirDrawerEnMovil = false) {
   setTxt('prov-driver', ctxData.driver || info.dominantDriver);
   setTxt('prov-explicacion', ctxData.explicacion);
 
-  // Actualizar la noticia según el año seleccionado en el control principal
   renderizarNoticiaPorAnio(ctxData, filtroTiempo.anioSeleccionado);
 
   const pathActivo = document.querySelector(`#mapa-contenedor path[id="${targetId}"]`);

@@ -1,6 +1,3 @@
-// ============================================================================
-// CONTROLADOR DE NARRATIVA, GLOSARIO UNIVERSAL (PC/MÓVIL), LEY Y TIMELAPSE
-// ============================================================================
 import { ETAPAS_HISTORIA_LEY, FUENTES_DOCUMENTALES } from './cronica-historica.js';
 import { abrirZoomGaleria } from './zoom-modal.js';
 
@@ -10,7 +7,6 @@ let timerTimelapse = null;
 let idxTimelapse = 0;
 let timelapsePausado = false;
 
-// 1. ANIMACIONES DE APARICIÓN ONE-WAY (SOLO AL BAJAR)
 function inicializarScrollAnimations() {
   const elementosReveal = document.querySelectorAll('.reveal-up');
   const observer = new IntersectionObserver((entries) => {
@@ -34,7 +30,6 @@ function inicializarScrollAnimations() {
   }, { passive: true });
 }
 
-// 2. GLOSARIO INTERACTIVO UNIVERSAL (HOVER EN PC + TAP EN CELULAR Y CERRAR AFUERA)
 function inicializarGlosarioInteractivo() {
   let popover = document.getElementById('glosario-popover');
   if (!popover) {
@@ -116,7 +111,6 @@ function inicializarGlosarioInteractivo() {
     });
   });
 
-  // Cerrar al tocar cualquier punto fuera de la palabra o al hacer scroll
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.termino-glosario')) {
       ocultarGlosario();
@@ -127,7 +121,6 @@ function inicializarGlosarioInteractivo() {
   window.addEventListener('resize', ocultarGlosario);
 }
 
-// 3. COMPARADOR INTERACTIVO DE SALTA
 function inicializarComparadorSalta() {
   const box = document.getElementById('comparador-salta');
   const slider = document.getElementById('slider-salta');
@@ -187,7 +180,6 @@ function inicializarComparadorSalta() {
   btnZoomSalta?.addEventListener('click', () => abrirGaleriaSalta(0));
 }
 
-// 4. PULSO ANUAL COMPACTO Y COMPARATIVA DE ETAPAS DE LA LEY (CAPÍTULO III)
 export function construirGraficoHistoriaLey(serieNacionalAnual) {
   serieNacionalCache = serieNacionalAnual || {};
   const contenedor = document.getElementById('grafico-nacional-barras');
@@ -297,7 +289,6 @@ function inicializarBotonesLey() {
   });
 }
 
-// 5. REPRODUCTOR TIMELAPSE EN GRANDE (2000–2026) EN EL CAPÍTULO V
 function inicializarTimelapseConclusion() {
   const imgs = document.querySelectorAll('#timelapse-stage .tl-img');
   const badge = document.getElementById('tl-badge-fecha');
@@ -362,7 +353,6 @@ function inicializarTimelapseConclusion() {
   }, 1800);
 }
 
-// 6. RENDERIZAR FUENTES EN EL FOOTER
 function renderizarFuentesFooter() {
   const ul = document.getElementById('contenedor-fuentes-final');
   if (!ul || !FUENTES_DOCUMENTALES) return;
